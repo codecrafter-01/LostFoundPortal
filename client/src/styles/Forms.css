@@ -1,0 +1,599 @@
+/* =========================================================
+   FORM PAGES
+   Lost & Found Student Portal
+   ========================================================= */
+
+/* =========================================================
+   PAGE BACKGROUND
+   ========================================================= */
+
+.login-page,
+.form-page {
+    min-height: calc(100vh - 72px);
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    padding: 45px 20px;
+
+    background:
+        radial-gradient(
+            circle at top left,
+            #eef2ff 0%,
+            transparent 40%
+        ),
+        linear-gradient(
+            135deg,
+            #f5f7ff,
+            #f8fafc
+        );
+}
+
+/* =========================================================
+   FORM CARDS
+   ========================================================= */
+
+.login-card,
+.form-card {
+    position: relative;
+
+    width: 100%;
+
+    max-width: 520px;
+
+    background: #ffffff;
+
+    border-radius: 22px;
+
+    padding: 40px;
+
+    border: 1px solid #e7e9f0;
+
+    box-shadow:
+        0 18px 45px rgba(15, 23, 42, 0.1);
+
+    animation:
+        fadeIn 0.4s ease;
+
+    overflow: hidden;
+}
+
+/* Top gradient line */
+
+.login-card::before,
+.form-card::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 4px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #4f46e5,
+            #7c3aed
+        );
+}
+
+/* =========================================================
+   FORM HEADINGS
+   ========================================================= */
+
+.login-card h1,
+.form-card h1 {
+    text-align: center;
+
+    font-size: 34px;
+
+    line-height: 1.25;
+
+    color: #4f46e5;
+
+    margin-bottom: 10px;
+
+    font-weight: 700;
+}
+
+.login-card h2,
+.form-card h2 {
+    text-align: center;
+
+    color: #6b7280;
+
+    font-size: 18px;
+
+    line-height: 1.5;
+
+    margin-bottom: 30px;
+
+    font-weight: 500;
+}
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+.login-card form,
+.form-card form {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 18px;
+}
+
+/* =========================================================
+   FORM LABELS
+   ========================================================= */
+
+.login-card label,
+.form-card label {
+    color: #374151;
+
+    font-size: 14px;
+
+    font-weight: 600;
+}
+
+/* Keep checkbox labels normal */
+
+.login-options label {
+    font-weight: 400;
+}
+
+/* =========================================================
+   PASSWORD BOX
+   ========================================================= */
+
+.password-box {
+    position: relative;
+
+    width: 100%;
+}
+
+.password-box input {
+    padding-right: 100px;
+}
+
+.show-btn {
+    position: absolute;
+
+    right: 8px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    background: #4f46e5;
+
+    color: #ffffff;
+
+    padding: 8px 14px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    font-size: 13px;
+
+    font-weight: 500;
+
+    z-index: 2;
+
+    transition:
+        background 0.25s ease,
+        transform 0.25s ease;
+}
+
+.show-btn:hover {
+    background: #3730a3;
+
+    transform:
+        translateY(-50%);
+}
+
+/* =========================================================
+   LOGIN OPTIONS
+   ========================================================= */
+
+.login-options {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 15px;
+
+    font-size: 13px;
+
+    color: #6b7280;
+}
+
+.login-options label {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    cursor: pointer;
+}
+
+.login-options input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+
+    margin: 0;
+
+    accent-color: #4f46e5;
+
+    cursor: pointer;
+}
+
+.login-options a {
+    color: #4f46e5;
+
+    font-weight: 600;
+
+    transition:
+        color 0.25s ease;
+}
+
+.login-options a:hover {
+    color: #3730a3;
+
+    text-decoration: underline;
+}
+
+/* =========================================================
+   SUBMIT BUTTON
+   ========================================================= */
+
+.login-submit,
+.form-card button[type="submit"] {
+    width: 100%;
+
+    background:
+        linear-gradient(
+            135deg,
+            #4f46e5,
+            #7c3aed
+        );
+
+    color: #ffffff;
+
+    padding: 14px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    font-size: 16px;
+
+    font-weight: 600;
+
+    box-shadow:
+        0 7px 18px rgba(79, 70, 229, 0.18);
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        opacity 0.25s ease;
+}
+
+.login-submit:hover,
+.form-card button[type="submit"]:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 11px 25px rgba(79, 70, 229, 0.3);
+}
+
+.login-submit:active,
+.form-card button[type="submit"]:active {
+    transform: translateY(0);
+}
+
+/* =========================================================
+   REGISTER LINK
+   ========================================================= */
+
+.register-link {
+    text-align: center;
+
+    margin-top: 12px;
+
+    color: #6b7280;
+
+    font-size: 14px;
+}
+
+.register-link a {
+    color: #4f46e5;
+
+    font-weight: 600;
+
+    transition:
+        color 0.25s ease;
+}
+
+.register-link a:hover {
+    color: #3730a3;
+
+    text-decoration: underline;
+}
+
+/* =========================================================
+   UPLOAD BOX
+   ========================================================= */
+
+.upload-box {
+    border: 2px dashed #c7d2fe;
+
+    border-radius: 14px;
+
+    padding: 28px 20px;
+
+    text-align: center;
+
+    cursor: pointer;
+
+    background: #fafaff;
+
+    transition:
+        border-color 0.25s ease,
+        background 0.25s ease,
+        transform 0.25s ease;
+}
+
+.upload-box:hover {
+    border-color: #4f46e5;
+
+    background: #eef2ff;
+
+    transform: translateY(-2px);
+}
+
+/* =========================================================
+   UPLOAD ICON
+   ========================================================= */
+
+.upload-icon {
+    font-size: 45px;
+
+    margin-bottom: 10px;
+
+    line-height: 1;
+}
+
+/* =========================================================
+   IMAGE PREVIEW
+   ========================================================= */
+
+.image-preview {
+    margin-top: 15px;
+
+    text-align: center;
+}
+
+.image-preview img {
+    width: 100%;
+
+    max-height: 300px;
+
+    object-fit: cover;
+
+    border-radius: 14px;
+
+    border: 1px solid #e5e7eb;
+
+    box-shadow:
+        0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* =========================================================
+   REMOVE IMAGE BUTTON
+   ========================================================= */
+
+.remove-btn {
+    margin-top: 12px;
+
+    background: #ef4444;
+
+    color: white;
+
+    padding: 10px 16px;
+
+    border-radius: 10px;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    transition:
+        background 0.25s ease,
+        transform 0.25s ease;
+}
+
+.remove-btn:hover {
+    background: #dc2626;
+
+    transform: translateY(-2px);
+}
+
+/* =========================================================
+   ANIMATION
+   ========================================================= */
+
+@keyframes fadeIn {
+
+    from {
+        opacity: 0;
+
+        transform:
+            translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+
+        transform:
+            translateY(0);
+    }
+}
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+    .login-page,
+    .form-page {
+        min-height: calc(100vh - 72px);
+
+        padding: 35px 18px;
+    }
+
+    .login-card,
+    .form-card {
+        max-width: 500px;
+
+        padding: 32px 27px;
+
+        border-radius: 19px;
+    }
+
+    .login-card h1,
+    .form-card h1 {
+        font-size: 30px;
+    }
+
+    .login-card h2,
+    .form-card h2 {
+        font-size: 17px;
+
+        margin-bottom: 25px;
+    }
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+    .login-page,
+    .form-page {
+        min-height: calc(100vh - 72px);
+
+        padding: 25px 14px;
+
+        align-items: flex-start;
+    }
+
+    .login-card,
+    .form-card {
+        margin-top: 10px;
+
+        padding: 28px 20px;
+
+        border-radius: 17px;
+    }
+
+    .login-card h1,
+    .form-card h1 {
+        font-size: 27px;
+    }
+
+    .login-card h2,
+    .form-card h2 {
+        font-size: 15px;
+
+        margin-bottom: 23px;
+    }
+
+    .login-card form,
+    .form-card form {
+        gap: 15px;
+    }
+
+    .login-options {
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 10px;
+    }
+
+    .login-submit,
+    .form-card button[type="submit"] {
+        padding: 13px;
+
+        font-size: 15px;
+    }
+
+    .upload-box {
+        padding: 24px 15px;
+    }
+
+    .upload-icon {
+        font-size: 40px;
+    }
+}
+
+/* =========================================================
+   VERY SMALL PHONES
+   ========================================================= */
+
+@media (max-width: 400px) {
+
+    .login-page,
+    .form-page {
+        padding: 20px 10px;
+    }
+
+    .login-card,
+    .form-card {
+        padding: 24px 16px;
+
+        border-radius: 15px;
+    }
+
+    .login-card h1,
+    .form-card h1 {
+        font-size: 24px;
+    }
+
+    .login-card h2,
+    .form-card h2 {
+        font-size: 14px;
+    }
+
+    .password-box input {
+        padding-right: 85px;
+    }
+
+    .show-btn {
+        right: 6px;
+
+        padding: 7px 10px;
+
+        font-size: 12px;
+    }
+
+    .upload-box {
+        padding: 20px 12px;
+    }
+
+    .remove-btn {
+        width: 100%;
+    }
+}

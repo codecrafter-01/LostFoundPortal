@@ -1,0 +1,359 @@
+/* =========================================================
+   GLOBAL STYLES
+   Lost & Found Student Portal
+   ========================================================= */
+
+/* Google Font */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: "Poppins", sans-serif;
+    background: #f5f7fb;
+    color: #222;
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+/* Prevent horizontal scrolling */
+html,
+body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+/* =========================================================
+   LINKS
+   ========================================================= */
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+a:focus-visible {
+    outline: 3px solid rgba(79, 70, 229, 0.25);
+    outline-offset: 3px;
+    border-radius: 6px;
+}
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+button {
+    cursor: pointer;
+    border: none;
+    border-radius: 10px;
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        background 0.25s ease,
+        opacity 0.25s ease;
+    font-family: "Poppins", sans-serif;
+}
+
+button:hover {
+    transform: translateY(-2px);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+    transform: none;
+}
+
+button:focus-visible {
+    outline: 3px solid rgba(79, 70, 229, 0.25);
+    outline-offset: 3px;
+}
+
+/* =========================================================
+   INPUTS
+   ========================================================= */
+
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 14px 15px;
+    border: 1px solid #d6d9e2;
+    border-radius: 10px;
+    outline: none;
+    transition:
+        border-color 0.25s ease,
+        box-shadow 0.25s ease,
+        background 0.25s ease;
+    font-size: 15px;
+    font-family: "Poppins", sans-serif;
+    background: #fff;
+    color: #222;
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: #9a9ca5;
+}
+
+input:hover,
+select:hover,
+textarea:hover {
+    border-color: #b8bcc8;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+}
+
+textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+/* =========================================================
+   CARDS
+   ========================================================= */
+
+.card {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.07);
+    padding: 25px;
+    border: 1px solid rgba(226, 228, 236, 0.8);
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 32px rgba(0, 0, 0, 0.1);
+}
+
+/* =========================================================
+   CONTAINERS
+   ========================================================= */
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+    padding: 30px 0;
+}
+
+/* =========================================================
+   SECTION TITLES
+   ========================================================= */
+
+.section-title {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.section-title h1 {
+    font-size: 36px;
+    line-height: 1.25;
+    color: #1f2937;
+    font-weight: 700;
+}
+
+.section-title p {
+    color: #6b7280;
+    margin-top: 8px;
+    font-size: 15px;
+}
+
+/* =========================================================
+   IMAGES
+   ========================================================= */
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+img {
+    height: auto;
+}
+
+/* =========================================================
+   TEXT SELECTION
+   ========================================================= */
+
+::selection {
+    background: #4f46e5;
+    color: #fff;
+}
+
+/* =========================================================
+   SCROLLBAR
+   ========================================================= */
+
+::-webkit-scrollbar {
+    width: 9px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #4f46e5;
+    border-radius: 50px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #3730a3;
+}
+
+::-webkit-scrollbar-track {
+    background: #eceef3;
+}
+
+/* =========================================================
+   STATUS BADGES
+   ========================================================= */
+
+.status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 7px 16px;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 13px;
+    line-height: 1.4;
+    white-space: nowrap;
+}
+
+.lost-status {
+    background: #ffe2e2;
+    color: #c40000;
+}
+
+.found-status {
+    background: #dfffe3;
+    color: #008b22;
+}
+
+/* Active status used by MyReports */
+.active-status {
+    background: #e1f8e7;
+    color: #15803d;
+}
+
+/* Returned status used by MyReports and Matches */
+.returned-status {
+    background: #e4f7e8;
+    color: #15803d;
+}
+
+/* =========================================================
+   COMMON PAGE HELPERS
+   ========================================================= */
+
+.page-title {
+    color: #1f2937;
+    font-weight: 700;
+}
+
+.text-muted {
+    color: #6b7280;
+}
+
+.text-center {
+    text-align: center;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 992px) {
+    .container {
+        width: 92%;
+    }
+
+    .section-title h1 {
+        font-size: 32px;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        width: 94%;
+        padding: 22px 0;
+    }
+
+    .section-title {
+        margin-bottom: 22px;
+    }
+
+    .section-title h1 {
+        font-size: 28px;
+    }
+
+    .section-title p {
+        font-size: 14px;
+    }
+
+    .card {
+        padding: 20px;
+        border-radius: 15px;
+    }
+
+    input,
+    select,
+    textarea {
+        padding: 12px 13px;
+        font-size: 14px;
+    }
+
+    button {
+        min-height: 42px;
+    }
+
+    .status {
+        font-size: 12px;
+        padding: 6px 13px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        width: 92%;
+    }
+
+    .section-title h1 {
+        font-size: 24px;
+    }
+
+    .section-title p {
+        font-size: 13px;
+    }
+
+    .card {
+        padding: 17px;
+        border-radius: 13px;
+    }
+
+    button {
+        width: 100%;
+    }
+}
