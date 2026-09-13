@@ -22,89 +22,33 @@ function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (
-      formData.password !==
-      formData.confirmPassword
-    ) {
+    if (formData.password !== formData.confirmPassword) {
       alert("Passwords do not match!");
       return;
     }
 
     try {
-      const response = await api.post(
-        "/auth/register",
-        {
-          name: formData.name,
-          email: formData.email,
-          password: formData.password,
-        }
-      );
+      const response = await api.post("/auth/register", {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+      });
 
       alert(response.data.message);
-
       navigate("/login");
-
     } catch (error) {
-      console.log(
-        "Registration Error:",
-        error
-      );
-
-      if (error.response) {
-        console.log(
-          "Response:",
-          error.response.data
-        );
-
-        console.log(
-          "Status:",
-          error.response.status
-        );
-
-        alert(
-          error.response.data.message ||
-            "Registration failed."
-        );
-
-      } else if (error.request) {
-        console.log(
-          "No response received:",
-          error.request
-        );
-
-        alert(
-          "Cannot connect to the server."
-        );
-
-      } else {
-        console.log(
-          "Error:",
-          error.message
-        );
-
-        alert(error.message);
-      }
+      console.log("Registration Error:", error);
+      alert(error.response?.data?.message || "Registration failed.");
     }
   };
 
   return (
     <div className="login-page">
-
       <div className="login-card">
+        <h1>🎓 Vignan Portal</h1>
+        <h2>Create Vignan Student Account</h2>
 
-        <h1>
-          🎓 University Portal
-        </h1>
-
-        <h2>
-          Create Student Account
-        </h2>
-
-        <form
-          onSubmit={handleSubmit}
-        >
-
+        <form onSubmit={handleSubmit}>
           <input
             type="text"
             name="name"
@@ -117,7 +61,7 @@ function Register() {
           <input
             type="email"
             name="email"
-            placeholder="University Email"
+            placeholder="Vignan Student Email"
             value={formData.email}
             onChange={handleChange}
             required
@@ -149,24 +93,16 @@ function Register() {
             required
           />
 
-          <button
-            type="submit"
-            className="login-submit"
-          >
-            Register
+          <button type="submit" className="login-submit">
+            Register Account
           </button>
 
           <p className="register-link">
             Already have an account?
-            <Link to="/login">
-              {" "}Login
-            </Link>
+            <Link to="/login"> Login</Link>
           </p>
-
         </form>
-
       </div>
-
     </div>
   );
 }

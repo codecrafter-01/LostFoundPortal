@@ -16,20 +16,19 @@ const getTransporter = () => {
   return nodemailer.createTransport({
     host,
     port,
-    secure: port === 465, // true for 465, false for other ports
+    secure: port === 465,
     auth: {
       user,
       pass,
     },
-    // Optional timeout settings to prevent hanging connections
-    connectionTimeout: 10000, // 10s
+    connectionTimeout: 10000,
     greetingTimeout: 10000,
     socketTimeout: 10000,
   });
 };
 
 const getFromAddress = () => {
-  return process.env.EMAIL_FROM || process.env.EMAIL_USER || '"Lost & Found Portal" <no-reply@lostfound.edu>';
+  return process.env.EMAIL_FROM || process.env.EMAIL_USER || '"Vignan Lost & Found Portal" <no-reply@vignan.edu>';
 };
 
 /**
@@ -55,12 +54,12 @@ const wrapHtmlTemplate = (title, contentHtml) => {
         max-width: 600px;
         margin: 0 auto;
         background-color: #ffffff;
-        border-radius: 8px;
+        border-radius: 12px;
         overflow: hidden;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
       }
       .header {
-        background-color: #1e3a8a;
+        background: linear-gradient(135deg, #1e1b4b 0%, #311042 100%);
         color: #ffffff;
         padding: 24px;
         text-align: center;
@@ -94,28 +93,9 @@ const wrapHtmlTemplate = (title, contentHtml) => {
       .details-card {
         background-color: #f8fafc;
         border: 1px solid #e2e8f0;
-        border-radius: 6px;
+        border-radius: 8px;
         padding: 16px;
         margin-bottom: 20px;
-      }
-      .details-row {
-        display: flex;
-        padding: 6px 0;
-        border-bottom: 1px dashed #e2e8f0;
-      }
-      .details-row:last-child {
-        border-bottom: none;
-      }
-      .details-label {
-        font-weight: 600;
-        width: 130px;
-        color: #475569;
-        font-size: 14px;
-      }
-      .details-value {
-        color: #1e293b;
-        font-size: 14px;
-        flex: 1;
       }
       .badge {
         display: inline-block;
@@ -150,15 +130,15 @@ const wrapHtmlTemplate = (title, contentHtml) => {
   <body>
     <div class="container">
       <div class="header">
-        <h1>🎓 Lost & Found Student Portal</h1>
+        <h1>🎓 Vignan Lost & Found Portal</h1>
         <p>Official Campus Notification</p>
       </div>
       <div class="content">
         ${contentHtml}
       </div>
       <div class="footer">
-        <p>© ${new Date().getFullYear()} Lost & Found Student Portal. All rights reserved.</p>
-        <p>This is an automated system email. Please do not reply directly to this message.</p>
+        <p>© ${new Date().getFullYear()} Vignan Lost & Found Student Portal. All rights reserved.</p>
+        <p>This is an automated campus email. Please do not reply directly.</p>
       </div>
     </div>
   </body>
@@ -173,17 +153,17 @@ const sendReportCreatedEmail = async (user, report) => {
   try {
     const transporter = getTransporter();
     if (!transporter) {
-      console.log("ℹ️ [EmailService] EMAIL_USER / EMAIL_PASSWORD not set in .env. Skipping Report Created email.");
+      console.log("ℹ️ [EmailService] EMAIL_USER / EMAIL_PASSWORD not set in .env. Skipping email.");
       return false;
     }
 
     const isLost = report.reportType === "lost";
-    const subject = "Lost & Found Report Submitted Successfully";
+    const subject = "Vignan Lost & Found Report Submitted Successfully";
 
     const contentHtml = `
-      <div class="greeting">Hello ${user.name || "Student"},</div>
+      <div class="greeting">Hello ${user.name || "Vignan Student"},</div>
       <p class="intro">
-        Your <strong>${report.reportType.toUpperCase()}</strong> report has been successfully submitted to the Lost & Found Student Portal.
+        Your <strong>${report.reportType.toUpperCase()}</strong> report has been successfully submitted to Vignan Lost & Found Portal.
       </p>
 
       <div class="details-card">
@@ -224,7 +204,7 @@ const sendReportCreatedEmail = async (user, report) => {
       </div>
 
       <p class="intro">
-        We will notify you automatically if our Smart Match system finds a candidate report matching your item.
+        We will notify you automatically if our Smart Match system finds a report matching your item.
       </p>
     `;
 
@@ -235,7 +215,7 @@ const sendReportCreatedEmail = async (user, report) => {
       to: user.email,
       subject: subject,
       html: html,
-      text: `Hello ${user.name},\n\nYour ${report.reportType.toUpperCase()} report for "${report.itemName}" has been successfully submitted.\nCategory: ${report.category}\nLocation: ${report.location}\nDate: ${report.date}\nStatus: ${report.status}\n\nThank you,\nLost & Found Student Portal`,
+      text: `Hello ${user.name},\n\nYour ${report.reportType.toUpperCase()} report for "${report.itemName}" has been successfully submitted to Vignan Lost & Found Portal.\nCategory: ${report.category}\nLocation: ${report.location}\nDate: ${report.date}\nStatus: ${report.status}\n\nThank you,\nVignan Lost & Found Student Portal`,
     };
 
     const info = await transporter.sendMail(mailOptions);
@@ -244,7 +224,6 @@ const sendReportCreatedEmail = async (user, report) => {
 
   } catch (error) {
     console.error("❌ [EmailService] Failed to send Report Created email:", error.message);
-    // Return false so caller knows email failed without throwing crash
     return false;
   }
 };
@@ -260,12 +239,12 @@ const sendSmartMatchEmail = async (recipientUser, targetReport, matchedReport, s
       return false;
     }
 
-    const subject = `Possible Match Found for Your ${targetReport.reportType === "lost" ? "Lost" : "Found"} Item`;
+    const subject = `Possible Match Found for Your ${targetReport.reportType === "lost" ? "Lost" : "Found"} Item - Vignan Portal`;
 
     const contentHtml = `
-      <div class="greeting">Hello ${recipientUser.name || "Student"},</div>
+      <div class="greeting">Hello ${recipientUser.name || "Vignan Student"},</div>
       <p class="intro">
-        🎯 <strong>Great news!</strong> Our Smart Match system detected a <strong>${score}% match</strong> for your report.
+        🎯 <strong>Great news!</strong> Vignan Smart Match system detected a <strong>${score}% match</strong> for your report.
       </p>
 
       <div style="background-color: #eff6ff; border-left: 4px solid #2563eb; padding: 12px 16px; margin-bottom: 20px; border-radius: 4px;">
@@ -324,7 +303,7 @@ const sendSmartMatchEmail = async (recipientUser, targetReport, matchedReport, s
       </div>
 
       <p class="intro" style="text-align: center; margin-top: 24px;">
-        Please log in to the <strong>Lost & Found Student Portal</strong> to view full details and contact the user.
+        Please log in to <strong>Vignan Lost & Found Portal</strong> to view full details and contact the user.
       </p>
     `;
 
@@ -335,7 +314,7 @@ const sendSmartMatchEmail = async (recipientUser, targetReport, matchedReport, s
       to: recipientUser.email,
       subject: subject,
       html: html,
-      text: `Hello ${recipientUser.name},\n\nA possible match (${score}%) was found for your item "${targetReport.itemName}".\nMatching Item: "${matchedReport.itemName}"\nCategory: ${matchedReport.category}\nLocation: ${matchedReport.location}\n\nPlease log in to the Lost & Found Student Portal to review.`,
+      text: `Hello ${recipientUser.name},\n\nA possible match (${score}%) was found for your item "${targetReport.itemName}".\nMatching Item: "${matchedReport.itemName}"\nCategory: ${matchedReport.category}\nLocation: ${matchedReport.location}\n\nPlease log in to Vignan Lost & Found Portal to review.`,
     };
 
     const info = await transporter.sendMail(mailOptions);
@@ -355,18 +334,18 @@ const sendReturnedEmail = async (user, report) => {
   try {
     const transporter = getTransporter();
     if (!transporter) {
-      console.log("ℹ️ [EmailService] EMAIL_USER / EMAIL_PASSWORD not set in .env. Skipping Returned Item email.");
+      console.log("ℹ️ [EmailService] EMAIL_USER / EMAIL_PASSWORD not set in .env. Skipping email.");
       return false;
     }
 
-    const subject = "Your Lost & Found Item Has Been Marked as Returned";
+    const subject = "Your Item Has Been Marked as Returned - Vignan Portal";
 
     const returnedDateStr = report.returnedAt
       ? new Date(report.returnedAt).toLocaleString()
       : new Date().toLocaleString();
 
     const contentHtml = `
-      <div class="greeting">Hello ${user.name || "Student"},</div>
+      <div class="greeting">Hello ${user.name || "Vignan Student"},</div>
       <p class="intro">
         🎉 Your <strong>${report.reportType.toUpperCase()}</strong> report for <strong>"${report.itemName}"</strong> has been successfully marked as <strong>RETURNED</strong>.
       </p>
@@ -395,7 +374,7 @@ const sendReturnedEmail = async (user, report) => {
       </div>
 
       <p class="intro">
-        Thank you for using the Lost & Found Student Portal to help keep our campus connected!
+        Thank you for using Vignan Lost & Found Portal to help keep our campus connected!
       </p>
     `;
 
@@ -406,7 +385,7 @@ const sendReturnedEmail = async (user, report) => {
       to: user.email,
       subject: subject,
       html: html,
-      text: `Hello ${user.name},\n\nYour ${report.reportType.toUpperCase()} item "${report.itemName}" has been marked as RETURNED on ${returnedDateStr}.\n\nThank you,\nLost & Found Student Portal`,
+      text: `Hello ${user.name},\n\nYour ${report.reportType.toUpperCase()} item "${report.itemName}" has been marked as RETURNED on ${returnedDateStr}.\n\nThank you,\nVignan Lost & Found Student Portal`,
     };
 
     const info = await transporter.sendMail(mailOptions);

@@ -2,14 +2,28 @@ import { useEffect, useState } from "react";
 import api from "../api";
 import { getImageUrl } from "../utils/imageUtils";
 
+const CATEGORIES = [
+  "ALL",
+  "🎒 Bag",
+  "💻 Laptop",
+  "📱 Mobile Phone",
+  "🔑 Keys",
+  "💳 ID Card",
+  "📚 Books",
+  "🎧 Earphones",
+  "⌚ Watch",
+  "💧 Water Bottle",
+  "👕 Clothing",
+  "📄 Documents",
+  "🎓 Others",
+];
+
 function Found() {
   const [reports, setReports] = useState([]);
   const [search, setSearch] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("ALL");
   const [loading, setLoading] = useState(true);
 
-  // ==============================
-  // Fetch Found Reports
-  // ==============================
   useEffect(() => {
     fetchFoundReports();
   }, []);
@@ -32,15 +46,20 @@ function Found() {
     }
   };
 
-  // Search filter
+  // Search & Category Filter
   const filteredReports = reports.filter((report) => {
     const searchText = search.toLowerCase().trim();
-    return (
+    const matchesSearch =
       String(report.itemName || "").toLowerCase().includes(searchText) ||
       String(report.category || "").toLowerCase().includes(searchText) ||
       String(report.location || "").toLowerCase().includes(searchText) ||
-      String(report.description || "").toLowerCase().includes(searchText)
-    );
+      String(report.description || "").toLowerCase().includes(searchText);
+
+    const matchesCategory =
+      selectedCategory === "ALL" ||
+      String(report.category || "").toLowerCase() === selectedCategory.toLowerCase();
+
+    return matchesSearch && matchesCategory;
   });
 
   if (loading) {
@@ -48,7 +67,7 @@ function Found() {
       <div className="reports-page">
         <h1>📍 Found Items</h1>
         <div className="empty-report">
-          <h2>Loading found items...</h2>
+          <h2>Loading Vignan found items...</h2>
           <p>Please wait.</p>
         </div>
       </div>
@@ -59,27 +78,51 @@ function Found() {
     <div className="reports-page">
       <h1>📍 Found Items</h1>
       <p className="reports-subtitle">
-        View items currently reported found by students.
+        View items currently reported found by Vignan students across campus.
       </p>
 
-      {/* Search */}
+      {/* Search Bar */}
       <div className="report-toolbar">
         <input
           type="text"
-          placeholder="🔍 Search item, category, location..."
+          placeholder="🔍 Search item name, location, description..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
       </div>
 
-      <div style={{ textAlign: "center", margin: "20px 0", fontSize: "18px", fontWeight: "600" }}>
-        {filteredReports.length} found item{filteredReports.length !== 1 ? "s" : ""} found
+      {/* Interactive Category Filter Pills */}
+      <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", justifyContent: "center", margin: "20px 0 25px" }}>
+        {CATEGORIES.map((cat) => (
+          <button
+            key={cat}
+            onClick={() => setSelectedCategory(cat)}
+            style={{
+              padding: "8px 16px",
+              borderRadius: "9999px",
+              fontSize: "13px",
+              fontWeight: "600",
+              border: "1px solid rgba(99, 102, 241, 0.2)",
+              background: selectedCategory === cat ? "linear-gradient(135deg, #6366f1 0%, #a855f7 100%)" : "#ffffff",
+              color: selectedCategory === cat ? "#ffffff" : "#475569",
+              boxShadow: selectedCategory === cat ? "0 4px 14px rgba(99, 102, 241, 0.35)" : "none",
+              cursor: "pointer",
+              transition: "all 0.2s ease",
+            }}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+
+      <div style={{ textAlign: "center", margin: "15px 0", fontSize: "16px", fontWeight: "700", color: "#4f46e5" }}>
+        Showing {filteredReports.length} found item{filteredReports.length !== 1 ? "s" : ""}
       </div>
 
       {filteredReports.length === 0 ? (
         <div className="empty-report">
-          <h2>📍 No Found Items</h2>
-          <p>{search ? "No active found items match your search." : "No active found items have been reported yet."}</p>
+          <h2>📍 No Found Items Match</h2>
+          <p>Try clearing your search or selecting a different category pill above.</p>
         </div>
       ) : (
         <div className="reports-grid">
@@ -110,7 +153,7 @@ function Found() {
                   <p><strong>📍 Location:</strong> {report.location}</p>
                   <p><strong>📅 Date:</strong> {report.date}</p>
                   <p><strong>📝 Description:</strong> {report.description}</p>
-                  <p><strong>👤 Reported By:</strong> {report.user?.name || "Student"}</p>
+                  <p><strong>👤 Reported By:</strong> {report.user?.name || "Vignan Student"}</p>
 
                   <span className="status found-status" style={{ marginTop: "12px" }}>
                     📍 FOUND

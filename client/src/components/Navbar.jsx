@@ -19,7 +19,7 @@ function Navbar() {
     <nav className="navbar">
       {/* Logo */}
       <Link to="/" className="logo">
-        🎓 Lost & Found
+        🎓 Vignan Lost & Found
       </Link>
 
       {/* Menu */}
