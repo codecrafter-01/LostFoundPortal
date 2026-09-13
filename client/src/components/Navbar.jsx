@@ -13,7 +13,6 @@ function Navbar() {
     localStorage.getItem("studentPhoto") || ""
   );
 
-  // Sync photo whenever location changes or storage is updated
   useEffect(() => {
     const photo = localStorage.getItem("studentPhoto");
     setStudentPhoto(photo || "");
@@ -29,109 +28,87 @@ function Navbar() {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <nav className="navbar">
-      {/* Logo */}
-      <Link to="/" className="logo">
-        <img
-          src="/vignan_logo.jpg"
-          alt="Vignan Logo"
-          style={{
-            width: "36px",
-            height: "36px",
-            borderRadius: "50%",
-            objectFit: "cover",
-            border: "2px solid #ffffff",
-            boxShadow: "0 2px 8px rgba(0, 0, 0, 0.2)",
-          }}
-        />
-        <span>Vignan Lost & Found</span>
+    <nav className="navbar-template">
+      {/* Left Logo */}
+      <Link to="/" className="logo-template">
+        <div className="logo-icon-bg">
+          <span className="logo-pin">📍</span>
+        </div>
+        <div className="logo-text-group">
+          <span className="logo-main-text">Vignan Lost & Found</span>
+          <span className="logo-sub-text">Student Portal</span>
+        </div>
       </Link>
 
-      {/* Menu */}
-      <ul className="menu">
+      {/* Center Menu Links */}
+      <ul className="menu-template">
         <li>
-          <Link to="/" className={isActive("/") ? "active-link" : ""}>
+          <Link to="/" className={isActive("/") ? "active-tab" : ""}>
             Home
           </Link>
         </li>
         <li>
-          <Link to="/lost" className={isActive("/lost") ? "active-link" : ""}>
-            Lost Items
+          <Link to="/report-lost" className={isActive("/report-lost") ? "active-tab" : ""}>
+            Report Lost
           </Link>
         </li>
         <li>
-          <Link to="/found" className={isActive("/found") ? "active-link" : ""}>
-            Found Items
+          <Link to="/report-found" className={isActive("/report-found") ? "active-tab" : ""}>
+            Report Found
+          </Link>
+        </li>
+        <li>
+          <Link to="/matches" className={isActive("/matches") ? "active-tab" : ""}>
+            Smart Match
           </Link>
         </li>
         {token && (
           <>
             <li>
-              <Link to="/dashboard" className={isActive("/dashboard") ? "active-link" : ""}>
-                Dashboard
-              </Link>
-            </li>
-            <li>
-              <Link to="/my-reports" className={isActive("/my-reports") ? "active-link" : ""}>
+              <Link to="/my-reports" className={isActive("/my-reports") ? "active-tab" : ""}>
                 My Reports
               </Link>
             </li>
             <li>
-              <Link to="/matches" className={isActive("/matches") ? "active-link" : ""}>
-                🤝 Matches
+              <Link to="/dashboard" className={isActive("/dashboard") ? "active-tab" : ""}>
+                Dashboard
               </Link>
             </li>
           </>
         )}
       </ul>
 
-      {/* Authentication & User Info Badge */}
-      <div className="navbar-right">
+      {/* Right Auth / Profile Controls */}
+      <div className="navbar-controls-template">
         {!token ? (
           <>
-            <Link to="/login">
-              <button className="login-btn">Login</button>
+            <Link to="/login" className="btn-text-login">
+              Login
             </Link>
             <Link to="/register">
-              <button className="register-btn">Register</button>
+              <button className="btn-pill-register">Register</button>
             </Link>
           </>
         ) : (
           <>
             {user?.name && (
-              <Link to="/profile" title="Click to view Student Profile" style={{ textDecoration: "none" }}>
-                <span
-                  className="user-name"
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: "9px",
-                    cursor: "pointer",
-                    transition: "transform 0.2s ease, box-shadow 0.2s ease",
-                  }}
-                >
+              <Link to="/profile" title="View Student Profile" style={{ textDecoration: "none" }}>
+                <span className="profile-pill-badge">
                   {studentPhoto ? (
                     <img
                       src={studentPhoto}
                       alt="Student Profile"
-                      style={{
-                        width: "28px",
-                        height: "28px",
-                        borderRadius: "50%",
-                        objectFit: "cover",
-                        border: "2px solid #ffffff",
-                        boxShadow: "0 2px 6px rgba(0, 0, 0, 0.25)",
-                      }}
+                      className="profile-avatar-img"
                     />
                   ) : (
-                    <span style={{ fontSize: "16px" }}>👤</span>
+                    <span className="avatar-icon-fallback">👤</span>
                   )}
-                  <span>{user.name}</span>
+                  <span className="profile-user-name">{user.name}</span>
                 </span>
               </Link>
             )}
 
-            <button className="logout-btn" onClick={handleLogout}>
+            <button className="btn-logout-template" onClick={handleLogout}>
               Logout
             </button>
           </>
