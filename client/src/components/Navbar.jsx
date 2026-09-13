@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 
 function Navbar() {
@@ -7,9 +8,21 @@ function Navbar() {
   const token = localStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("user") || "null");
 
+  // Dynamic student photo state
+  const [studentPhoto, setStudentPhoto] = useState(
+    localStorage.getItem("studentPhoto") || ""
+  );
+
+  // Sync photo whenever location changes or storage is updated
+  useEffect(() => {
+    const photo = localStorage.getItem("studentPhoto");
+    setStudentPhoto(photo || "");
+  }, [location]);
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+    localStorage.removeItem("studentPhoto");
     navigate("/login");
   };
 
@@ -17,7 +30,7 @@ function Navbar() {
 
   return (
     <nav className="navbar">
-      {/* Logo with Vignan Avatar */}
+      {/* Logo */}
       <Link to="/" className="logo">
         <img
           src="/vignan_logo.jpg"
@@ -72,7 +85,7 @@ function Navbar() {
         )}
       </ul>
 
-      {/* Authentication & User Info */}
+      {/* Authentication & User Info Badge */}
       <div className="navbar-right">
         {!token ? (
           <>
@@ -86,21 +99,38 @@ function Navbar() {
         ) : (
           <>
             {user?.name && (
-              <span className="user-name" style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
-                <img
-                  src="/vignan_logo.jpg"
-                  alt="User Avatar"
+              <Link to="/profile" title="Click to view Student Profile" style={{ textDecoration: "none" }}>
+                <span
+                  className="user-name"
                   style={{
-                    width: "24px",
-                    height: "24px",
-                    borderRadius: "50%",
-                    objectFit: "cover",
-                    border: "1.5px solid #ffffff",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "9px",
+                    cursor: "pointer",
+                    transition: "transform 0.2s ease, box-shadow 0.2s ease",
                   }}
-                />
-                {user.name}
-              </span>
+                >
+                  {studentPhoto ? (
+                    <img
+                      src={studentPhoto}
+                      alt="Student Profile"
+                      style={{
+                        width: "28px",
+                        height: "28px",
+                        borderRadius: "50%",
+                        objectFit: "cover",
+                        border: "2px solid #ffffff",
+                        boxShadow: "0 2px 6px rgba(0, 0, 0, 0.25)",
+                      }}
+                    />
+                  ) : (
+                    <span style={{ fontSize: "16px" }}>👤</span>
+                  )}
+                  <span>{user.name}</span>
+                </span>
+              </Link>
             )}
+
             <button className="logout-btn" onClick={handleLogout}>
               Logout
             </button>
