@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../api";
 
 function Register() {
   const navigate = useNavigate();
@@ -23,14 +23,17 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (formData.password !== formData.confirmPassword) {
+    if (
+      formData.password !==
+      formData.confirmPassword
+    ) {
       alert("Passwords do not match!");
       return;
     }
 
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/auth/register",
+      const response = await api.post(
+        "/auth/register",
         {
           name: formData.name,
           email: formData.email,
@@ -43,19 +46,42 @@ function Register() {
       navigate("/login");
 
     } catch (error) {
-      console.log("Registration Error:", error);
+      console.log(
+        "Registration Error:",
+        error
+      );
 
       if (error.response) {
-        console.log("Response:", error.response.data);
-        console.log("Status:", error.response.status);
+        console.log(
+          "Response:",
+          error.response.data
+        );
 
-        alert(error.response.data.message);
+        console.log(
+          "Status:",
+          error.response.status
+        );
+
+        alert(
+          error.response.data.message ||
+            "Registration failed."
+        );
+
       } else if (error.request) {
-        console.log("No response received:", error.request);
+        console.log(
+          "No response received:",
+          error.request
+        );
 
-        alert("Cannot connect to the server.");
+        alert(
+          "Cannot connect to the server."
+        );
+
       } else {
-        console.log("Error:", error.message);
+        console.log(
+          "Error:",
+          error.message
+        );
 
         alert(error.message);
       }
@@ -64,12 +90,20 @@ function Register() {
 
   return (
     <div className="login-page">
+
       <div className="login-card">
 
-        <h1>🎓 University Portal</h1>
-        <h2>Create Student Account</h2>
+        <h1>
+          🎓 University Portal
+        </h1>
 
-        <form onSubmit={handleSubmit}>
+        <h2>
+          Create Student Account
+        </h2>
+
+        <form
+          onSubmit={handleSubmit}
+        >
 
           <input
             type="text"
@@ -124,12 +158,15 @@ function Register() {
 
           <p className="register-link">
             Already have an account?
-            <Link to="/login"> Login</Link>
+            <Link to="/login">
+              {" "}Login
+            </Link>
           </p>
 
         </form>
 
       </div>
+
     </div>
   );
 }

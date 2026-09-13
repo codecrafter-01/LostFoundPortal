@@ -3,7 +3,7 @@ import {
   Link,
   useNavigate,
 } from "react-router-dom";
-import axios from "axios";
+import api from "../api";
 
 function Login() {
   const navigate = useNavigate();
@@ -17,35 +17,29 @@ function Login() {
       password: "",
     });
 
-
   // ==============================
   // Handle Input
   // ==============================
 
   const handleChange = (e) => {
-
     setFormData({
       ...formData,
       [e.target.name]:
         e.target.value,
     });
-
   };
-
 
   // ==============================
   // Login
   // ==============================
 
   const handleSubmit = async (e) => {
-
     e.preventDefault();
 
     try {
-
       const response =
-        await axios.post(
-          "http://localhost:5000/api/auth/login",
+        await api.post(
+          "/auth/login",
           {
             email:
               formData.email,
@@ -54,13 +48,11 @@ function Login() {
           }
         );
 
-
       // Store JWT token
       localStorage.setItem(
         "token",
         response.data.token
       );
-
 
       // Store user information
       localStorage.setItem(
@@ -70,17 +62,14 @@ function Login() {
         )
       );
 
-
       alert(
         response.data.message
       );
-
 
       // Go to dashboard
       navigate("/dashboard");
 
     } catch (error) {
-
       console.error(
         "Login Error:",
         error
@@ -92,7 +81,6 @@ function Login() {
       );
     }
   };
-
 
   return (
     <div className="login-page">
@@ -106,7 +94,6 @@ function Login() {
         <h2>
           Student Login
         </h2>
-
 
         <form
           onSubmit={handleSubmit}
@@ -124,7 +111,6 @@ function Login() {
             onChange={handleChange}
             required
           />
-
 
           {/* ============================== */}
           {/* Password */}
@@ -149,7 +135,6 @@ function Login() {
               required
             />
 
-
             <button
               type="button"
               className="show-btn"
@@ -166,7 +151,6 @@ function Login() {
 
           </div>
 
-
           {/* ============================== */}
           {/* Login Options */}
           {/* ============================== */}
@@ -180,13 +164,11 @@ function Login() {
               Remember Me
             </label>
 
-
             <a href="#">
               Forgot Password?
             </a>
 
           </div>
-
 
           {/* ============================== */}
           {/* Login Button */}
@@ -198,7 +180,6 @@ function Login() {
           >
             Login
           </button>
-
 
           {/* ============================== */}
           {/* Register */}

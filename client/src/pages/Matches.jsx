@@ -107,10 +107,6 @@ function Matches() {
       return;
     }
 
-    // ======================================
-    // Get Current User Reports
-    // ======================================
-
     const myReports = allReports.filter(
       (report) => {
         if (!report.user) {
@@ -128,10 +124,6 @@ function Matches() {
       }
     );
 
-    // ======================================
-    // Only Active Reports
-    // ======================================
-
     const activeMyReports =
       myReports.filter(
         (report) =>
@@ -140,18 +132,10 @@ function Matches() {
 
     const possibleMatches = [];
 
-    // ======================================
-    // Compare Reports
-    // ======================================
-
     activeMyReports.forEach(
       (myReport) => {
         allReports.forEach(
           (otherReport) => {
-
-            // --------------------------------
-            // Don't Match Own Report
-            // --------------------------------
 
             if (
               otherReport._id ===
@@ -160,10 +144,6 @@ function Matches() {
               return;
             }
 
-            // --------------------------------
-            // Ignore Returned Reports
-            // --------------------------------
-
             if (
               otherReport.status ===
               "returned"
@@ -171,20 +151,12 @@ function Matches() {
               return;
             }
 
-            // --------------------------------
-            // Must Be Opposite Type
-            // --------------------------------
-
             if (
               myReport.reportType ===
               otherReport.reportType
             ) {
               return;
             }
-
-            // =================================
-            // MATCHING SCORE
-            // =================================
 
             let score = 0;
             const reasons = [];
@@ -466,10 +438,6 @@ function Matches() {
   return (
     <div className="reports-page">
 
-      {/* ================================== */}
-      {/* Heading */}
-      {/* ================================== */}
-
       <h1>
         🤝 Smart Lost & Found Matches
       </h1>
@@ -481,10 +449,7 @@ function Matches() {
         matches.
       </p>
 
-
-      {/* ================================== */}
       {/* No Matches */}
-      {/* ================================== */}
 
       {matches.length === 0 ? (
 
@@ -521,9 +486,8 @@ function Matches() {
       ) : (
 
         <>
-          {/* ================================== */}
+
           {/* Match Count */}
-          {/* ================================== */}
 
           <div
             style={{
@@ -542,10 +506,7 @@ function Matches() {
             found 🎯
           </div>
 
-
-          {/* ================================== */}
           {/* Matches Grid */}
-          {/* ================================== */}
 
           <div className="reports-grid">
 
@@ -563,9 +524,7 @@ function Matches() {
                     key={`${match.myReport._id}-${match.matchedReport._id}-${index}`}
                   >
 
-                    {/* ========================= */}
                     {/* Match Score */}
-                    {/* ========================= */}
 
                     <div
                       style={{
@@ -586,10 +545,7 @@ function Matches() {
 
                     </div>
 
-
-                    {/* ========================= */}
                     {/* Your Report */}
-                    {/* ========================= */}
 
                     <h3>
                       🧑 Your Report
@@ -597,12 +553,16 @@ function Matches() {
 
                     {match.myReport.image && (
                       <img
-                        src={`http://localhost:5000${match.myReport.image}`}
+                        src={`https://lostfoundportal-37ab.onrender.com${match.myReport.image}`}
                         alt={
                           match.myReport
                             .itemName
                         }
                         className="report-image"
+                        onError={(e) => {
+                          e.target.style.display =
+                            "none";
+                        }}
                       />
                     )}
 
@@ -638,13 +598,9 @@ function Matches() {
                       {match.myReport.description}
                     </p>
 
-
                     <hr />
 
-
-                    {/* ========================= */}
                     {/* Possible Match */}
-                    {/* ========================= */}
 
                     <h3>
                       🤝 Possible Match
@@ -654,13 +610,17 @@ function Matches() {
                       .image && (
 
                       <img
-                        src={`http://localhost:5000${match.matchedReport.image}`}
+                        src={`https://lostfoundportal-37ab.onrender.com${match.matchedReport.image}`}
                         alt={
                           match
                             .matchedReport
                             .itemName
                         }
                         className="report-image"
+                        onError={(e) => {
+                          e.target.style.display =
+                            "none";
+                        }}
                       />
 
                     )}
@@ -709,10 +669,7 @@ function Matches() {
                       }
                     </p>
 
-
-                    {/* ========================= */}
                     {/* Why Match */}
-                    {/* ========================= */}
 
                     <div
                       style={{
@@ -744,10 +701,7 @@ function Matches() {
 
                     </div>
 
-
-                    {/* ========================= */}
                     {/* Contact */}
-                    {/* ========================= */}
 
                     {match
                       .matchedReport
@@ -773,6 +727,7 @@ function Matches() {
             )}
 
           </div>
+
         </>
 
       )}

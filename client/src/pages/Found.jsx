@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../api";
 
 function Found() {
   const [reports, setReports] = useState([]);
@@ -17,8 +17,8 @@ function Found() {
     try {
       setLoading(true);
 
-      const response = await axios.get(
-        "http://localhost:5000/api/reports"
+      const response = await api.get(
+        "/reports"
       );
 
       const foundReports =
@@ -106,10 +106,6 @@ function Found() {
   return (
     <div className="reports-page">
 
-      {/* ============================== */}
-      {/* Heading */}
-      {/* ============================== */}
-
       <h1>📍 Found Items</h1>
 
       <p className="reports-subtitle">
@@ -117,9 +113,7 @@ function Found() {
         by students.
       </p>
 
-      {/* ============================== */}
       {/* Search */}
-      {/* ============================== */}
 
       <div className="report-toolbar">
 
@@ -134,9 +128,7 @@ function Found() {
 
       </div>
 
-      {/* ============================== */}
       {/* Report Count */}
-      {/* ============================== */}
 
       <div
         style={{
@@ -153,9 +145,7 @@ function Found() {
         found
       </div>
 
-      {/* ============================== */}
       {/* No Reports */}
-      {/* ============================== */}
 
       {filteredReports.length === 0 ? (
 
@@ -181,10 +171,6 @@ function Found() {
 
       ) : (
 
-        /* ============================== */
-        /* Reports Grid */
-        /* ============================== */
-
         <div className="reports-grid">
 
           {filteredReports.map(
@@ -195,14 +181,12 @@ function Found() {
                 key={report._id}
               >
 
-                {/* ============================== */}
                 {/* Image */}
-                {/* ============================== */}
 
                 {report.image ? (
 
                   <img
-                    src={`http://localhost:5000${report.image}`}
+                    src={`https://lostfoundportal-37ab.onrender.com${report.image}`}
                     alt={report.itemName}
                     className="report-image"
                     onError={(e) => {
@@ -231,9 +215,7 @@ function Found() {
 
                 )}
 
-                {/* ============================== */}
                 {/* Content */}
-                {/* ============================== */}
 
                 <div className="report-content">
 
@@ -276,8 +258,6 @@ function Found() {
                     {report.user?.name ||
                       "Unknown"}
                   </p>
-
-                  {/* Found Badge */}
 
                   <span className="status found-status">
                     📍 FOUND

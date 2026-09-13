@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../api";
 
 function Lost() {
   const [reports, setReports] = useState([]);
@@ -17,20 +17,28 @@ function Lost() {
     try {
       setLoading(true);
 
-      const response = await axios.get(
-        "http://localhost:5000/api/reports"
+      const response = await api.get(
+        "/reports"
       );
 
-      console.log("ALL REPORTS:", response.data);
-
-      const lostReports = response.data.filter(
-        (report) =>
-          String(report.reportType || "").toLowerCase() ===
-            "lost" &&
-          report.status !== "returned"
+      console.log(
+        "ALL REPORTS:",
+        response.data
       );
 
-      console.log("ACTIVE LOST REPORTS:", lostReports);
+      const lostReports =
+        response.data.filter(
+          (report) =>
+            String(
+              report.reportType || ""
+            ).toLowerCase() === "lost" &&
+            report.status !== "returned"
+        );
+
+      console.log(
+        "ACTIVE LOST REPORTS:",
+        lostReports
+      );
 
       setReports(lostReports);
     } catch (error) {
@@ -51,8 +59,8 @@ function Lost() {
   // ==============================
   // Search
   // ==============================
-  const filteredReports = reports.filter(
-    (report) => {
+  const filteredReports =
+    reports.filter((report) => {
       const searchText =
         search.toLowerCase().trim();
 
@@ -60,21 +68,17 @@ function Lost() {
         String(report.itemName || "")
           .toLowerCase()
           .includes(searchText) ||
-
         String(report.category || "")
           .toLowerCase()
           .includes(searchText) ||
-
         String(report.location || "")
           .toLowerCase()
           .includes(searchText) ||
-
         String(report.description || "")
           .toLowerCase()
           .includes(searchText)
       );
-    }
-  );
+    });
 
   // ==============================
   // Loading
@@ -98,10 +102,6 @@ function Lost() {
   return (
     <div className="reports-page">
 
-      {/* ============================== */}
-      {/* Heading */}
-      {/* ============================== */}
-
       <h1>📦 Lost Items</h1>
 
       <p className="reports-subtitle">
@@ -109,12 +109,9 @@ function Lost() {
         by students.
       </p>
 
-      {/* ============================== */}
       {/* Search */}
-      {/* ============================== */}
 
       <div className="report-toolbar">
-
         <input
           type="text"
           placeholder="🔍 Search item, category, location..."
@@ -123,12 +120,9 @@ function Lost() {
             setSearch(e.target.value)
           }
         />
-
       </div>
 
-      {/* ============================== */}
       {/* Report Count */}
-      {/* ============================== */}
 
       <div
         style={{
@@ -145,14 +139,10 @@ function Lost() {
         found
       </div>
 
-      {/* ============================== */}
       {/* No Reports */}
-      {/* ============================== */}
 
       {filteredReports.length === 0 ? (
-
         <div className="empty-report">
-
           <h2>📦 No Lost Items Found</h2>
 
           {search ? (
@@ -166,33 +156,22 @@ function Lost() {
               been reported yet.
             </p>
           )}
-
         </div>
-
       ) : (
-
-        /* ============================== */
-        /* Reports Grid */
-        /* ============================== */
-
         <div className="reports-grid">
 
           {filteredReports.map(
             (report) => (
-
               <div
                 className="report-card"
                 key={report._id}
               >
 
-                {/* ============================== */}
                 {/* Image */}
-                {/* ============================== */}
 
                 {report.image ? (
-
                   <img
-                    src={`http://localhost:5000${report.image}`}
+                    src={`https://lostfoundportal-37ab.onrender.com${report.image}`}
                     alt={report.itemName}
                     className="report-image"
                     onError={(e) => {
@@ -200,9 +179,7 @@ function Lost() {
                         "none";
                     }}
                   />
-
                 ) : (
-
                   <div
                     style={{
                       height: "180px",
@@ -218,12 +195,9 @@ function Lost() {
                   >
                     📦
                   </div>
-
                 )}
 
-                {/* ============================== */}
                 {/* Content */}
-                {/* ============================== */}
 
                 <div className="report-content">
 
@@ -259,23 +233,17 @@ function Lost() {
                     {report.description}
                   </p>
 
-                  {/* Lost Badge */}
-
                   <span className="status lost-status">
                     📦 LOST
                   </span>
 
                 </div>
-
               </div>
-
             )
           )}
 
         </div>
-
       )}
-
     </div>
   );
 }

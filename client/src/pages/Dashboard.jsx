@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import api from "../api";
 
 function Dashboard() {
   const [stats, setStats] = useState({
@@ -32,8 +32,8 @@ function Dashboard() {
       setLoading(true);
       setError("");
 
-      const response = await axios.get(
-        "http://localhost:5000/api/reports/stats"
+      const response = await api.get(
+        "/reports/stats"
       );
 
       setStats(response.data);
@@ -129,9 +129,7 @@ function Dashboard() {
   return (
     <div className="dashboard-page">
 
-      {/* ================================== */}
       {/* Dashboard Header */}
-      {/* ================================== */}
 
       <div className="dashboard-title">
 
@@ -154,10 +152,7 @@ function Dashboard() {
 
       </div>
 
-
-      {/* ================================== */}
       {/* Error Message */}
-      {/* ================================== */}
 
       {error && (
         <div className="empty-report">
@@ -175,10 +170,7 @@ function Dashboard() {
         </div>
       )}
 
-
-      {/* ================================== */}
       {/* System Overview */}
-      {/* ================================== */}
 
       <div className="dashboard-title">
 
@@ -192,7 +184,6 @@ function Dashboard() {
         </p>
 
       </div>
-
 
       <div className="dashboard-grid">
 
@@ -240,10 +231,7 @@ function Dashboard() {
 
       </div>
 
-
-      {/* ================================== */}
       {/* Refresh Statistics */}
-      {/* ================================== */}
 
       <div
         style={{
@@ -263,10 +251,7 @@ function Dashboard() {
 
       </div>
 
-
-      {/* ================================== */}
       {/* Quick Actions */}
-      {/* ================================== */}
 
       <div className="dashboard-title">
 
@@ -280,7 +265,6 @@ function Dashboard() {
         </p>
 
       </div>
-
 
       <div className="dashboard-grid">
 
@@ -326,10 +310,7 @@ function Dashboard() {
 
       </div>
 
-
-      {/* ================================== */}
       {/* Help / Information */}
-      {/* ================================== */}
 
       <div className="dashboard-card">
 

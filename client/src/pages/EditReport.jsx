@@ -8,7 +8,7 @@ import {
   useParams,
 } from "react-router-dom";
 
-import axios from "axios";
+import api from "../api";
 
 function EditReport() {
   const navigate =
@@ -16,7 +16,6 @@ function EditReport() {
 
   const { id } =
     useParams();
-
 
   const [formData, setFormData] =
     useState({
@@ -27,7 +26,6 @@ function EditReport() {
       description: "",
     });
 
-
   // ==============================
   // Load Report
   // ==============================
@@ -36,16 +34,12 @@ function EditReport() {
     fetchReport();
   }, []);
 
-
   const fetchReport = async () => {
-
     try {
-
       const response =
-        await axios.get(
-          "http://localhost:5000/api/reports"
+        await api.get(
+          "/reports"
         );
-
 
       const report =
         response.data.find(
@@ -53,9 +47,7 @@ function EditReport() {
             item._id === id
         );
 
-
       if (!report) {
-
         alert(
           "Report not found."
         );
@@ -66,7 +58,6 @@ function EditReport() {
 
         return;
       }
-
 
       setFormData({
         itemName:
@@ -89,99 +80,14 @@ function EditReport() {
       });
 
     } catch (error) {
-
       console.error(
         "Fetch Report Error:",
         error
       );
 
-      alert(
-        "Failed to load report."
-      );
-
-      navigate(
-        "/my-reports"
-      );
-    }
-  };
-
-
-  // ==============================
-  // Handle Input
-  // ==============================
-
-  const handleChange = (e) => {
-
-    setFormData({
-      ...formData,
-      [e.target.name]:
-        e.target.value,
-    });
-
-  };
-
-
-  // ==============================
-  // Update Report
-  // ==============================
-
-  const handleSubmit = async (e) => {
-
-    e.preventDefault();
-
-    try {
-
-      const token =
-        localStorage.getItem(
-          "token"
-        );
-
-
-      if (!token) {
-
-        alert(
-          "Please login again."
-        );
-
-        navigate("/login");
-
-        return;
-      }
-
-
-      await axios.put(
-        `http://localhost:5000/api/reports/${id}`,
-        formData,
-        {
-          headers: {
-            Authorization:
-              `Bearer ${token}`,
-          },
-        }
-      );
-
-
-      alert(
-        "Report Updated Successfully!"
-      );
-
-
-      navigate(
-        "/my-reports"
-      );
-
-    } catch (error) {
-
-      console.error(
-        "Update Report Error:",
-        error
-      );
-
-
       if (
         error.response?.status === 401
       ) {
-
         localStorage.removeItem(
           "token"
         );
@@ -201,6 +107,97 @@ function EditReport() {
         return;
       }
 
+      alert(
+        "Failed to load report."
+      );
+
+      navigate(
+        "/my-reports"
+      );
+    }
+  };
+
+  // ==============================
+  // Handle Input
+  // ==============================
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]:
+        e.target.value,
+    });
+  };
+
+  // ==============================
+  // Update Report
+  // ==============================
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const token =
+        localStorage.getItem(
+          "token"
+        );
+
+      if (!token) {
+        alert(
+          "Please login again."
+        );
+
+        navigate("/login");
+
+        return;
+      }
+
+      await api.put(
+        `/reports/${id}`,
+        formData,
+        {
+          headers: {
+            Authorization:
+              `Bearer ${token}`,
+          },
+        }
+      );
+
+      alert(
+        "Report Updated Successfully!"
+      );
+
+      navigate(
+        "/my-reports"
+      );
+
+    } catch (error) {
+      console.error(
+        "Update Report Error:",
+        error
+      );
+
+      if (
+        error.response?.status === 401
+      ) {
+        localStorage.removeItem(
+          "token"
+        );
+
+        localStorage.removeItem(
+          "user"
+        );
+
+        alert(
+          "Session expired. Please login again."
+        );
+
+        navigate(
+          "/login"
+        );
+
+        return;
+      }
 
       alert(
         error.response?.data?.message ||
@@ -209,16 +206,14 @@ function EditReport() {
     }
   };
 
-
   return (
     <div className="form-page">
 
       <div className="form-card">
 
         <h1>
-          ✏ Edit Report
+          ✏️ Edit Report
         </h1>
-
 
         <form
           onSubmit={handleSubmit}
@@ -237,7 +232,6 @@ function EditReport() {
             required
           />
 
-
           <input
             type="text"
             name="category"
@@ -250,7 +244,6 @@ function EditReport() {
             }
             required
           />
-
 
           <input
             type="text"
@@ -265,7 +258,6 @@ function EditReport() {
             required
           />
 
-
           <input
             type="date"
             name="date"
@@ -277,7 +269,6 @@ function EditReport() {
             }
             required
           />
-
 
           <textarea
             name="description"
@@ -291,7 +282,6 @@ function EditReport() {
             }
             required
           />
-
 
           <button type="submit">
             💾 Save Changes

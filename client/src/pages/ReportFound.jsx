@@ -1,77 +1,56 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../api";
 
 function ReportFound() {
   const navigate = useNavigate();
 
-  const [formData, setFormData] =
-    useState({
-      itemName: "",
-      category: "",
-      location: "",
-      date: "",
-      description: "",
-    });
+  const [formData, setFormData] = useState({
+    itemName: "",
+    category: "",
+    location: "",
+    date: "",
+    description: "",
+  });
 
-  const [image, setImage] =
-    useState(null);
-
-  const [preview, setPreview] =
-    useState(null);
-
+  const [image, setImage] = useState(null);
+  const [preview, setPreview] = useState(null);
 
   // ==============================
   // Handle Input
   // ==============================
 
   const handleChange = (e) => {
-
     setFormData({
       ...formData,
-      [e.target.name]:
-        e.target.value,
+      [e.target.name]: e.target.value,
     });
-
   };
-
 
   // ==============================
   // Handle Image
   // ==============================
 
   const handleImage = (e) => {
-
-    const file =
-      e.target.files[0];
+    const file = e.target.files[0];
 
     if (file) {
-
       setImage(file);
-
-      setPreview(
-        URL.createObjectURL(file)
-      );
-
+      setPreview(URL.createObjectURL(file));
     }
   };
-
 
   // ==============================
   // Submit Report
   // ==============================
 
   const handleSubmit = async (e) => {
-
     e.preventDefault();
 
     try {
-
-      const token =
-        localStorage.getItem("token");
+      const token = localStorage.getItem("token");
 
       if (!token) {
-
         alert(
           "Please login before submitting a report."
         );
@@ -81,9 +60,7 @@ function ReportFound() {
         return;
       }
 
-
-      const data =
-        new FormData();
+      const data = new FormData();
 
       data.append(
         "itemName",
@@ -115,34 +92,33 @@ function ReportFound() {
         "found"
       );
 
-
       if (image) {
-
         data.append(
           "image",
           image
         );
-
       }
 
+      // =====================================
+      // Send Report To Render Backend
+      // =====================================
 
-      const response =
-        await axios.post(
-          "http://localhost:5000/api/reports",
-          data,
-          {
-            headers: {
-              Authorization:
-                `Bearer ${token}`,
-            },
-          }
-        );
-
+      const response = await api.post(
+        "/reports",
+        data,
+        {
+          headers: {
+            Authorization:
+              `Bearer ${token}`,
+          },
+        }
+      );
 
       alert(
         response.data.message
       );
 
+      // Reset form
 
       setFormData({
         itemName: "",
@@ -155,23 +131,25 @@ function ReportFound() {
       setImage(null);
       setPreview(null);
 
+      // Go to My Reports
 
       navigate(
         "/my-reports"
       );
 
     } catch (error) {
-
       console.error(
         "Create Found Report Error:",
         error
       );
 
+      // =====================================
+      // Session Expired
+      // =====================================
 
       if (
         error.response?.status === 401
       ) {
-
         localStorage.removeItem(
           "token"
         );
@@ -189,14 +167,12 @@ function ReportFound() {
         return;
       }
 
-
       alert(
         error.response?.data?.message ||
           "Failed to submit report"
       );
     }
   };
-
 
   return (
     <div className="form-page">
@@ -206,7 +182,6 @@ function ReportFound() {
         <h1>
           📍 Report Found Item
         </h1>
-
 
         <form
           onSubmit={handleSubmit}
@@ -224,7 +199,6 @@ function ReportFound() {
             }
             required
           />
-
 
           <select
             name="category"
@@ -291,7 +265,6 @@ function ReportFound() {
 
           </select>
 
-
           <input
             type="text"
             name="location"
@@ -305,7 +278,6 @@ function ReportFound() {
             required
           />
 
-
           <input
             type="date"
             name="date"
@@ -317,7 +289,6 @@ function ReportFound() {
             }
             required
           />
-
 
           <textarea
             name="description"
@@ -331,7 +302,6 @@ function ReportFound() {
             }
             required
           />
-
 
           {/* ============================== */}
           {/* Image Upload */}
@@ -348,7 +318,6 @@ function ReportFound() {
               }
             />
 
-
             {preview ? (
 
               <div className="image-preview">
@@ -357,7 +326,6 @@ function ReportFound() {
                   src={preview}
                   alt="Preview"
                 />
-
 
                 <button
                   type="button"
@@ -397,7 +365,6 @@ function ReportFound() {
             )}
 
           </label>
-
 
           <button type="submit">
             Submit Report

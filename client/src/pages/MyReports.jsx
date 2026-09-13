@@ -203,9 +203,7 @@ function MyReports() {
   return (
     <div className="reports-page">
 
-      {/* ================================== */}
       {/* Heading */}
-      {/* ================================== */}
 
       <h1>
         📋 My Reports
@@ -216,10 +214,7 @@ function MyReports() {
         reports submitted by you.
       </p>
 
-
-      {/* ================================== */}
       {/* Report Summary */}
-      {/* ================================== */}
 
       <div className="dashboard-grid">
 
@@ -239,7 +234,6 @@ function MyReports() {
 
         </div>
 
-
         <div className="dashboard-card">
 
           <div className="icon">
@@ -255,7 +249,6 @@ function MyReports() {
           </p>
 
         </div>
-
 
         <div className="dashboard-card">
 
@@ -275,10 +268,7 @@ function MyReports() {
 
       </div>
 
-
-      {/* ================================== */}
       {/* Filters */}
-      {/* ================================== */}
 
       <div
         style={{
@@ -330,10 +320,7 @@ function MyReports() {
 
       </div>
 
-
-      {/* ================================== */}
       {/* No Reports */}
-      {/* ================================== */}
 
       {filteredReports.length === 0 ? (
 
@@ -377,10 +364,6 @@ function MyReports() {
 
       ) : (
 
-        /* ================================== */
-        /* Reports Grid */
-        /* ================================== */
-
         <div className="reports-grid">
 
           {filteredReports.map(
@@ -396,9 +379,7 @@ function MyReports() {
                   key={report._id}
                 >
 
-                  {/* ======================== */}
                   {/* Status */}
-                  {/* ======================== */}
 
                   <div
                     style={{
@@ -423,25 +404,23 @@ function MyReports() {
 
                   </div>
 
-
-                  {/* ======================== */}
                   {/* Image */}
-                  {/* ======================== */}
 
                   {report.image && (
                     <img
-                      src={`http://localhost:5000${report.image}`}
+                      src={`https://lostfoundportal-37ab.onrender.com${report.image}`}
                       alt={
                         report.itemName
                       }
                       className="report-image"
+                      onError={(e) => {
+                        e.target.style.display =
+                          "none";
+                      }}
                     />
                   )}
 
-
-                  {/* ======================== */}
                   {/* Report Information */}
-                  {/* ======================== */}
 
                   <h2>
                     {report.itemName}
@@ -489,10 +468,7 @@ function MyReports() {
                     {report.description}
                   </p>
 
-
-                  {/* ======================== */}
                   {/* Returned Date */}
-                  {/* ======================== */}
 
                   {isReturned &&
                     report.returnedAt && (
@@ -506,10 +482,7 @@ function MyReports() {
                       </p>
                     )}
 
-
-                  {/* ======================== */}
                   {/* Actions */}
-                  {/* ======================== */}
 
                   <div
                     style={{
@@ -517,8 +490,6 @@ function MyReports() {
                         "20px",
                     }}
                   >
-
-                    {/* Active Report Actions */}
 
                     {!isReturned && (
                       <>
@@ -544,9 +515,6 @@ function MyReports() {
                       </>
                     )}
 
-
-                    {/* Delete */}
-
                     {" "}
 
                     <button
@@ -561,10 +529,7 @@ function MyReports() {
 
                   </div>
 
-
-                  {/* ======================== */}
                   {/* Returned Information */}
-                  {/* ======================== */}
 
                   {isReturned && (
                     <div

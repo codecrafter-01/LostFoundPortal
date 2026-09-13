@@ -1,74 +1,54 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../api";
 
 function ReportLost() {
   const navigate = useNavigate();
 
-  const [formData, setFormData] =
-    useState({
-      itemName: "",
-      category: "",
-      location: "",
-      date: "",
-      description: "",
-    });
+  const [formData, setFormData] = useState({
+    itemName: "",
+    category: "",
+    location: "",
+    date: "",
+    description: "",
+  });
 
-  const [image, setImage] =
-    useState(null);
-
-  const [preview, setPreview] =
-    useState(null);
-
+  const [image, setImage] = useState(null);
+  const [preview, setPreview] = useState(null);
 
   // ==============================
   // Handle Input
   // ==============================
 
   const handleChange = (e) => {
-
     setFormData({
       ...formData,
-      [e.target.name]:
-        e.target.value,
+      [e.target.name]: e.target.value,
     });
-
   };
-
 
   // ==============================
   // Handle Image
   // ==============================
 
   const handleImage = (e) => {
-
-    const file =
-      e.target.files[0];
+    const file = e.target.files[0];
 
     if (file) {
-
       setImage(file);
-
-      setPreview(
-        URL.createObjectURL(file)
-      );
-
+      setPreview(URL.createObjectURL(file));
     }
   };
-
 
   // ==============================
   // Submit Report
   // ==============================
 
   const handleSubmit = async (e) => {
-
     e.preventDefault();
 
     try {
-
-      const token =
-        localStorage.getItem("token");
+      const token = localStorage.getItem("token");
 
       if (!token) {
         alert(
@@ -80,9 +60,7 @@ function ReportLost() {
         return;
       }
 
-
-      const data =
-        new FormData();
+      const data = new FormData();
 
       data.append(
         "itemName",
@@ -114,34 +92,33 @@ function ReportLost() {
         "lost"
       );
 
-
       if (image) {
-
         data.append(
           "image",
           image
         );
-
       }
 
+      // =====================================
+      // Send Report To Render Backend
+      // =====================================
 
-      const response =
-        await axios.post(
-          "http://localhost:5000/api/reports",
-          data,
-          {
-            headers: {
-              Authorization:
-                `Bearer ${token}`,
-            },
-          }
-        );
-
+      const response = await api.post(
+        "/reports",
+        data,
+        {
+          headers: {
+            Authorization:
+              `Bearer ${token}`,
+          },
+        }
+      );
 
       alert(
         response.data.message
       );
 
+      // Reset form
 
       setFormData({
         itemName: "",
@@ -154,23 +131,25 @@ function ReportLost() {
       setImage(null);
       setPreview(null);
 
+      // Go to My Reports
 
       navigate(
         "/my-reports"
       );
 
     } catch (error) {
-
       console.error(
         "Create Lost Report Error:",
         error
       );
 
+      // =====================================
+      // Session Expired
+      // =====================================
 
       if (
         error.response?.status === 401
       ) {
-
         localStorage.removeItem(
           "token"
         );
@@ -188,14 +167,12 @@ function ReportLost() {
         return;
       }
 
-
       alert(
         error.response?.data?.message ||
           "Failed to submit report"
       );
     }
   };
-
 
   return (
     <div className="form-page">
@@ -205,7 +182,6 @@ function ReportLost() {
         <h1>
           📦 Report Lost Item
         </h1>
-
 
         <form
           onSubmit={handleSubmit}
@@ -223,7 +199,6 @@ function ReportLost() {
             }
             required
           />
-
 
           <select
             name="category"
@@ -290,7 +265,6 @@ function ReportLost() {
 
           </select>
 
-
           <input
             type="text"
             name="location"
@@ -304,7 +278,6 @@ function ReportLost() {
             required
           />
 
-
           <input
             type="date"
             name="date"
@@ -316,7 +289,6 @@ function ReportLost() {
             }
             required
           />
-
 
           <textarea
             name="description"
@@ -330,7 +302,6 @@ function ReportLost() {
             }
             required
           />
-
 
           {/* ============================== */}
           {/* Image Upload */}
@@ -347,7 +318,6 @@ function ReportLost() {
               }
             />
 
-
             {preview ? (
 
               <div className="image-preview">
@@ -356,7 +326,6 @@ function ReportLost() {
                   src={preview}
                   alt="Preview"
                 />
-
 
                 <button
                   type="button"
@@ -396,7 +365,6 @@ function ReportLost() {
             )}
 
           </label>
-
 
           <button type="submit">
             Submit Report

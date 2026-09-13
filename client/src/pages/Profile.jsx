@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../api";
 
 function Profile() {
   const [stats, setStats] = useState({
@@ -23,15 +23,16 @@ function Profile() {
     try {
       setLoading(true);
 
-      const response = await axios.get(
-        "http://localhost:5000/api/reports"
+      const response = await api.get(
+        "/reports"
       );
 
-      const myReports = response.data.filter(
-        (report) =>
-          report.user &&
-          report.user._id === user._id
-      );
+      const myReports =
+        response.data.filter(
+          (report) =>
+            report.user &&
+            report.user._id === user?._id
+        );
 
       setStats({
         total: myReports.length,
@@ -67,12 +68,18 @@ function Profile() {
     <div className="dashboard">
 
       {/* Profile Heading */}
-      <h1>👤 Student Profile</h1>
+
+      <h1>
+        👤 Student Profile
+      </h1>
 
       {/* User Information */}
+
       <div className="dashboard-card">
 
-        <h2>👋 {user?.name}</h2>
+        <h2>
+          👋 {user?.name}
+        </h2>
 
         <p>
           <strong>Email:</strong>{" "}
@@ -94,38 +101,71 @@ function Profile() {
       <br />
 
       {/* Profile Statistics */}
+
       <div className="dashboard-stats">
 
         {/* Total Reports */}
+
         <div className="stat-box">
+
           <h2>
-            {loading ? "..." : stats.total}
+            {loading
+              ? "..."
+              : stats.total}
           </h2>
-          <p>📋 Total Reports</p>
+
+          <p>
+            📋 Total Reports
+          </p>
+
         </div>
 
         {/* Lost Reports */}
+
         <div className="stat-box">
+
           <h2>
-            {loading ? "..." : stats.lost}
+            {loading
+              ? "..."
+              : stats.lost}
           </h2>
-          <p>📦 Lost Reports</p>
+
+          <p>
+            📦 Lost Reports
+          </p>
+
         </div>
 
         {/* Found Reports */}
+
         <div className="stat-box">
+
           <h2>
-            {loading ? "..." : stats.found}
+            {loading
+              ? "..."
+              : stats.found}
           </h2>
-          <p>📍 Found Reports</p>
+
+          <p>
+            📍 Found Reports
+          </p>
+
         </div>
 
         {/* Returned Reports */}
+
         <div className="stat-box">
+
           <h2>
-            {loading ? "..." : stats.returned}
+            {loading
+              ? "..."
+              : stats.returned}
           </h2>
-          <p>✅ Returned Reports</p>
+
+          <p>
+            ✅ Returned Reports
+          </p>
+
         </div>
 
       </div>
