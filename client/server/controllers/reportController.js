@@ -1,5 +1,11 @@
 const Report = require("../models/Report");
 const User = require("../models/User");
+const {
+  sendReportCreatedEmail,
+  sendSmartMatchEmail,
+  sendReturnedEmail,
+} = require("../services/emailService");
+const { calculateMatchScore } = require("../utils/matchUtils");
 
 // ==============================
 // Create Report
@@ -37,8 +43,51 @@ const createReport = async (req, res) => {
       returnedAt: null,
     });
 
+    // =====================================
+    // Trigger Email Notifications (Non-blocking)
+    // =====================================
+    try {
+      // 1. Send Report Created Email to student
+      await sendReportCreatedEmail(req.user, report);
+
+      // 2. Check for Smart Matches against active opposite reports
+      const oppositeType = reportType === "lost" ? "found" : "lost";
+      const candidateReports = await Report.find({
+        status: "active",
+        reportType: oppositeType,
+        user: { $ne: userId },
+      }).populate("user", "name email");
+
+      for (const candidate of candidateReports) {
+        if (candidate.user && candidate.user.email) {
+          const matchResult = calculateMatchScore(report, candidate);
+          if (matchResult.isMatch) {
+            // Send Smart Match notification to matched item owner
+            await sendSmartMatchEmail(
+              candidate.user,
+              candidate,
+              report,
+              matchResult.score,
+              matchResult.reasons
+            );
+
+            // Send Smart Match notification to report creator
+            await sendSmartMatchEmail(
+              req.user,
+              report,
+              candidate,
+              matchResult.score,
+              matchResult.reasons
+            );
+          }
+        }
+      }
+    } catch (emailError) {
+      console.error("⚠️ Email Notification Error (Non-blocking):", emailError.message);
+    }
+
     res.status(201).json({
-      message: "Report Submitted Successfully",
+      message: "Report Submitted Successfully 📧 Email confirmation sent!",
       report,
     });
 
@@ -248,9 +297,16 @@ const markAsReturned = async (req, res) => {
     const updatedReport =
       await report.save();
 
+    // Trigger Returned Email Notification (Non-blocking)
+    try {
+      await sendReturnedEmail(req.user, updatedReport);
+    } catch (emailError) {
+      console.error("⚠️ Returned Email Error (Non-blocking):", emailError.message);
+    }
+
     res.json({
       message:
-        "Item marked as returned successfully",
+        "Item marked as returned successfully 📧 Email notification sent!",
       report: updatedReport,
     });
 

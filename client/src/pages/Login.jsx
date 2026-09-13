@@ -24,8 +24,7 @@ function Login() {
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]:
-        e.target.value,
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -37,36 +36,26 @@ function Login() {
     e.preventDefault();
 
     try {
-      const response =
-        await api.post(
-          "/auth/login",
-          {
-            email:
-              formData.email,
-            password:
-              formData.password,
-          }
-        );
+      const response = await api.post(
+        "/auth/login",
+        {
+          email: formData.email,
+          password: formData.password,
+        }
+      );
 
-      // Store JWT token
       localStorage.setItem(
         "token",
         response.data.token
       );
 
-      // Store user information
       localStorage.setItem(
         "user",
-        JSON.stringify(
-          response.data.user
-        )
+        JSON.stringify(response.data.user)
       );
 
-      alert(
-        response.data.message
-      );
+      alert(response.data.message);
 
-      // Go to dashboard
       navigate("/dashboard");
 
     } catch (error) {
@@ -95,13 +84,11 @@ function Login() {
           Student Login
         </h2>
 
-        <form
-          onSubmit={handleSubmit}
-        >
+        <form onSubmit={handleSubmit}>
 
-          {/* ============================== */}
-          {/* Email */}
-          {/* ============================== */}
+          {/* ==============================
+              EMAIL
+              ============================== */}
 
           <input
             type="email"
@@ -112,13 +99,14 @@ function Login() {
             required
           />
 
-          {/* ============================== */}
-          {/* Password */}
-          {/* ============================== */}
+          {/* ==============================
+              PASSWORD
+              ============================== */}
 
-          <div className="password-box">
+          <div className="password-wrapper">
 
             <input
+              className="password-input"
               type={
                 showPassword
                   ? "text"
@@ -126,22 +114,23 @@ function Login() {
               }
               name="password"
               placeholder="Password"
-              value={
-                formData.password
-              }
-              onChange={
-                handleChange
-              }
+              value={formData.password}
+              onChange={handleChange}
               required
             />
 
             <button
               type="button"
-              className="show-btn"
+              className="password-toggle"
               onClick={() =>
                 setShowPassword(
-                  !showPassword
+                  (previous) => !previous
                 )
+              }
+              aria-label={
+                showPassword
+                  ? "Hide password"
+                  : "Show password"
               }
             >
               {showPassword
@@ -151,9 +140,9 @@ function Login() {
 
           </div>
 
-          {/* ============================== */}
-          {/* Login Options */}
-          {/* ============================== */}
+          {/* ==============================
+              LOGIN OPTIONS
+              ============================== */}
 
           <div className="login-options">
 
@@ -161,6 +150,7 @@ function Login() {
               <input
                 type="checkbox"
               />
+
               Remember Me
             </label>
 
@@ -170,9 +160,9 @@ function Login() {
 
           </div>
 
-          {/* ============================== */}
-          {/* Login Button */}
-          {/* ============================== */}
+          {/* ==============================
+              LOGIN BUTTON
+              ============================== */}
 
           <button
             type="submit"
@@ -181,9 +171,9 @@ function Login() {
             Login
           </button>
 
-          {/* ============================== */}
-          {/* Register */}
-          {/* ============================== */}
+          {/* ==============================
+              REGISTER
+              ============================== */}
 
           <p className="register-link">
 
