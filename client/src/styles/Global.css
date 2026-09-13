@@ -1,359 +1,207 @@
 /* =========================================================
-   GLOBAL STYLES
-   Lost & Found Student Portal
+   GLOBAL STYLES & DESIGN SYSTEM
+   University Lost & Found Student Portal
    ========================================================= */
 
-/* Google Font */
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap");
 
-/* =========================================================
-   RESET
-   ========================================================= */
+:root {
+  --font-main: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-heading: "Outfit", "Plus Jakarta Sans", sans-serif;
+
+  --primary: #6366f1;
+  --primary-hover: #4f46e5;
+  --primary-light: #e0e7ff;
+  
+  --secondary: #06b6d4;
+  --accent: #a855f7;
+
+  --grad-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
+  --grad-surface: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  --grad-hero: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #311042 100%);
+
+  --bg-page: #f8fafc;
+  --card-bg: #ffffff;
+  --text-dark: #0f172a;
+  --text-muted: #64748b;
+  --border-light: rgba(226, 232, 240, 0.8);
+  
+  --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 10px 25px -5px rgba(99, 102, 241, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 20px 35px -10px rgba(99, 102, 241, 0.15), 0 10px 15px -5px rgba(0, 0, 0, 0.04);
+  --shadow-glow: 0 0 25px rgba(99, 102, 241, 0.35);
+}
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 html {
-    scroll-behavior: smooth;
+  scroll-behavior: smooth;
+  font-family: var(--font-main);
 }
 
 body {
-    font-family: "Poppins", sans-serif;
-    background: #f5f7fb;
-    color: #222;
-    line-height: 1.6;
-    min-height: 100vh;
+  font-family: var(--font-main);
+  background-color: var(--bg-page);
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.07) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(168, 85, 247, 0.07) 0px, transparent 50%);
+  background-attachment: fixed;
+  color: var(--text-dark);
+  line-height: 1.6;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Prevent horizontal scrolling */
-html,
-body {
-    max-width: 100%;
-    overflow-x: hidden;
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
-/* =========================================================
-   LINKS
-   ========================================================= */
-
+/* Links */
 a {
-    text-decoration: none;
-    color: inherit;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.25s ease;
 }
 
 a:focus-visible {
-    outline: 3px solid rgba(79, 70, 229, 0.25);
-    outline-offset: 3px;
-    border-radius: 6px;
+  outline: 3px solid rgba(99, 102, 241, 0.4);
+  outline-offset: 2px;
+  border-radius: 6px;
 }
 
-/* =========================================================
-   BUTTONS
-   ========================================================= */
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  color: var(--text-dark);
+  letter-spacing: -0.02em;
+}
 
+/* Buttons */
 button {
-    cursor: pointer;
-    border: none;
-    border-radius: 10px;
-    transition:
-        transform 0.25s ease,
-        box-shadow 0.25s ease,
-        background 0.25s ease,
-        opacity 0.25s ease;
-    font-family: "Poppins", sans-serif;
+  font-family: var(--font-main);
+  cursor: pointer;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 button:hover {
-    transform: translateY(-2px);
+  transform: translateY(-2px);
 }
 
 button:active {
-    transform: translateY(0);
+  transform: translateY(0);
 }
 
-button:disabled {
-    cursor: not-allowed;
-    opacity: 0.6;
-    transform: none;
+/* Form Inputs */
+input, select, textarea {
+  width: 100%;
+  padding: 14px 18px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  outline: none;
+  transition: all 0.25s ease;
+  font-size: 15px;
+  font-family: var(--font-main);
+  background: #ffffff;
+  color: var(--text-dark);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
 }
 
-button:focus-visible {
-    outline: 3px solid rgba(79, 70, 229, 0.25);
-    outline-offset: 3px;
+input::placeholder, textarea::placeholder {
+  color: #94a3b8;
 }
 
-/* =========================================================
-   INPUTS
-   ========================================================= */
-
-input,
-select,
-textarea {
-    width: 100%;
-    padding: 14px 15px;
-    border: 1px solid #d6d9e2;
-    border-radius: 10px;
-    outline: none;
-    transition:
-        border-color 0.25s ease,
-        box-shadow 0.25s ease,
-        background 0.25s ease;
-    font-size: 15px;
-    font-family: "Poppins", sans-serif;
-    background: #fff;
-    color: #222;
-}
-
-input::placeholder,
-textarea::placeholder {
-    color: #9a9ca5;
-}
-
-input:hover,
-select:hover,
-textarea:hover {
-    border-color: #b8bcc8;
-}
-
-input:focus,
-select:focus,
-textarea:focus {
-    border-color: #4f46e5;
-    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+input:focus, select:focus, textarea:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15), 0 2px 4px rgba(0, 0, 0, 0.02);
 }
 
 textarea {
-    min-height: 120px;
-    resize: vertical;
+  min-height: 120px;
+  resize: vertical;
 }
 
-/* =========================================================
-   CARDS
-   ========================================================= */
-
+/* Universal Cards */
 .card {
-    background: #fff;
-    border-radius: 18px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.07);
-    padding: 25px;
-    border: 1px solid rgba(226, 228, 236, 0.8);
-    transition:
-        transform 0.25s ease,
-        box-shadow 0.25s ease;
+  background: var(--card-bg);
+  border-radius: 20px;
+  box-shadow: var(--shadow-md);
+  padding: 28px;
+  border: 1px solid var(--border-light);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 15px 32px rgba(0, 0, 0, 0.1);
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+  border-color: rgba(99, 102, 241, 0.3);
 }
-
-/* =========================================================
-   CONTAINERS
-   ========================================================= */
 
 .container {
-    width: 90%;
-    max-width: 1200px;
-    margin: auto;
-    padding: 30px 0;
+  width: 90%;
+  max-width: 1280px;
+  margin: auto;
+  padding: 35px 0;
 }
 
-/* =========================================================
-   SECTION TITLES
-   ========================================================= */
-
-.section-title {
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-.section-title h1 {
-    font-size: 36px;
-    line-height: 1.25;
-    color: #1f2937;
-    font-weight: 700;
-}
-
-.section-title p {
-    color: #6b7280;
-    margin-top: 8px;
-    font-size: 15px;
-}
-
-/* =========================================================
-   IMAGES
-   ========================================================= */
-
-img {
-    max-width: 100%;
-    display: block;
-}
-
-img {
-    height: auto;
-}
-
-/* =========================================================
-   TEXT SELECTION
-   ========================================================= */
-
-::selection {
-    background: #4f46e5;
-    color: #fff;
-}
-
-/* =========================================================
-   SCROLLBAR
-   ========================================================= */
-
-::-webkit-scrollbar {
-    width: 9px;
-}
-
-::-webkit-scrollbar-thumb {
-    background: #4f46e5;
-    border-radius: 50px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: #3730a3;
-}
-
-::-webkit-scrollbar-track {
-    background: #eceef3;
-}
-
-/* =========================================================
-   STATUS BADGES
-   ========================================================= */
-
+/* Badges */
 .status {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 7px 16px;
-    border-radius: 30px;
-    font-weight: 600;
-    font-size: 13px;
-    line-height: 1.4;
-    white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 9999px;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.3px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
 }
 
 .lost-status {
-    background: #ffe2e2;
-    color: #c40000;
+  background: #fff1f2;
+  color: #e11d48;
+  border: 1px solid #fecdd3;
 }
 
 .found-status {
-    background: #dfffe3;
-    color: #008b22;
+  background: #f0fdf4;
+  color: #16a34a;
+  border: 1px solid #bbf7d0;
 }
 
-/* Active status used by MyReports */
 .active-status {
-    background: #e1f8e7;
-    color: #15803d;
+  background: #f0fdf4;
+  color: #16a34a;
+  border: 1px solid #bbf7d0;
 }
 
-/* Returned status used by MyReports and Matches */
 .returned-status {
-    background: #e4f7e8;
-    color: #15803d;
+  background: #f0f9ff;
+  color: #0284c7;
+  border: 1px solid #bae6fd;
 }
 
-/* =========================================================
-   COMMON PAGE HELPERS
-   ========================================================= */
-
-.page-title {
-    color: #1f2937;
-    font-weight: 700;
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
 }
 
-.text-muted {
-    color: #6b7280;
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 20px;
 }
 
-.text-center {
-    text-align: center;
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
 }
 
-/* =========================================================
-   RESPONSIVE
-   ========================================================= */
-
-@media (max-width: 992px) {
-    .container {
-        width: 92%;
-    }
-
-    .section-title h1 {
-        font-size: 32px;
-    }
-}
-
-@media (max-width: 768px) {
-    .container {
-        width: 94%;
-        padding: 22px 0;
-    }
-
-    .section-title {
-        margin-bottom: 22px;
-    }
-
-    .section-title h1 {
-        font-size: 28px;
-    }
-
-    .section-title p {
-        font-size: 14px;
-    }
-
-    .card {
-        padding: 20px;
-        border-radius: 15px;
-    }
-
-    input,
-    select,
-    textarea {
-        padding: 12px 13px;
-        font-size: 14px;
-    }
-
-    button {
-        min-height: 42px;
-    }
-
-    .status {
-        font-size: 12px;
-        padding: 6px 13px;
-    }
-}
-
-@media (max-width: 480px) {
-    .container {
-        width: 92%;
-    }
-
-    .section-title h1 {
-        font-size: 24px;
-    }
-
-    .section-title p {
-        font-size: 13px;
-    }
-
-    .card {
-        padding: 17px;
-        border-radius: 13px;
-    }
-
-    button {
-        width: 100%;
-    }
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
 }

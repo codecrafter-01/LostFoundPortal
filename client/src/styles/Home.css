@@ -1,404 +1,192 @@
 /* =========================================================
-   HOME PAGE
-   Lost & Found Student Portal
+   HOME PAGE - MODERN VIBRANT STYLING
    ========================================================= */
 
 .home {
-    width: 100%;
-    max-width: 1400px;
-
-    margin: 0 auto;
-
-    padding: 40px 6%;
+  width: 100%;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 40px 4%;
 }
-
-/* =========================================================
-   HERO SECTION
-   ========================================================= */
 
 .hero {
-    position: relative;
-
-    overflow: hidden;
-
-    text-align: center;
-
-    padding: 90px 30px;
-
-    border-radius: 28px;
-
-    color: white;
-
-    background:
-        linear-gradient(
-            135deg,
-            #4f46e5 0%,
-            #6366f1 45%,
-            #7c3aed 100%
-        );
-
-    box-shadow:
-        0 20px 45px rgba(79, 70, 229, 0.25);
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  padding: 100px 30px;
+  border-radius: 32px;
+  color: white;
+  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #311042 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.5), 0 0 40px rgba(99, 102, 241, 0.2);
 }
 
-/* Decorative circles */
-
+/* Background Animated Gradient Mesh Glowing Orbs */
 .hero::before {
-    content: "";
-
-    position: absolute;
-
-    width: 260px;
-    height: 260px;
-
-    top: -130px;
-    right: -80px;
-
-    border-radius: 50%;
-
-    background: rgba(255, 255, 255, 0.08);
+  content: "";
+  position: absolute;
+  width: 350px;
+  height: 350px;
+  top: -100px;
+  right: -100px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.35) 0%, rgba(99, 102, 241, 0) 70%);
+  filter: blur(40px);
 }
 
 .hero::after {
-    content: "";
-
-    position: absolute;
-
-    width: 200px;
-    height: 200px;
-
-    bottom: -110px;
-    left: -70px;
-
-    border-radius: 50%;
-
-    background: rgba(255, 255, 255, 0.07);
+  content: "";
+  position: absolute;
+  width: 350px;
+  height: 350px;
+  bottom: -100px;
+  left: -100px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(6, 182, 212, 0.35) 0%, rgba(99, 102, 241, 0) 70%);
+  filter: blur(40px);
 }
-
-/* Hero heading */
 
 .hero h1 {
-    position: relative;
-
-    z-index: 1;
-
-    font-size: clamp(34px, 5vw, 52px);
-
-    line-height: 1.2;
-
-    margin-bottom: 20px;
-
-    font-weight: 700;
-
-    letter-spacing: -0.5px;
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-heading, "Outfit", sans-serif);
+  font-size: clamp(38px, 5.5vw, 64px);
+  line-height: 1.15;
+  margin-bottom: 22px;
+  font-weight: 800;
+  letter-spacing: -1.5px;
+  background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 60%, #c084fc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
-
-/* Hero paragraph */
 
 .hero p {
-    position: relative;
-
-    z-index: 1;
-
-    font-size: 19px;
-
-    line-height: 1.7;
-
-    max-width: 720px;
-
-    margin: 0 auto 35px;
-
-    color: rgba(255, 255, 255, 0.92);
+  position: relative;
+  z-index: 1;
+  font-size: 19px;
+  line-height: 1.7;
+  max-width: 720px;
+  margin: 0 auto 40px;
+  color: #cbd5e1;
+  font-weight: 400;
 }
 
-/* =========================================================
-   HERO BUTTONS
-   ========================================================= */
-
 .hero-buttons {
-    position: relative;
-
-    z-index: 2;
-
-    display: flex;
-
-    justify-content: center;
-
-    align-items: center;
-
-    gap: 15px;
-
-    flex-wrap: wrap;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
 }
 
 .hero-buttons button {
-    min-width: 170px;
-
-    padding: 14px 27px;
-
-    border: none;
-
-    border-radius: 12px;
-
-    font-size: 16px;
-
-    font-weight: 600;
-
-    background: white;
-
-    color: #4f46e5;
-
-    box-shadow:
-        0 8px 20px rgba(0, 0, 0, 0.12);
-
-    transition:
-        transform 0.25s ease,
-        box-shadow 0.25s ease,
-        background 0.25s ease;
+  min-width: 190px;
+  padding: 16px 32px;
+  border-radius: 9999px;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .hero-buttons button:hover {
-    transform: translateY(-4px);
-
-    background: #f8f7ff;
-
-    box-shadow:
-        0 14px 28px rgba(0, 0, 0, 0.18);
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 16px 35px rgba(99, 102, 241, 0.6);
+  background: linear-gradient(135deg, #4f46e5 0%, #9333ea 100%);
 }
 
-.hero-buttons button:active {
-    transform: translateY(-1px);
+/* Secondary Button variant inside hero */
+.hero-buttons button:nth-child(2) {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
-/* =========================================================
-   FEATURES SECTION
-   ========================================================= */
+.hero-buttons button:nth-child(2):hover {
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 12px 28px rgba(255, 255, 255, 0.2);
+}
 
+/* Features Grid */
 .features {
-    display: grid;
-
-    grid-template-columns:
-        repeat(auto-fit, minmax(260px, 1fr));
-
-    gap: 25px;
-
-    margin-top: 60px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 28px;
+  margin-top: 65px;
 }
-
-/* =========================================================
-   FEATURE CARD
-   ========================================================= */
 
 .feature-card {
-    position: relative;
-
-    overflow: hidden;
-
-    background: white;
-
-    padding: 32px 27px;
-
-    border-radius: 20px;
-
-    text-align: center;
-
-    border: 1px solid #e8eaf0;
-
-    box-shadow:
-        0 10px 25px rgba(0, 0, 0, 0.07);
-
-    transition:
-        transform 0.3s ease,
-        box-shadow 0.3s ease,
-        border-color 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  background: #ffffff;
+  padding: 36px 30px;
+  border-radius: 24px;
+  text-align: center;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .feature-card::before {
-    content: "";
-
-    position: absolute;
-
-    top: 0;
-    left: 0;
-
-    width: 100%;
-    height: 4px;
-
-    background:
-        linear-gradient(
-            90deg,
-            #4f46e5,
-            #7c3aed
-        );
-
-    transform: scaleX(0);
-
-    transform-origin: left;
-
-    transition:
-        transform 0.3s ease;
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: linear-gradient(90deg, #6366f1, #a855f7, #ec4899);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
 }
 
 .feature-card:hover {
-    transform: translateY(-8px);
-
-    border-color: #ddd9ff;
-
-    box-shadow:
-        0 18px 35px rgba(79, 70, 229, 0.12);
+  transform: translateY(-8px);
+  border-color: rgba(99, 102, 241, 0.3);
+  box-shadow: 0 20px 40px -10px rgba(99, 102, 241, 0.15);
 }
 
 .feature-card:hover::before {
-    transform: scaleX(1);
+  transform: scaleX(1);
 }
-
-/* =========================================================
-   FEATURE CARD HEADING
-   ========================================================= */
 
 .feature-card h2 {
-    color: #4f46e5;
-
-    margin-bottom: 12px;
-
-    font-size: 21px;
-
-    font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 14px;
+  font-size: 22px;
+  font-weight: 700;
 }
-
-/* =========================================================
-   FEATURE CARD TEXT
-   ========================================================= */
 
 .feature-card p {
-    color: #666;
-
-    font-size: 14px;
-
-    line-height: 1.7;
+  color: #64748b;
+  font-size: 15px;
+  line-height: 1.7;
 }
-
-/* =========================================================
-   TABLET
-   ========================================================= */
-
-@media (max-width: 992px) {
-
-    .home {
-        padding: 35px 5%;
-    }
-
-    .hero {
-        padding: 75px 25px;
-    }
-
-    .features {
-        margin-top: 45px;
-
-        gap: 20px;
-    }
-}
-
-/* =========================================================
-   MOBILE
-   ========================================================= */
 
 @media (max-width: 768px) {
-
-    .home {
-        width: 100%;
-
-        padding: 25px 4%;
-    }
-
-    .hero {
-        padding: 60px 20px;
-
-        border-radius: 21px;
-    }
-
-    .hero h1 {
-        font-size: 34px;
-
-        margin-bottom: 16px;
-    }
-
-    .hero p {
-        font-size: 16px;
-
-        line-height: 1.6;
-
-        margin-bottom: 27px;
-    }
-
-    .hero-buttons {
-        flex-direction: column;
-
-        width: 100%;
-    }
-
-    .hero-buttons button {
-        width: min(100%, 300px);
-
-        padding: 13px 20px;
-
-        font-size: 15px;
-    }
-
-    .features {
-        grid-template-columns: 1fr;
-
-        gap: 18px;
-
-        margin-top: 35px;
-    }
-
-    .feature-card {
-        padding: 27px 22px;
-    }
-
-    .feature-card h2 {
-        font-size: 19px;
-    }
-}
-
-/* =========================================================
-   SMALL PHONES
-   ========================================================= */
-
-@media (max-width: 480px) {
-
-    .home {
-        padding: 18px 3%;
-    }
-
-    .hero {
-        padding: 48px 16px;
-
-        border-radius: 18px;
-    }
-
-    .hero h1 {
-        font-size: 28px;
-    }
-
-    .hero p {
-        font-size: 14px;
-    }
-
-    .hero-buttons button {
-        width: 100%;
-
-        font-size: 14px;
-    }
-
-    .feature-card {
-        padding: 24px 18px;
-
-        border-radius: 16px;
-    }
-
-    .feature-card p {
-        font-size: 13px;
-    }
+  .hero {
+    padding: 65px 20px;
+    border-radius: 24px;
+  }
+  .hero h1 {
+    font-size: 34px;
+  }
+  .hero p {
+    font-size: 16px;
+  }
+  .hero-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+  .hero-buttons button {
+    width: 100%;
+  }
 }
