@@ -40,7 +40,22 @@ function Login() {
   return (
     <div className="login-page">
       <div className="login-card">
-        <h1>🎓 Vignan Portal</h1>
+        <div style={{ textAlign: "center", marginBottom: "14px" }}>
+          <img
+            src="/vignan_logo.jpg"
+            alt="Vignan Avatar"
+            style={{
+              width: "68px",
+              height: "68px",
+              borderRadius: "50%",
+              objectFit: "cover",
+              border: "2px solid #6366f1",
+              boxShadow: "0 6px 16px rgba(99, 102, 241, 0.25)",
+            }}
+          />
+        </div>
+
+        <h1>Vignan Portal</h1>
         <h2>Student Login</h2>
 
         <form onSubmit={handleSubmit}>

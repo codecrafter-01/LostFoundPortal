@@ -5,6 +5,20 @@ function Home() {
     <div className="home">
       {/* Hero */}
       <section className="hero">
+        <img
+          src="/vignan_logo.jpg"
+          alt="Vignan Emblem Avatar"
+          style={{
+            width: "84px",
+            height: "84px",
+            borderRadius: "50%",
+            objectFit: "cover",
+            margin: "0 auto 20px",
+            border: "3px solid #ffffff",
+            boxShadow: "0 10px 25px rgba(0, 0, 0, 0.4)",
+          }}
+        />
+
         <h1>🎓 Vignan Lost & Found Portal</h1>
         <p>
           Helping Vignan students recover their lost belongings quickly, securely, and easily.

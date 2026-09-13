@@ -17,9 +17,21 @@ function Navbar() {
 
   return (
     <nav className="navbar">
-      {/* Logo */}
+      {/* Logo with Vignan Avatar */}
       <Link to="/" className="logo">
-        🎓 Vignan Lost & Found
+        <img
+          src="/vignan_logo.jpg"
+          alt="Vignan Logo"
+          style={{
+            width: "36px",
+            height: "36px",
+            borderRadius: "50%",
+            objectFit: "cover",
+            border: "2px solid #ffffff",
+            boxShadow: "0 2px 8px rgba(0, 0, 0, 0.2)",
+          }}
+        />
+        <span>Vignan Lost & Found</span>
       </Link>
 
       {/* Menu */}
@@ -74,8 +86,19 @@ function Navbar() {
         ) : (
           <>
             {user?.name && (
-              <span className="user-name">
-                👋 {user.name}
+              <span className="user-name" style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+                <img
+                  src="/vignan_logo.jpg"
+                  alt="User Avatar"
+                  style={{
+                    width: "24px",
+                    height: "24px",
+                    borderRadius: "50%",
+                    objectFit: "cover",
+                    border: "1.5px solid #ffffff",
+                  }}
+                />
+                {user.name}
               </span>
             )}
             <button className="logout-btn" onClick={handleLogout}>
