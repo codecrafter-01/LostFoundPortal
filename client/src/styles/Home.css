@@ -1,5 +1,5 @@
 /* =========================================================
-   HOME PAGE - BRIGHT CAMPUS HERO WITH ROTATING MAGNIFIER
+   HOME PAGE - BRIGHT CAMPUS HERO LAYOUT
    ========================================================= */
 
 .home {
@@ -13,15 +13,15 @@
   position: relative;
   overflow: hidden;
   text-align: center;
-  padding: 70px 24px 90px;
+  padding: 100px 24px 110px;
   border-radius: 32px;
   color: #0f172a;
   background: 
-    linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.45) 50%, rgba(255, 255, 255, 0.95) 100%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.45) 50%, rgba(255, 255, 255, 0.95) 100%),
     url("/campus_hero.png") center bottom / cover no-repeat;
   border: 1px solid rgba(226, 232, 240, 0.9);
   box-shadow: 0 20px 50px -10px rgba(99, 102, 241, 0.12), 0 10px 25px rgba(0, 0, 0, 0.04);
-  min-height: 520px;
+  min-height: 480px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -55,111 +55,21 @@
   pointer-events: none;
 }
 
-/* Opening Magnifying Glass Animation Wrapper */
-.magnifier-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0 auto 12px;
-  position: relative;
-  z-index: 2;
-}
-
-.magnifier-glass {
-  width: 86px;
-  height: 86px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  /* Entrance: Fade in and scale up */
-  /* Rotation: 360 degree smooth rotation lasting 2.8s */
-  animation: 
-    magnifyEntrance 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards,
-    magnifyRotate 2.8s cubic-bezier(0.4, 0, 0.2, 1) 0.3s forwards,
-    pulseGlow 2.8s ease-in-out 0.3s forwards;
-  transform-origin: center center;
-}
-
-.magnifier-svg {
-  width: 100%;
-  height: 100%;
-  filter: drop-shadow(0 10px 25px rgba(99, 102, 241, 0.35));
-}
-
-/* Entrance: Fade + Scale */
-@keyframes magnifyEntrance {
-  0% {
-    opacity: 0;
-    transform: scale(0.6);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-/* Rotation: Single 360 rotation stopping after ~2.8s */
-@keyframes magnifyRotate {
-  0% {
-    transform: scale(1) rotate(0deg);
-  }
-  100% {
-    transform: scale(1) rotate(360deg);
-  }
-}
-
-/* Minimal Glow Pulse during rotation */
-@keyframes pulseGlow {
-  0% {
-    filter: drop-shadow(0 4px 12px rgba(99, 102, 241, 0.3));
-  }
-  50% {
-    filter: drop-shadow(0 0 30px rgba(168, 85, 247, 0.6));
-  }
-  100% {
-    filter: drop-shadow(0 8px 20px rgba(99, 102, 241, 0.4));
-  }
-}
-
-/* Motion preference override for reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .magnifier-glass {
-    animation: magnifyEntrance 0.5s forwards !important;
-  }
-}
-
-.hero h1 {
-  position: relative;
-  z-index: 2;
-  font-family: var(--font-heading, "Outfit", sans-serif);
-  font-size: clamp(36px, 5.2vw, 58px);
-  line-height: 1.15;
-  margin-bottom: 18px;
-  font-weight: 800;
-  letter-spacing: -1.2px;
-  color: #0f172a;
-  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #4338ca 100%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 0 2px 10px rgba(255, 255, 255, 0.8);
-}
-
 .hero p {
   position: relative;
   z-index: 2;
-  font-size: 18px;
+  font-size: 19px;
   line-height: 1.6;
   max-width: 680px;
-  margin: 0 auto 32px;
-  color: #334155;
-  font-weight: 600;
-  background: rgba(255, 255, 255, 0.75);
-  padding: 8px 22px;
+  margin: 0 auto 36px;
+  color: #1e293b;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.85);
+  padding: 12px 28px;
   border-radius: 9999px;
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.1);
 }
 
 .hero-buttons {
@@ -263,19 +173,12 @@
 
 @media (max-width: 768px) {
   .hero {
-    padding: 55px 18px 70px;
+    padding: 65px 18px 75px;
     border-radius: 24px;
   }
-  .magnifier-glass {
-    width: 70px;
-    height: 70px;
-  }
-  .hero h1 {
-    font-size: 32px;
-  }
   .hero p {
-    font-size: 15px;
-    padding: 6px 14px;
+    font-size: 16px;
+    padding: 8px 16px;
   }
   .hero-buttons {
     flex-direction: column;
@@ -283,12 +186,5 @@
   }
   .hero-buttons button {
     width: 100%;
-  }
-}
-
-@media (max-width: 480px) {
-  .magnifier-glass {
-    width: 58px;
-    height: 58px;
   }
 }
