@@ -205,3 +205,15 @@ textarea {
 ::-webkit-scrollbar-track {
   background: #f1f5f9;
 }
+
+/* Mobile Responsiveness Overrides */
+@media (max-width: 768px) {
+  .container {
+    width: 94%;
+    padding: 20px 0;
+  }
+  .card {
+    padding: 20px 16px;
+    border-radius: 16px;
+  }
+}

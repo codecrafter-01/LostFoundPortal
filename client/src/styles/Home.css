@@ -1,5 +1,5 @@
 /* =========================================================
-   HOME PAGE - VIBRANT HD CAMPUS HERO & SIMPLE ROTATING MAGNIFIER
+   HOME PAGE - VIBRANT HD CAMPUS HERO & MOBILE RESPONSIVE DESIGN
    ========================================================= */
 
 .home {
@@ -196,7 +196,7 @@
 
 .hero-buttons button:nth-child(2):hover {
   background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
-  box-shadow: 0 18px 40px rgba(139, 92, 246, 0.55);
+  box-shadow: 0 16px 35px rgba(139, 92, 246, 0.55);
 }
 
 /* Features Grid */
@@ -255,23 +255,63 @@
   line-height: 1.7;
 }
 
+/* Mobile Breakpoints (< 768px) */
 @media (max-width: 768px) {
   .hero {
-    padding: 50px 18px 65px;
+    padding: 40px 16px 55px;
+    min-height: auto;
     border-radius: 24px;
   }
   .magnifier-simple-icon {
-    width: 68px;
-    height: 68px;
+    width: 64px;
+    height: 64px;
   }
   .portal-hd-title {
-    font-size: 30px;
+    font-size: clamp(26px, 6.5vw, 36px);
+    margin-bottom: 20px;
+  }
+  .portal-sub-tag {
+    gap: 10px;
+  }
+  .tag-line {
+    width: 30px;
+  }
+  .tag-text {
+    font-size: 11px;
+    letter-spacing: 2px;
   }
   .hero-buttons {
     flex-direction: column;
     width: 100%;
+    gap: 12px;
   }
   .hero-buttons button {
     width: 100%;
+    min-width: 0;
+    padding: 14px 20px;
+  }
+}
+
+/* Small Phone Breakpoints (< 480px) */
+@media (max-width: 480px) {
+  .home {
+    padding: 16px 3%;
+  }
+  .hero {
+    padding: 35px 12px 45px;
+    border-radius: 20px;
+  }
+  .magnifier-simple-icon {
+    width: 54px;
+    height: 54px;
+  }
+  .features {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-top: 30px;
+  }
+  .feature-card {
+    padding: 24px 18px;
+    border-radius: 18px;
   }
 }
