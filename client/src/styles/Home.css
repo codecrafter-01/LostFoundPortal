@@ -1,5 +1,5 @@
 /* =========================================================
-   HOME PAGE - CLEAN HERO WITH ZERO DOUBLE OVERLAY
+   HOME PAGE - VIBRANT HD CAMPUS HERO & SIMPLE ROTATING MAGNIFIER
    ========================================================= */
 
 .home {
@@ -16,10 +16,10 @@
   padding: 55px 24px 75px;
   border-radius: 32px;
   color: #0f172a;
-  /* Top solid gradient completely hides old printed image text/logo, 
-     revealing only the clean HD icon & vector title on top */
+  /* Top solid sky gradient completely erases all background image text underneath.
+     Bottom is fully transparent to reveal the boy and girl illustration in full vibrant HD clarity! */
   background: 
-    linear-gradient(180deg, #edf2ff 0%, #edf2ff 46%, rgba(237, 242, 255, 0.5) 72%, rgba(255, 255, 255, 0.98) 100%),
+    linear-gradient(180deg, #edf2ff 0%, #edf2ff 58%, rgba(237, 242, 255, 0.4) 75%, rgba(255, 255, 255, 0) 100%),
     url("/campus_hero.png") center bottom / cover no-repeat;
   border: 1px solid rgba(226, 232, 240, 0.9);
   box-shadow: 0 20px 50px -10px rgba(99, 102, 241, 0.12), 0 10px 25px rgba(0, 0, 0, 0.04);
@@ -57,42 +57,36 @@
   pointer-events: none;
 }
 
-/* HD 3D Magnifier Wrapper & Opening Animation */
-.magnifier-hd-wrapper {
+/* Standalone Frameless Magnifying Glass Icon & Simple Rotation */
+.magnifier-simple-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 0 auto 16px;
+  margin: 0 auto 14px;
   position: relative;
   z-index: 2;
 }
 
-.magnifier-hd-card {
-  width: 105px;
-  height: 105px;
-  border-radius: 28px;
-  overflow: hidden;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(12px);
-  padding: 8px;
-  box-shadow: 0 15px 35px rgba(99, 102, 241, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.9);
-  /* Entrance: Fade in and scale up */
-  /* Levitation / Rotation Effect */
+.magnifier-simple-icon {
+  width: 82px;
+  height: 82px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Entrance fade + Simple 360 degree rotation lasting 2.8s, then stops */
   animation: 
-    hdEntrance 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards,
-    hdFloatRotate 3s cubic-bezier(0.4, 0, 0.2, 1) 0.3s forwards;
+    simpleEntrance 0.6s ease-out forwards,
+    simpleRotate 2.8s cubic-bezier(0.4, 0, 0.2, 1) 0.2s forwards;
   transform-origin: center center;
 }
 
-.magnifier-hd-img {
+.magnifier-simple-svg {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  border-radius: 20px;
-  display: block;
+  filter: drop-shadow(0 10px 25px rgba(99, 102, 241, 0.4));
 }
 
-@keyframes hdEntrance {
+@keyframes simpleEntrance {
   0% {
     opacity: 0;
     transform: scale(0.6);
@@ -103,12 +97,9 @@
   }
 }
 
-@keyframes hdFloatRotate {
+@keyframes simpleRotate {
   0% {
     transform: scale(1) rotate(0deg);
-  }
-  50% {
-    transform: scale(1.05) rotate(180deg);
   }
   100% {
     transform: scale(1) rotate(360deg);
@@ -117,8 +108,8 @@
 
 /* Motion preference override */
 @media (prefers-reduced-motion: reduce) {
-  .magnifier-hd-card {
-    animation: hdEntrance 0.5s forwards !important;
+  .magnifier-simple-icon {
+    animation: simpleEntrance 0.5s forwards !important;
   }
 }
 
@@ -199,7 +190,7 @@
 .hero-buttons button:nth-child(2) {
   background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
   color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.4);
   box-shadow: 0 12px 30px rgba(139, 92, 246, 0.35);
 }
 
@@ -269,9 +260,9 @@
     padding: 50px 18px 65px;
     border-radius: 24px;
   }
-  .magnifier-hd-card {
-    width: 90px;
-    height: 90px;
+  .magnifier-simple-icon {
+    width: 68px;
+    height: 68px;
   }
   .portal-hd-title {
     font-size: 30px;
