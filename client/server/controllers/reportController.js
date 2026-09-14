@@ -26,9 +26,7 @@ const createReport = async (req, res) => {
       ? `/uploads/${req.file.filename}`
       : "";
 
-    // IMPORTANT:
-    // User is taken from the verified JWT,
-    // NOT from the browser request.
+    // User is taken from the verified JWT, NOT from the browser request.
     const userId = req.user._id;
 
     const report = await Report.create({
@@ -44,63 +42,57 @@ const createReport = async (req, res) => {
       returnedAt: null,
     });
 
-    // =====================================
-    // Trigger Email Notifications (Non-blocking)
-    // =====================================
-    try {
-      // 1. Send Report Created Email to student
-      await sendReportCreatedEmail(req.user, report);
-
-      // 2. Check for Smart Matches against active opposite reports
-      const oppositeType = reportType === "lost" ? "found" : "lost";
-      const candidateReports = await Report.find({
-        status: "active",
-        reportType: oppositeType,
-        user: { $ne: userId },
-      }).populate("user", "name email");
-
-      for (const candidate of candidateReports) {
-        if (candidate.user && candidate.user.email) {
-          const matchResult = calculateMatchScore(report, candidate);
-          if (matchResult.isMatch) {
-            // Send Smart Match notification to matched item owner
-            await sendSmartMatchEmail(
-              candidate.user,
-              candidate,
-              report,
-              matchResult.score,
-              matchResult.reasons
-            );
-
-            // Send Smart Match notification to report creator
-            await sendSmartMatchEmail(
-              req.user,
-              report,
-              candidate,
-              matchResult.score,
-              matchResult.reasons
-            );
-          }
-        }
-      }
-    } catch (emailError) {
-      console.error("⚠️ Email Notification Error (Non-blocking):", emailError.message);
-    }
-
+    // ✅ Respond IMMEDIATELY — user gets success in milliseconds
     res.status(201).json({
-      message: "Report Submitted Successfully 📧 Email confirmation sent!",
+      message: "Report Submitted Successfully!",
       report,
     });
 
-  } catch (error) {
-    console.error(
-      "Create Report Error:",
-      error
-    );
+    // 📧 Emails run in the background — do NOT block the response
+    setImmediate(async () => {
+      try {
+        // 1. Send Report Created Email to student
+        await sendReportCreatedEmail(req.user, report);
 
-    res.status(500).json({
-      message: error.message,
+        // 2. Check for Smart Matches against active opposite reports
+        const oppositeType = reportType === "lost" ? "found" : "lost";
+        const candidateReports = await Report.find({
+          status: "active",
+          reportType: oppositeType,
+          user: { $ne: userId },
+        }).populate("user", "name email");
+
+        for (const candidate of candidateReports) {
+          if (candidate.user && candidate.user.email) {
+            const matchResult = calculateMatchScore(report, candidate);
+            if (matchResult.isMatch) {
+              // Notify the matched item owner
+              await sendSmartMatchEmail(
+                candidate.user,
+                candidate,
+                report,
+                matchResult.score,
+                matchResult.reasons
+              );
+              // Notify the report creator
+              await sendSmartMatchEmail(
+                req.user,
+                report,
+                candidate,
+                matchResult.score,
+                matchResult.reasons
+              );
+            }
+          }
+        }
+      } catch (emailError) {
+        console.error("⚠️ Background Email Error:", emailError.message);
+      }
     });
+
+  } catch (error) {
+    console.error("Create Report Error:", error);
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -240,27 +232,24 @@ const updateReport = async (req, res) => {
 
     const updatedReport = await report.save();
 
-    // Send Status Update Email (Non-blocking)
-    try {
-      await sendStatusUpdateEmail(req.user, updatedReport);
-    } catch (emailError) {
-      console.error("⚠️ Status Update Email Error (Non-blocking):", emailError.message);
-    }
-
+    // ✅ Respond immediately
     res.json({
       message: "Report Updated Successfully",
       report: updatedReport,
     });
 
-  } catch (error) {
-    console.error(
-      "Update Report Error:",
-      error
-    );
-
-    res.status(500).json({
-      message: error.message,
+    // 📧 Send status update email in the background
+    setImmediate(async () => {
+      try {
+        await sendStatusUpdateEmail(req.user, updatedReport);
+      } catch (emailError) {
+        console.error("⚠️ Status Update Email Error:", emailError.message);
+      }
     });
+
+  } catch (error) {
+    console.error("Update Report Error:", error);
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -300,31 +289,26 @@ const markAsReturned = async (req, res) => {
     report.status = "returned";
     report.returnedAt = new Date();
 
-    const updatedReport =
-      await report.save();
+    const updatedReport = await report.save();
 
-    // Trigger Returned Email Notification (Non-blocking)
-    try {
-      await sendReturnedEmail(req.user, updatedReport);
-    } catch (emailError) {
-      console.error("⚠️ Returned Email Error (Non-blocking):", emailError.message);
-    }
-
+    // ✅ Respond immediately
     res.json({
-      message:
-        "Item marked as returned successfully 📧 Email notification sent!",
+      message: "Item marked as returned successfully!",
       report: updatedReport,
     });
 
-  } catch (error) {
-    console.error(
-      "Mark Returned Error:",
-      error
-    );
-
-    res.status(500).json({
-      message: error.message,
+    // 📧 Send returned email in the background
+    setImmediate(async () => {
+      try {
+        await sendReturnedEmail(req.user, updatedReport);
+      } catch (emailError) {
+        console.error("⚠️ Returned Email Error:", emailError.message);
+      }
     });
+
+  } catch (error) {
+    console.error("Mark Returned Error:", error);
+    res.status(500).json({ message: error.message });
   }
 };
 
