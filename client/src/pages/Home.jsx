@@ -5,6 +5,28 @@ function Home() {
     <div className="home">
       {/* Hero Section */}
       <section className="hero">
+        {/* Crisp HD 3D Magnifying Glass Icon with Opening Animation */}
+        <div className="magnifier-hd-wrapper" aria-label="3D Magnifying Glass searching animation">
+          <div className="magnifier-hd-card">
+            <img
+              src="/vignan_hd_magnifier.jpg"
+              alt="3D Magnifying Glass Icon"
+              className="magnifier-hd-img"
+            />
+          </div>
+        </div>
+
+        {/* Crisp HD Vignan Lost & Found Portal Title */}
+        <h1 className="portal-hd-title">
+          Vignan <span className="title-highlight">Lost & Found</span>
+          <div className="portal-sub-tag">
+            <span className="tag-line"></span>
+            <span className="tag-text">STUDENT PORTAL</span>
+            <span className="tag-line"></span>
+          </div>
+        </h1>
+
+        {/* Action Buttons */}
         <div className="hero-buttons">
           <Link to="/report-lost">
             <button>📦 Report Lost</button>
@@ -15,7 +37,7 @@ function Home() {
         </div>
       </section>
 
-      {/* Features */}
+      {/* Features Grid */}
       <section className="features">
         <div className="feature-card">
           <h2>📦 Lost Items</h2>
