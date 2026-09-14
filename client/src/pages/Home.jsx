@@ -5,7 +5,7 @@ function Home() {
     <div className="home">
       {/* Hero Section */}
       <section className="hero">
-        {/* Opening Animated Magnifying Glass with Question Mark */}
+        {/* Opening Animated 3D Magnifying Glass with Question Mark */}
         <div className="magnifier-wrapper" aria-label="Searching for lost items animation">
           <div className="magnifier-glass">
             <svg
@@ -30,24 +30,37 @@ function Home() {
                 </filter>
               </defs>
 
+              {/* Glowing Orbit Rings around lens */}
+              <ellipse
+                cx="42"
+                cy="42"
+                rx="34"
+                ry="14"
+                stroke="#818cf8"
+                strokeWidth="2"
+                fill="none"
+                opacity="0.6"
+                transform="rotate(-25 42 42)"
+              />
+
               {/* Magnifying Glass Outer Ring */}
               <circle
                 cx="42"
                 cy="42"
-                r="28"
+                r="26"
                 stroke="url(#glassGrad)"
                 strokeWidth="7"
-                fill="rgba(99, 102, 241, 0.25)"
+                fill="rgba(255, 255, 255, 0.9)"
                 filter="url(#glowFilter)"
               />
 
               {/* Lens Inner Reflection Accent */}
               <path
-                d="M 24 32 A 20 20 0 0 1 42 22"
-                stroke="#ffffff"
+                d="M 24 32 A 18 18 0 0 1 42 22"
+                stroke="#6366f1"
                 strokeWidth="2.5"
                 strokeLinecap="round"
-                opacity="0.7"
+                opacity="0.8"
               />
 
               {/* Question Mark Inside Lens */}
@@ -57,7 +70,7 @@ function Home() {
                 textAnchor="middle"
                 fontSize="24"
                 fontWeight="800"
-                fill="#ffffff"
+                fill="#4f46e5"
                 fontFamily="Outfit, sans-serif"
               >
                 ?
@@ -65,12 +78,12 @@ function Home() {
 
               {/* Magnifying Glass Handle */}
               <rect
-                x="62"
-                y="58"
+                x="60"
+                y="56"
                 width="11"
                 height="28"
                 rx="5.5"
-                transform="rotate(-45 62 58)"
+                transform="rotate(-45 60 56)"
                 fill="url(#handleGrad)"
                 stroke="#ffffff"
                 strokeWidth="1.5"
@@ -83,13 +96,13 @@ function Home() {
           src="/vignan_logo.jpg"
           alt="Vignan Emblem Avatar"
           style={{
-            width: "84px",
-            height: "84px",
+            width: "80px",
+            height: "80px",
             borderRadius: "50%",
             objectFit: "cover",
-            margin: "0 auto 20px",
+            margin: "0 auto 16px",
             border: "3px solid #ffffff",
-            boxShadow: "0 10px 25px rgba(0, 0, 0, 0.4)",
+            boxShadow: "0 10px 25px rgba(99, 102, 241, 0.25)",
           }}
         />
 
