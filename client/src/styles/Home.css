@@ -1,5 +1,5 @@
 /* =========================================================
-   HOME PAGE - BRIGHT CAMPUS HERO LAYOUT
+   HOME PAGE - HD CAMPUS HERO WITH REPORT ACTION BUTTONS
    ========================================================= */
 
 .home {
@@ -13,19 +13,21 @@
   position: relative;
   overflow: hidden;
   text-align: center;
-  padding: 100px 24px 110px;
+  padding: 220px 24px 75px;
   border-radius: 32px;
   color: #0f172a;
   background: 
-    linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.45) 50%, rgba(255, 255, 255, 0.95) 100%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.85) 100%),
     url("/campus_hero.png") center bottom / cover no-repeat;
   border: 1px solid rgba(226, 232, 240, 0.9);
   box-shadow: 0 20px 50px -10px rgba(99, 102, 241, 0.12), 0 10px 25px rgba(0, 0, 0, 0.04);
-  min-height: 480px;
+  min-height: 560px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
 }
 
 /* Soft Glow Accents in Hero */
@@ -37,7 +39,7 @@
   top: -120px;
   right: -100px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, rgba(99, 102, 241, 0) 70%);
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.12) 0%, rgba(99, 102, 241, 0) 70%);
   filter: blur(50px);
   pointer-events: none;
 }
@@ -50,26 +52,9 @@
   bottom: -100px;
   left: -100px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, rgba(168, 85, 247, 0) 70%);
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.12) 0%, rgba(168, 85, 247, 0) 70%);
   filter: blur(50px);
   pointer-events: none;
-}
-
-.hero p {
-  position: relative;
-  z-index: 2;
-  font-size: 19px;
-  line-height: 1.6;
-  max-width: 680px;
-  margin: 0 auto 36px;
-  color: #1e293b;
-  font-weight: 700;
-  background: rgba(255, 255, 255, 0.85);
-  padding: 12px 28px;
-  border-radius: 9999px;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.8);
-  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.1);
 }
 
 .hero-buttons {
@@ -78,27 +63,28 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 18px;
+  gap: 20px;
   flex-wrap: wrap;
 }
 
 .hero-buttons button {
-  min-width: 190px;
-  padding: 16px 34px;
+  min-width: 200px;
+  padding: 17px 36px;
   border-radius: 9999px;
-  font-size: 16px;
+  font-size: 16.5px;
   font-weight: 700;
   letter-spacing: 0.2px;
   background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
   color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  box-shadow: 0 10px 25px rgba(99, 102, 241, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 12px 30px rgba(99, 102, 241, 0.4);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(4px);
 }
 
 .hero-buttons button:hover {
   transform: translateY(-4px) scale(1.02);
-  box-shadow: 0 16px 35px rgba(99, 102, 241, 0.5);
+  box-shadow: 0 18px 40px rgba(99, 102, 241, 0.55);
   background: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%);
 }
 
@@ -106,13 +92,13 @@
 .hero-buttons button:nth-child(2) {
   background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
   color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  box-shadow: 0 10px 25px rgba(139, 92, 246, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 12px 30px rgba(139, 92, 246, 0.4);
 }
 
 .hero-buttons button:nth-child(2):hover {
   background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
-  box-shadow: 0 16px 35px rgba(139, 92, 246, 0.5);
+  box-shadow: 0 18px 40px rgba(139, 92, 246, 0.55);
 }
 
 /* Features Grid */
@@ -173,12 +159,9 @@
 
 @media (max-width: 768px) {
   .hero {
-    padding: 65px 18px 75px;
+    padding: 140px 18px 55px;
+    min-height: 440px;
     border-radius: 24px;
-  }
-  .hero p {
-    font-size: 16px;
-    padding: 8px 16px;
   }
   .hero-buttons {
     flex-direction: column;

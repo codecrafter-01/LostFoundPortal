@@ -5,10 +5,6 @@ function Home() {
     <div className="home">
       {/* Hero Section */}
       <section className="hero">
-        <p>
-          Helping Vignan students recover their lost belongings quickly, securely, and easily.
-        </p>
-
         <div className="hero-buttons">
           <Link to="/report-lost">
             <button>📦 Report Lost</button>
