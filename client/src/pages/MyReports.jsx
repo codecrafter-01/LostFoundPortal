@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../api";
 import { getImageUrl } from "../utils/imageUtils";
+import { useNotification } from "../context/NotificationContext";
 
 function MyReports() {
   const [reports, setReports] = useState([]);
   const [filter, setFilter] = useState("all");
   const [loading, setLoading] = useState(true);
+  const { showNotification } = useNotification();
 
   const user = JSON.parse(localStorage.getItem("user") || "null");
 
@@ -29,7 +31,11 @@ function MyReports() {
       setReports(myReports);
     } catch (error) {
       console.error("Fetch My Reports Error:", error);
-      alert(error.response?.data?.message || "Failed to load your reports");
+      showNotification({
+        title: "Load Error",
+        message: error.response?.data?.message || "Failed to load your reports",
+        type: "error",
+      });
     } finally {
       setLoading(false);
     }
@@ -41,11 +47,19 @@ function MyReports() {
 
     try {
       await api.delete(`/reports/${id}`);
-      alert("Report deleted successfully.");
+      showNotification({
+        title: "Report Deleted",
+        message: "Report deleted successfully.",
+        type: "success",
+      });
       fetchReports();
     } catch (error) {
       console.error("Delete Report Error:", error);
-      alert(error.response?.data?.message || "Failed to delete report");
+      showNotification({
+        title: "Delete Error",
+        message: error.response?.data?.message || "Failed to delete report",
+        type: "error",
+      });
     }
   };
 
@@ -55,11 +69,19 @@ function MyReports() {
 
     try {
       await api.put(`/reports/${id}/returned`);
-      alert("Item marked as returned successfully.");
+      showNotification({
+        title: "Status Updated",
+        message: "Item marked as returned successfully.",
+        type: "success",
+      });
       fetchReports();
     } catch (error) {
       console.error("Mark Returned Error:", error);
-      alert(error.response?.data?.message || "Failed to mark item as returned");
+      showNotification({
+        title: "Update Error",
+        message: error.response?.data?.message || "Failed to mark item as returned",
+        type: "error",
+      });
     }
   };
 

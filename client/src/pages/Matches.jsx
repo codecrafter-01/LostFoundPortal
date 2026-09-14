@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../api";
 import { getImageUrl } from "../utils/imageUtils";
+import { useNotification } from "../context/NotificationContext";
 
 function Matches() {
   const [matches, setMatches] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { showNotification } = useNotification();
 
   const user = JSON.parse(localStorage.getItem("user") || "null");
 
@@ -23,7 +25,11 @@ function Matches() {
       findMatches(response.data);
     } catch (error) {
       console.error("Fetch Matching Reports Error:", error);
-      alert(error.response?.data?.message || "Failed to load matching reports");
+      showNotification({
+        title: "Match Error",
+        message: error.response?.data?.message || "Failed to load matching reports",
+        type: "error",
+      });
     } finally {
       setLoading(false);
     }

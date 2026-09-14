@@ -1,0 +1,156 @@
+/* =========================================================
+   TOP-OF-SCREEN POP-UP NOTIFICATION (TOAST BANNER) STYLING
+   ========================================================= */
+
+.toast-container {
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 90%;
+  max-width: 520px;
+  pointer-events: none;
+}
+
+.toast-banner {
+  pointer-events: auto;
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px 20px;
+  border-radius: 20px;
+  background: rgba(15, 23, 42, 0.92);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4), 0 0 25px rgba(99, 102, 241, 0.3);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  animation: slideDownToast 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Email Banner Variant */
+.toast-banner.toast-email {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.96) 0%, rgba(30, 27, 75, 0.96) 100%);
+  border: 1.5px solid rgba(129, 140, 248, 0.6);
+  box-shadow: 0 18px 45px rgba(99, 102, 241, 0.45);
+}
+
+.toast-banner.toast-success {
+  border-left: 5px solid #22c55e;
+}
+
+.toast-banner.toast-error {
+  border-left: 5px solid #ef4444;
+}
+
+.toast-banner.toast-match {
+  border-left: 5px solid #a855f7;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.96) 0%, rgba(49, 16, 66, 0.96) 100%);
+}
+
+.toast-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.toast-icon-email {
+  animation: pulseEnvelope 1.8s infinite ease-in-out;
+}
+
+.toast-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.toast-badge {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: #818cf8;
+  text-transform: uppercase;
+}
+
+.toast-title {
+  font-family: var(--font-heading, "Outfit", sans-serif);
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.25;
+}
+
+.toast-message {
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: #cbd5e1;
+}
+
+.toast-close-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.toast-close-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: scale(1.1);
+}
+
+@keyframes slideDownToast {
+  0% {
+    opacity: 0;
+    transform: translateY(-40px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes pulseEnvelope {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+}
+
+@media (max-width: 600px) {
+  .toast-container {
+    top: 14px;
+    width: 94%;
+  }
+  .toast-banner {
+    padding: 14px 16px;
+    border-radius: 16px;
+  }
+  .toast-title {
+    font-size: 15px;
+  }
+  .toast-message {
+    font-size: 13px;
+  }
+}

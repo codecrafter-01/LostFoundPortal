@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../api";
+import { useNotification } from "../context/NotificationContext";
 
 function Login() {
   const navigate = useNavigate();
+  const { showNotification } = useNotification();
 
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -29,11 +31,20 @@ function Login() {
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("user", JSON.stringify(response.data.user));
 
-      alert(response.data.message);
+      showNotification({
+        title: "Welcome Back",
+        message: response.data.message || "Logged in successfully!",
+        type: "success",
+      });
+
       navigate("/dashboard");
     } catch (error) {
       console.error("Login Error:", error);
-      alert(error.response?.data?.message || "Login Failed");
+      showNotification({
+        title: "Login Failed",
+        message: error.response?.data?.message || "Invalid email or password",
+        type: "error",
+      });
     }
   };
 

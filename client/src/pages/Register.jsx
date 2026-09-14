@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../api";
+import { useNotification } from "../context/NotificationContext";
 
 function Register() {
   const navigate = useNavigate();
+  const { showNotification } = useNotification();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -23,7 +25,11 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
+      showNotification({
+        title: "Validation Error",
+        message: "Passwords do not match!",
+        type: "error",
+      });
       return;
     }
 
@@ -34,11 +40,19 @@ function Register() {
         password: formData.password,
       });
 
-      alert(response.data.message);
+      showNotification({
+        title: "Registration Successful",
+        message: response.data.message || "Account created! Please login.",
+        type: "success",
+      });
       navigate("/login");
     } catch (error) {
       console.log("Registration Error:", error);
-      alert(error.response?.data?.message || "Registration failed.");
+      showNotification({
+        title: "Registration Failed",
+        message: error.response?.data?.message || "Registration failed.",
+        type: "error",
+      });
     }
   };
 

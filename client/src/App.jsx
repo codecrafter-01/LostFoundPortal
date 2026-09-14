@@ -6,6 +6,9 @@ import {
 
 import "./App.css";
 
+import { NotificationProvider } from "./context/NotificationContext";
+import NotificationToast from "./components/NotificationToast";
+
 import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -24,131 +27,89 @@ import Profile from "./pages/Profile";
 
 function App() {
   return (
-    <BrowserRouter>
+    <NotificationProvider>
+      <BrowserRouter>
+        {/* Top-of-Screen Pop-up Notification Banner Component */}
+        <NotificationToast />
 
-      {/* ============================== */}
-      {/* Navigation Bar */}
-      {/* ============================== */}
+        {/* Navigation Bar */}
+        <Navbar />
 
-      <Navbar />
+        {/* Application Routes */}
+        <Routes>
+          {/* PUBLIC ROUTES */}
+          <Route path="/" element={<Home />} />
+          <Route path="/lost" element={<Lost />} />
+          <Route path="/found" element={<Found />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
 
+          {/* PROTECTED ROUTES */}
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
 
-      {/* ============================== */}
-      {/* Application Routes */}
-      {/* ============================== */}
+          <Route
+            path="/report-lost"
+            element={
+              <ProtectedRoute>
+                <ReportLost />
+              </ProtectedRoute>
+            }
+          />
 
-      <Routes>
+          <Route
+            path="/report-found"
+            element={
+              <ProtectedRoute>
+                <ReportFound />
+              </ProtectedRoute>
+            }
+          />
 
-        {/* ============================== */}
-        {/* PUBLIC ROUTES */}
-        {/* ============================== */}
+          <Route
+            path="/my-reports"
+            element={
+              <ProtectedRoute>
+                <MyReports />
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="/"
-          element={<Home />}
-        />
+          <Route
+            path="/edit-report/:id"
+            element={
+              <ProtectedRoute>
+                <EditReport />
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="/lost"
-          element={<Lost />}
-        />
+          <Route
+            path="/matches"
+            element={
+              <ProtectedRoute>
+                <Matches />
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="/found"
-          element={<Found />}
-        />
-
-        <Route
-          path="/login"
-          element={<Login />}
-        />
-
-        <Route
-          path="/register"
-          element={<Register />}
-        />
-
-
-        {/* ============================== */}
-        {/* PROTECTED ROUTES */}
-        {/* ============================== */}
-
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
-
-
-        <Route
-          path="/report-lost"
-          element={
-            <ProtectedRoute>
-              <ReportLost />
-            </ProtectedRoute>
-          }
-        />
-
-
-        <Route
-          path="/report-found"
-          element={
-            <ProtectedRoute>
-              <ReportFound />
-            </ProtectedRoute>
-          }
-        />
-
-
-        <Route
-          path="/my-reports"
-          element={
-            <ProtectedRoute>
-              <MyReports />
-            </ProtectedRoute>
-          }
-        />
-
-
-        <Route
-          path="/edit-report/:id"
-          element={
-            <ProtectedRoute>
-              <EditReport />
-            </ProtectedRoute>
-          }
-        />
-
-
-        <Route
-          path="/matches"
-          element={
-            <ProtectedRoute>
-              <Matches />
-            </ProtectedRoute>
-          }
-        />
-
-
-        {/* ============================== */}
-        {/* PROFILE ROUTE */}
-        {/* ============================== */}
-
-        <Route
-          path="/profile"
-          element={
-            <ProtectedRoute>
-              <Profile />
-            </ProtectedRoute>
-          }
-        />
-
-      </Routes>
-
-    </BrowserRouter>
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </BrowserRouter>
+    </NotificationProvider>
   );
 }
 

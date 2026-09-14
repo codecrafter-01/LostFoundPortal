@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vignan Lost & Found Portal - Project Presentation</title>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Outfit:wght@600;800&display=swap");
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Plus Jakarta Sans", sans-serif;
+      background: #0f172a;
+      color: #ffffff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .slide-container {
+      width: 100%;
+      max-width: 1100px;
+      aspect-ratio: 16 / 9;
+      background: #1e1b4b;
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .slide {
+      display: none;
+      width: 100%;
+      height: 100%;
+      padding: 50px 60px;
+      flex-direction: column;
+      justify-content: space-between;
+      animation: fadeIn 0.4s ease forwards;
+    }
+
+    .slide.active {
+      display: flex;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.98); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    /* Slide Content Styles */
+    .slide-header {
+      border-bottom: 2px solid rgba(99, 102, 241, 0.4);
+      padding-bottom: 15px;
+      margin-bottom: 20px;
+    }
+
+    .slide-tag {
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 2.5px;
+      color: #818cf8;
+      text-transform: uppercase;
+    }
+
+    .slide-title {
+      font-family: "Outfit", sans-serif;
+      font-size: 32px;
+      font-weight: 800;
+      color: #ffffff;
+      margin-top: 5px;
+    }
+
+    .slide-body {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      align-items: center;
+    }
+
+    .full-width {
+      grid-column: span 2;
+    }
+
+    .card-box {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 18px;
+      padding: 24px;
+      backdrop-filter: blur(10px);
+    }
+
+    .card-box.problem {
+      border-left: 5px solid #ef4444;
+    }
+
+    .card-box.solution {
+      border-left: 5px solid #6366f1;
+    }
+
+    .card-title {
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    ul.slide-list {
+      list-style: none;
+    }
+
+    ul.slide-list li {
+      position: relative;
+      padding-left: 24px;
+      margin-bottom: 12px;
+      font-size: 15px;
+      line-height: 1.6;
+      color: #cbd5e1;
+    }
+
+    ul.slide-list li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: #818cf8;
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    /* Controls Bar */
+    .controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 1100px;
+      margin-top: 20px;
+    }
+
+    .btn {
+      background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+      color: #ffffff;
+      border: none;
+      padding: 12px 26px;
+      border-radius: 9999px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+      transition: transform 0.2s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .counter {
+      font-size: 16px;
+      font-weight: 700;
+      color: #94a3b8;
+    }
+
+    /* Table Styles */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    th, td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 14px;
+    }
+
+    th {
+      background: rgba(99, 102, 241, 0.2);
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    td {
+      color: #cbd5e1;
+    }
+  </style>
+</head>
+<body>
+
+  <div className="slide-container" id="slideDeck">
+
+    <!-- SLIDE 1 -->
+    <div className="slide active" style="background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 60%, #311042 100%); align-items: center; justify-content: center; text-align: center;">
+      <span className="slide-tag">🎓 VIGNAN UNIVERSITY MINI PROJECT</span>
+      <h1 style="font-family: 'Outfit', sans-serif; font-size: 42px; font-weight: 800; margin: 16px 0; color: #ffffff;">Vignan Lost & Found Student Portal</h1>
+      <p style="font-size: 20px; color: #818cf8; font-weight: 600; margin-bottom: 30px;">A Centralized Digital Campus Item Recovery Network</p>
+      
+      <div style="background: rgba(255, 255, 255, 0.08); padding: 20px 40px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.15);">
+        <p style="font-size: 16px; color: #f1f5f9; font-weight: 700;">Department of Computer Science & Engineering</p>
+        <p style="font-size: 14px; color: #94a3b8; margin-top: 4px;">Vignan's Foundation for Science, Technology & Research (VFSTR)</p>
+        <p style="font-size: 13px; color: #c084fc; margin-top: 10px;">Tech Stack: React 19 + Vite | Node.js | Express | MongoDB Atlas | Nodemailer</p>
+      </div>
+    </div>
+
+    <!-- SLIDE 2 -->
+    <div className="slide">
+      <div className="slide-header">
+        <div className="slide-tag">SLIDE 2 OF 6</div>
+        <div className="slide-title">Problem Statement & Proposed Solution</div>
+      </div>
+      <div className="slide-body">
+        <div className="card-box problem">
+          <div className="card-title" style="color: #f87171;">❌ Manual Challenges</div>
+          <ul className="slide-list">
+            <li>Unorganized physical notice boards and WhatsApp chat groups.</li>
+            <li>Delayed communication leading to unrecovered items.</li>
+            <li>Lack of verification to confirm item ownership.</li>
+            <li>No automated status tracking for lost inquiries.</li>
+          </ul>
+        </div>
+        <div className="card-box solution">
+          <div className="card-title" style="color: #818cf8;">✅ Vignan Portal Solution</div>
+          <ul className="slide-list">
+            <li>Single centralized web portal for all Vignan departments.</li>
+            <li>Real-time automated Smart Match Engine.</li>
+            <li>Instant Nodemailer email alerts on match detection.</li>
+            <li>Secure student profiles & JWT authenticated access.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 3 -->
+    <div className="slide">
+      <div className="slide-header">
+        <div className="slide-tag">SLIDE 3 OF 6</div>
+        <div className="slide-title">System Architecture & Technology Stack</div>
+      </div>
+      <div className="slide-body">
+        <div className="card-box full-width">
+          <table>
+            <thead>
+              <tr>
+                <th>Architecture Layer</th>
+                <th>Technologies & Purpose</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Frontend UI</strong></td>
+                <td>React 19 + Vite 8, Vanilla CSS3 (Glassmorphic Theme, Mobile Breakpoints)</td>
+              </tr>
+              <tr>
+                <td><strong>Backend Server</strong></td>
+                <td>Node.js + Express 5 REST API Architecture</td>
+              </tr>
+              <tr>
+                <td><strong>Database Layer</strong></td>
+                <td>MongoDB Atlas Cloud, Mongoose 9 ODM</td>
+              </tr>
+              <tr>
+                <td><strong>Notification & Storage</strong></td>
+                <td>Nodemailer (Automated Email Alerts), Multer (Student Photo Uploads)</td>
+              </tr>
+              <tr>
+                <td><strong>Security & Auth</strong></td>
+                <td>JWT (JSON Web Tokens), bcryptjs Password Hashing, Server .env Isolation</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 4 -->
+    <div className="slide">
+      <div className="slide-header">
+        <div className="slide-tag">SLIDE 4 OF 6</div>
+        <div className="slide-title">Key Features & Smart Match Engine</div>
+      </div>
+      <div className="slide-body" style="grid-template-columns: 1fr 1fr; gap: 20px;">
+        <div className="card-box">
+          <div className="card-title" style="color: #818cf8;">👤 Student Auth & Profile</div>
+          <p style="font-size: 14px; color: #cbd5e1;">JWT login/register with custom student photo avatar uploads.</p>
+        </div>
+        <div className="card-box">
+          <div className="card-title" style="color: #c084fc;">📦 Report Lost & Found</div>
+          <p style="font-size: 14px; color: #cbd5e1;">Categorized item reporting with location, date, description & images.</p>
+        </div>
+        <div className="card-box">
+          <div className="card-title" style="color: #22d3ee;">🤝 Smart Match Engine</div>
+          <p style="font-size: 14px; color: #cbd5e1;">Real-time correlation algorithm matching lost & found reports instantly.</p>
+        </div>
+        <div className="card-box">
+          <div className="card-title" style="color: #34d399;">🔒 Status Tracking</div>
+          <p style="font-size: 14px; color: #cbd5e1;">Item lifecycle management: Active, Matched, and Returned status.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 5 -->
+    <div className="slide">
+      <div className="slide-header">
+        <div className="slide-tag">SLIDE 5 OF 6</div>
+        <div className="slide-title">Automated Email Alerts & Mobile Responsiveness</div>
+      </div>
+      <div className="slide-body">
+        <div className="card-box">
+          <div className="card-title" style="color: #818cf8;">📧 Email Notification System</div>
+          <ul className="slide-list">
+            <li>Nodemailer integration for reliable SMTP email delivery.</li>
+            <li>Report Confirmation email upon submission.</li>
+            <li>Smart Match Alert email dispatched upon match detection.</li>
+            <li>Professional HTML email templates.</li>
+          </ul>
+        </div>
+        <div className="card-box">
+          <div className="card-title" style="color: #c084fc;">📱 Phone Screen Optimization</div>
+          <ul className="slide-list">
+            <li>Slide-down Hamburger Navigation Menu (☰) for mobile.</li>
+            <li>Frameless 3D rotating magnifying glass animation.</li>
+            <li>Full 100% HD daytime campus background underlay.</li>
+            <li>Stacked touch-friendly buttons & zero horizontal scroll.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 6 -->
+    <div className="slide" style="background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 60%, #311042 100%);">
+      <div className="slide-header">
+        <div className="slide-tag" style="color: #c084fc;">SLIDE 6 OF 6</div>
+        <div className="slide-title">Verification, Security & Conclusion</div>
+      </div>
+      <div className="slide-body" style="grid-template-columns: 1fr; gap: 15px;">
+        <div className="card-box" style="border-left: 5px solid #34d399;">
+          <ul className="slide-list">
+            <li><strong>Security Compliance</strong>: Passwords hashed via bcryptjs; stateless session validation via JWT Bearer tokens.</li>
+            <li><strong>Build Verification</strong>: Passed 100% clean production build with Vite in 200ms–390ms (0 errors).</li>
+            <li><strong>GitHub Repository</strong>: Code committed and pushed to main branch.</li>
+            <li><strong>Project Impact</strong>: Replaces manual notice boards with an automated, instant digital campus recovery network.</li>
+          </ul>
+        </div>
+        <div style="text-align: center; margin-top: 10px;">
+          <h2 style="font-family: 'Outfit', sans-serif; color: #c084fc; font-size: 24px;">Thank You! Open for Questions & Live Demo 🎓</h2>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Controls -->
+  <div className="controls">
+    <button className="btn" id="prevBtn" onclick="prevSlide()" disabled>← Previous Slide</button>
+    <div className="counter" id="slideCounter">Slide 1 of 6</div>
+    <button className="btn" id="nextBtn" onclick="nextSlide()">Next Slide →</button>
+  </div>
+
+  <script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll(".slide");
+    const counter = document.getElementById("slideCounter");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+
+    function updateSlides() {
+      slides.forEach((slide, idx) => {
+        slide.classList.toggle("active", idx === currentSlide);
+      });
+      counter.textContent = `Slide ${currentSlide + 1} of ${slides.length}`;
+      prevBtn.disabled = currentSlide === 0;
+      nextBtn.disabled = currentSlide === slides.length - 1;
+    }
+
+    function nextSlide() {
+      if (currentSlide < slides.length - 1) {
+        currentSlide++;
+        updateSlides();
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 0) {
+        currentSlide--;
+        updateSlides();
+      }
+    }
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowRight" || e.key === " ") nextSlide();
+      if (e.key === "ArrowLeft") prevSlide();
+    });
+  </script>
+</body>
+</html>

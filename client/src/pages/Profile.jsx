@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import api from "../api";
+import { useNotification } from "../context/NotificationContext";
 
 function Profile() {
+  const { showNotification } = useNotification();
   const [stats, setStats] = useState({
     total: 0,
     lost: 0,
@@ -48,7 +50,11 @@ function Profile() {
     const file = e.target.files[0];
     if (file) {
       if (file.size > 5 * 1024 * 1024) {
-        alert("Please select a photo smaller than 5MB.");
+        showNotification({
+          title: "File Too Large",
+          message: "Please select a photo smaller than 5MB.",
+          type: "error",
+        });
         return;
       }
 
@@ -57,7 +63,11 @@ function Profile() {
         const base64Data = reader.result;
         setProfilePhoto(base64Data);
         localStorage.setItem("studentPhoto", base64Data);
-        alert("✅ Student photo updated successfully!");
+        showNotification({
+          title: "Profile Updated",
+          message: "Student photo updated successfully!",
+          type: "success",
+        });
       };
       reader.readAsDataURL(file);
     }

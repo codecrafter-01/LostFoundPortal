@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api";
+import { useNotification } from "../context/NotificationContext";
 
 function ReportFound() {
   const navigate = useNavigate();
+  const { showNotification } = useNotification();
 
   const [formData, setFormData] = useState({
     itemName: "",
@@ -51,9 +53,11 @@ function ReportFound() {
       const token = localStorage.getItem("token");
 
       if (!token) {
-        alert(
-          "Please login before submitting a report."
-        );
+        showNotification({
+          title: "Authentication Required",
+          message: "Please login before submitting a report.",
+          type: "error",
+        });
 
         navigate("/login");
 
@@ -62,64 +66,36 @@ function ReportFound() {
 
       const data = new FormData();
 
-      data.append(
-        "itemName",
-        formData.itemName
-      );
-
-      data.append(
-        "category",
-        formData.category
-      );
-
-      data.append(
-        "location",
-        formData.location
-      );
-
-      data.append(
-        "date",
-        formData.date
-      );
-
-      data.append(
-        "description",
-        formData.description
-      );
-
-      data.append(
-        "reportType",
-        "found"
-      );
+      data.append("itemName", formData.itemName);
+      data.append("category", formData.category);
+      data.append("location", formData.location);
+      data.append("date", formData.date);
+      data.append("description", formData.description);
+      data.append("reportType", "found");
 
       if (image) {
-        data.append(
-          "image",
-          image
-        );
+        data.append("image", image);
       }
 
       // =====================================
       // Send Report To Render Backend
       // =====================================
 
-      const response = await api.post(
-        "/reports",
-        data,
-        {
-          headers: {
-            Authorization:
-              `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await api.post("/reports", data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-      alert(
-        response.data.message
-      );
+      // Top-of-screen Pop-up Email Notification Banner
+      showNotification({
+        title: "📧 Email Alert Dispatched",
+        message: response.data.message || "Found report submitted! Confirmation email has been sent to your student inbox.",
+        type: "success",
+        isEmail: true,
+      });
 
       // Reset form
-
       setFormData({
         itemName: "",
         category: "",
@@ -132,45 +108,31 @@ function ReportFound() {
       setPreview(null);
 
       // Go to My Reports
-
-      navigate(
-        "/my-reports"
-      );
+      navigate("/my-reports");
 
     } catch (error) {
-      console.error(
-        "Create Found Report Error:",
-        error
-      );
+      console.error("Create Found Report Error:", error);
 
-      // =====================================
-      // Session Expired
-      // =====================================
+      if (error.response?.status === 401) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
 
-      if (
-        error.response?.status === 401
-      ) {
-        localStorage.removeItem(
-          "token"
-        );
-
-        localStorage.removeItem(
-          "user"
-        );
-
-        alert(
-          "Session expired. Please login again."
-        );
+        showNotification({
+          title: "Session Expired",
+          message: "Session expired. Please login again.",
+          type: "error",
+        });
 
         navigate("/login");
 
         return;
       }
 
-      alert(
-        error.response?.data?.message ||
-          "Failed to submit report"
-      );
+      showNotification({
+        title: "Submission Error",
+        message: error.response?.data?.message || "Failed to submit found report.",
+        type: "error",
+      });
     }
   };
 
