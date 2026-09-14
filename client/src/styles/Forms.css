@@ -72,6 +72,52 @@
   font-weight: 600;
 }
 
+/* Remember Me + Forgot Password row */
+.login-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: -6px;
+}
+
+.login-options label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #64748b;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.login-options label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+  accent-color: var(--primary);
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 0;
+  box-shadow: none;
+  border: 1.5px solid #cbd5e1;
+}
+
+.login-options a {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--primary);
+  white-space: nowrap;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.login-options a:hover {
+  color: var(--primary-hover);
+  text-decoration: underline;
+}
+
 .login-submit,
 .form-card button[type="submit"] {
   width: 100%;

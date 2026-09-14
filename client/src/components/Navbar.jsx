@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import NotificationBell from "./NotificationBell";
 
 function Navbar() {
   const navigate = useNavigate();
@@ -126,6 +127,9 @@ function Navbar() {
                   </span>
                 </Link>
               )}
+
+              {/* 🔔 Notification Bell */}
+              <NotificationBell />
 
               <button className="logout-btn" onClick={handleLogout}>
                 Logout

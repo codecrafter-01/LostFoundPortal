@@ -4,6 +4,7 @@ const {
   sendReportCreatedEmail,
   sendSmartMatchEmail,
   sendReturnedEmail,
+  sendStatusUpdateEmail,
 } = require("../services/emailService");
 const { calculateMatchScore } = require("../utils/matchUtils");
 
@@ -237,12 +238,17 @@ const updateReport = async (req, res) => {
         `/uploads/${req.file.filename}`;
     }
 
-    const updatedReport =
-      await report.save();
+    const updatedReport = await report.save();
+
+    // Send Status Update Email (Non-blocking)
+    try {
+      await sendStatusUpdateEmail(req.user, updatedReport);
+    } catch (emailError) {
+      console.error("⚠️ Status Update Email Error (Non-blocking):", emailError.message);
+    }
 
     res.json({
-      message:
-        "Report Updated Successfully",
+      message: "Report Updated Successfully",
       report: updatedReport,
     });
 

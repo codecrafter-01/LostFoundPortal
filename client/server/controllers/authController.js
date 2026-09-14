@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { sendWelcomeEmail } = require("../services/emailService");
 
 // =====================
 // Register User
@@ -8,6 +9,14 @@ const jwt = require("jsonwebtoken");
 const registerUser = async (req, res) => {
   try {
     const { name, email, password } = req.body;
+
+    // Basic email format validation
+    const emailRegex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({
+        message: "Please enter a valid email address",
+      });
+    }
 
     const userExists = await User.findOne({ email });
 
@@ -24,6 +33,13 @@ const registerUser = async (req, res) => {
       email,
       password: hashedPassword,
     });
+
+    // Send Welcome Email (Non-blocking)
+    try {
+      await sendWelcomeEmail({ name: user.name, email: user.email });
+    } catch (emailError) {
+      console.error("⚠️ Welcome Email Error (Non-blocking):", emailError.message);
+    }
 
     res.status(201).json({
       message: "Registration Successful",

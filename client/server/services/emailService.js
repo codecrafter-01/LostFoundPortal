@@ -32,6 +32,54 @@ const getFromAddress = () => {
 };
 
 /**
+ * Returns the admin CC email(s) from .env.
+ * Every portal email is also CC'd here so the admin always gets a copy.
+ */
+const getAdminCC = () => {
+  const admin = process.env.ADMIN_NOTIFY_EMAIL;
+  return admin && admin.trim() ? admin.trim() : null;
+};
+
+// =====================================
+// Email Validation - Block Fake Emails
+// =====================================
+const BLOCKED_DOMAINS = [
+  "example.com", "test.com", "fake.com", "invalid.com",
+  "mailinator.com", "guerrillamail.com", "tempmail.com",
+  "throwaway.email", "yopmail.com", "sharklasers.com",
+  "guerrillamailblock.com", "grr.la", "guerrillamail.info",
+  "spam4.me", "trashmail.com", "trashmail.me", "dispostable.com",
+  "maildrop.cc", "spamgourmet.com", "getairmail.com",
+  "fakeinbox.com", "nospam.ze.tc", "bugmenot.com",
+  "sample.com", "domain.com", "nomail.com", "noemail.com",
+];
+
+/**
+ * Returns true only if the email address looks real and valid.
+ * Blocks fake/disposable domains and badly formatted emails.
+ */
+const isRealEmail = (email) => {
+  if (!email || typeof email !== "string") return false;
+
+  // Basic RFC 5322 email format check
+  const emailRegex = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
+  if (!emailRegex.test(email.trim())) return false;
+
+  const domain = email.trim().toLowerCase().split("@")[1];
+  if (!domain) return false;
+
+  // Block known fake/disposable domains
+  if (BLOCKED_DOMAINS.includes(domain)) return false;
+
+  // Block obviously fake patterns like 'test@', 'fake@', 'noreply@'
+  const localPart = email.trim().toLowerCase().split("@")[0];
+  const fakePrefixes = ["test", "fake", "noreply", "no-reply", "donotreply", "dummy", "invalid", "null"];
+  if (fakePrefixes.some((prefix) => localPart === prefix)) return false;
+
+  return true;
+};
+
+/**
  * Shared HTML Base Wrapper
  */
 const wrapHtmlTemplate = (title, contentHtml) => {
@@ -151,6 +199,12 @@ const wrapHtmlTemplate = (title, contentHtml) => {
 // =====================================
 const sendReportCreatedEmail = async (user, report) => {
   try {
+    // Skip sending to fake/invalid emails
+    if (!isRealEmail(user.email)) {
+      console.log(`⚠️ [EmailService] Skipping Report Created email — fake/invalid email: ${user.email}`);
+      return false;
+    }
+
     const transporter = getTransporter();
     if (!transporter) {
       console.log("ℹ️ [EmailService] EMAIL_USER / EMAIL_PASSWORD not set in .env. Skipping email.");
@@ -210,9 +264,11 @@ const sendReportCreatedEmail = async (user, report) => {
 
     const html = wrapHtmlTemplate(subject, contentHtml);
 
+    const adminCC = getAdminCC();
     const mailOptions = {
       from: getFromAddress(),
       to: user.email,
+      ...(adminCC && adminCC !== user.email ? { cc: adminCC } : {}),
       subject: subject,
       html: html,
       text: `Hello ${user.name},\n\nYour ${report.reportType.toUpperCase()} report for "${report.itemName}" has been successfully submitted to Vignan Lost & Found Portal.\nCategory: ${report.category}\nLocation: ${report.location}\nDate: ${report.date}\nStatus: ${report.status}\n\nThank you,\nVignan Lost & Found Student Portal`,
@@ -233,6 +289,12 @@ const sendReportCreatedEmail = async (user, report) => {
 // =====================================
 const sendSmartMatchEmail = async (recipientUser, targetReport, matchedReport, score, reasons) => {
   try {
+    // Skip sending to fake/invalid emails
+    if (!isRealEmail(recipientUser.email)) {
+      console.log(`⚠️ [EmailService] Skipping Smart Match email — fake/invalid email: ${recipientUser.email}`);
+      return false;
+    }
+
     const transporter = getTransporter();
     if (!transporter) {
       console.log("ℹ️ [EmailService] EMAIL_USER / EMAIL_PASSWORD not set in .env. Skipping Smart Match email.");
@@ -309,9 +371,11 @@ const sendSmartMatchEmail = async (recipientUser, targetReport, matchedReport, s
 
     const html = wrapHtmlTemplate(subject, contentHtml);
 
+    const adminCC = getAdminCC();
     const mailOptions = {
       from: getFromAddress(),
       to: recipientUser.email,
+      ...(adminCC && adminCC !== recipientUser.email ? { cc: adminCC } : {}),
       subject: subject,
       html: html,
       text: `Hello ${recipientUser.name},\n\nA possible match (${score}%) was found for your item "${targetReport.itemName}".\nMatching Item: "${matchedReport.itemName}"\nCategory: ${matchedReport.category}\nLocation: ${matchedReport.location}\n\nPlease log in to Vignan Lost & Found Portal to review.`,
@@ -332,6 +396,12 @@ const sendSmartMatchEmail = async (recipientUser, targetReport, matchedReport, s
 // =====================================
 const sendReturnedEmail = async (user, report) => {
   try {
+    // Skip sending to fake/invalid emails
+    if (!isRealEmail(user.email)) {
+      console.log(`⚠️ [EmailService] Skipping Returned email — fake/invalid email: ${user.email}`);
+      return false;
+    }
+
     const transporter = getTransporter();
     if (!transporter) {
       console.log("ℹ️ [EmailService] EMAIL_USER / EMAIL_PASSWORD not set in .env. Skipping email.");
@@ -380,9 +450,11 @@ const sendReturnedEmail = async (user, report) => {
 
     const html = wrapHtmlTemplate(subject, contentHtml);
 
+    const adminCC = getAdminCC();
     const mailOptions = {
       from: getFromAddress(),
       to: user.email,
+      ...(adminCC && adminCC !== user.email ? { cc: adminCC } : {}),
       subject: subject,
       html: html,
       text: `Hello ${user.name},\n\nYour ${report.reportType.toUpperCase()} item "${report.itemName}" has been marked as RETURNED on ${returnedDateStr}.\n\nThank you,\nVignan Lost & Found Student Portal`,
@@ -398,8 +470,177 @@ const sendReturnedEmail = async (user, report) => {
   }
 };
 
+// =====================================
+// 4. Send Welcome Email (on Registration)
+// =====================================
+const sendWelcomeEmail = async (user) => {
+  try {
+    // Skip fake/invalid emails
+    if (!isRealEmail(user.email)) {
+      console.log(`⚠️ [EmailService] Skipping Welcome email — fake/invalid email: ${user.email}`);
+      return false;
+    }
+
+    const transporter = getTransporter();
+    if (!transporter) {
+      console.log("ℹ️ [EmailService] EMAIL_USER / EMAIL_PASSWORD not set in .env. Skipping Welcome email.");
+      return false;
+    }
+
+    const subject = "Welcome to Vignan Lost & Found Portal! 🎓";
+
+    const contentHtml = `
+      <div class="greeting">Welcome, ${user.name || "Vignan Student"}! 🎉</div>
+      <p class="intro">
+        You have successfully registered on the <strong>Vignan Lost &amp; Found Student Portal</strong>.
+        Your campus is now smarter, safer, and more connected!
+      </p>
+
+      <div class="details-card">
+        <table width="100%" cellpadding="6" cellspacing="0" style="font-size: 14px;">
+          <tr>
+            <td width="130" style="font-weight: 600; color: #475569;">Name:</td>
+            <td style="color: #1e293b;">${user.name}</td>
+          </tr>
+          <tr>
+            <td style="font-weight: 600; color: #475569;">Email:</td>
+            <td style="color: #1e293b;">${user.email}</td>
+          </tr>
+        </table>
+      </div>
+
+      <p class="intro">
+        🔔 <strong>How notifications work:</strong><br/>
+        Whenever a matching lost/found item is detected, you will automatically receive an email at this address.
+        Make sure to check your inbox regularly!
+      </p>
+
+      <p class="intro" style="text-align: center; margin-top: 20px;">
+        Thank you for joining Vignan Lost &amp; Found Portal. Together, we make our campus a better place! 🌟
+      </p>
+    `;
+
+    const html = wrapHtmlTemplate(subject, contentHtml);
+
+    const adminCC = getAdminCC();
+    const mailOptions = {
+      from: getFromAddress(),
+      to: user.email,
+      ...(adminCC && adminCC !== user.email ? { cc: adminCC } : {}),
+      subject: subject,
+      html: html,
+      text: `Welcome ${user.name}!\n\nYou have successfully registered on Vignan Lost & Found Student Portal.\nYou will receive email notifications whenever a match is found for your lost/found items.\n\nThank you,\nVignan Lost & Found Student Portal`,
+    };
+
+    const info = await transporter.sendMail(mailOptions);
+    console.log(`✅ [EmailService] Welcome email sent to ${user.email} (MessageId: ${info.messageId})`);
+    return true;
+
+  } catch (error) {
+    console.error("❌ [EmailService] Failed to send Welcome email:", error.message);
+    return false;
+  }
+};
+
+// =====================================
+// 5. Send Status Update Email
+// =====================================
+const sendStatusUpdateEmail = async (user, report) => {
+  try {
+    if (!isRealEmail(user.email)) {
+      console.log(`⚠️ [EmailService] Skipping Status Update email — fake/invalid email: ${user.email}`);
+      return false;
+    }
+
+    const transporter = getTransporter();
+    if (!transporter) {
+      console.log("ℹ️ [EmailService] EMAIL_USER / EMAIL_PASSWORD not set in .env. Skipping Status Update email.");
+      return false;
+    }
+
+    const subject = `Your Report Status Has Been Updated — Vignan Lost & Found Portal`;
+
+    const statusLabel = report.status === "returned" ? "RETURNED ✅" : report.status.toUpperCase();
+    const statusColor = report.status === "returned" ? "#16a34a" : "#6366f1";
+
+    const contentHtml = `
+      <div class="greeting">Hello ${user.name || "Vignan Student"},</div>
+      <p class="intro">
+        📋 Your <strong>${report.reportType.toUpperCase()}</strong> report has been updated with a new status.
+      </p>
+
+      <div class="details-card">
+        <table width="100%" cellpadding="6" cellspacing="0" style="font-size: 14px;">
+          <tr>
+            <td width="130" style="font-weight: 600; color: #475569;">Item Name:</td>
+            <td style="color: #1e293b;"><strong>${report.itemName}</strong></td>
+          </tr>
+          <tr>
+            <td style="font-weight: 600; color: #475569;">Report Type:</td>
+            <td style="color: #1e293b;">${report.reportType.toUpperCase()}</td>
+          </tr>
+          <tr>
+            <td style="font-weight: 600; color: #475569;">Category:</td>
+            <td style="color: #1e293b;">${report.category}</td>
+          </tr>
+          <tr>
+            <td style="font-weight: 600; color: #475569;">Location:</td>
+            <td style="color: #1e293b;">${report.location}</td>
+          </tr>
+          <tr>
+            <td style="font-weight: 600; color: #475569;">New Status:</td>
+            <td>
+              <span style="
+                display: inline-block;
+                padding: 4px 12px;
+                border-radius: 9999px;
+                font-size: 13px;
+                font-weight: 700;
+                background-color: ${statusColor}22;
+                color: ${statusColor};
+                border: 1px solid ${statusColor}44;
+              ">${statusLabel}</span>
+            </td>
+          </tr>
+          ${report.returnedAt ? `
+          <tr>
+            <td style="font-weight: 600; color: #475569;">Completed On:</td>
+            <td style="color: #1e293b;">${new Date(report.returnedAt).toLocaleString()}</td>
+          </tr>` : ""}
+        </table>
+      </div>
+
+      <p class="intro">
+        Please log in to <strong>Vignan Lost &amp; Found Portal</strong> to view full details of your report.
+      </p>
+    `;
+
+    const html = wrapHtmlTemplate(subject, contentHtml);
+
+    const adminCC = getAdminCC();
+    const mailOptions = {
+      from: getFromAddress(),
+      to: user.email,
+      ...(adminCC && adminCC !== user.email ? { cc: adminCC } : {}),
+      subject: subject,
+      html: html,
+      text: `Hello ${user.name},\n\nYour ${report.reportType.toUpperCase()} report for "${report.itemName}" has been updated.\nNew Status: ${statusLabel}\n\nPlease log in to Vignan Lost & Found Portal to view details.\n\nThank you,\nVignan Lost & Found Student Portal`,
+    };
+
+    const info = await transporter.sendMail(mailOptions);
+    console.log(`✅ [EmailService] Status Update email sent to ${user.email} (MessageId: ${info.messageId})`);
+    return true;
+
+  } catch (error) {
+    console.error("❌ [EmailService] Failed to send Status Update email:", error.message);
+    return false;
+  }
+};
+
 module.exports = {
   sendReportCreatedEmail,
   sendSmartMatchEmail,
   sendReturnedEmail,
+  sendWelcomeEmail,
+  sendStatusUpdateEmail,
 };
