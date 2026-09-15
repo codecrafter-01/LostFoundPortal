@@ -1,4 +1,6 @@
 import { createContext, useContext, useState, useCallback, useEffect } from "react";
+import { playAlertSound, playMatchSound, playSuccessSound } from "../utils/alertSound";
+
 
 const NotificationContext = createContext();
 
@@ -50,6 +52,15 @@ export const NotificationProvider = ({ children }) => {
         const updated = [{ ...newNotif, read: false }, ...prev].slice(0, MAX_HISTORY);
         return updated;
       });
+
+      // 🔊 Play buzz alert sound based on type
+      if (type === "match") {
+        playMatchSound();
+      } else if (type === "success") {
+        playSuccessSound();
+      } else {
+        playAlertSound();
+      }
 
       // Auto-dismiss toast after duration
       if (duration > 0) {
