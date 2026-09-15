@@ -20,6 +20,7 @@
     "mongoose": "^9.9.1",
     "multer": "^2.2.0",
     "nodemailer": "^10.0.9",
-    "nodemon": "^3.1.14"
+    "nodemon": "^3.1.14",
+    "web-push": "^3.6.7"
   }
 }

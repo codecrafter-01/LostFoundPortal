@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../api";
+import PushNotificationSetup from "../components/PushNotificationSetup";
 
 function Dashboard() {
   const [stats, setStats] = useState({
@@ -70,6 +71,9 @@ function Dashboard() {
         </p>
         <p>Manage your campus Lost & Found activities from one central hub.</p>
       </div>
+
+      {/* 🔔 Push Notification Setup Banner */}
+      <PushNotificationSetup />
 
       {error && (
         <div className="empty-report">

@@ -6,6 +6,10 @@ const {
   sendReturnedEmail,
   sendStatusUpdateEmail,
 } = require("../services/emailService");
+const {
+  sendPushToAllUsers,
+  sendPushToUsers,
+} = require("../services/pushService");
 const { calculateMatchScore } = require("../utils/matchUtils");
 
 // ==============================
@@ -48,13 +52,25 @@ const createReport = async (req, res) => {
       report,
     });
 
-    // 📧 Emails run in the background — do NOT block the response
+    // 📧🔔 Emails + Push run in the background — do NOT block the response
     setImmediate(async () => {
       try {
         // 1. Send Report Created Email to student
         await sendReportCreatedEmail(req.user, report);
 
-        // 2. Check for Smart Matches against active opposite reports
+        // 2. Broadcast push alert to ALL subscribed users (like emergency alert)
+        await sendPushToAllUsers({
+          title: reportType === "lost"
+            ? "🔴 Lost Item Reported!"
+            : "🟢 Found Item Reported!",
+          body: `${report.itemName} — near ${report.location}. Tap to view.`,
+          icon: "/vignan_logo.jpg",
+          badge: "/vignan_logo.jpg",
+          url: "/lost",
+          tag: `report-${report._id}`,
+        });
+
+        // 3. Check for Smart Matches against active opposite reports
         const oppositeType = reportType === "lost" ? "found" : "lost";
         const candidateReports = await Report.find({
           status: "active",
@@ -66,27 +82,34 @@ const createReport = async (req, res) => {
           if (candidate.user && candidate.user.email) {
             const matchResult = calculateMatchScore(report, candidate);
             if (matchResult.isMatch) {
-              // Notify the matched item owner
+              // Send match emails to both users
               await sendSmartMatchEmail(
-                candidate.user,
-                candidate,
-                report,
-                matchResult.score,
-                matchResult.reasons
+                candidate.user, candidate, report,
+                matchResult.score, matchResult.reasons
               );
-              // Notify the report creator
               await sendSmartMatchEmail(
-                req.user,
-                report,
-                candidate,
-                matchResult.score,
-                matchResult.reasons
+                req.user, report, candidate,
+                matchResult.score, matchResult.reasons
+              );
+
+              // Send match push alert to BOTH matched users only
+              await sendPushToUsers(
+                [candidate.user._id, userId],
+                {
+                  title: "🎯 Match Found!",
+                  body: `Your "${report.itemName}" may have been found! Tap to view the match.`,
+                  icon: "/vignan_logo.jpg",
+                  badge: "/vignan_logo.jpg",
+                  url: "/matches",
+                  tag: `match-${report._id}`,
+                  vibrate: [200, 100, 200, 100, 200],
+                }
               );
             }
           }
         }
       } catch (emailError) {
-        console.error("⚠️ Background Email Error:", emailError.message);
+        console.error("⚠️ Background Email/Push Error:", emailError.message);
       }
     });
 
@@ -297,12 +320,24 @@ const markAsReturned = async (req, res) => {
       report: updatedReport,
     });
 
-    // 📧 Send returned email in the background
+    // 📧🔔 Send returned email + push in the background
     setImmediate(async () => {
       try {
         await sendReturnedEmail(req.user, updatedReport);
+        await sendPushToUsers(
+          [req.user._id],
+          {
+            title: "✅ Item Returned!",
+            body: `Your "${updatedReport.itemName}" has been successfully marked as returned.`,
+            icon: "/vignan_logo.jpg",
+            badge: "/vignan_logo.jpg",
+            url: "/my-reports",
+            tag: `returned-${updatedReport._id}`,
+            vibrate: [300, 100, 300],
+          }
+        );
       } catch (emailError) {
-        console.error("⚠️ Returned Email Error:", emailError.message);
+        console.error("⚠️ Returned Email/Push Error:", emailError.message);
       }
     });
 

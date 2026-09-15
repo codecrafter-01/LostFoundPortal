@@ -186,3 +186,162 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* =========================================================
+   PUSH NOTIFICATION SETUP CARD
+   ========================================================= */
+
+.push-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 28px 32px;
+  border-radius: 24px;
+  margin-bottom: 35px;
+  transition: all 0.3s ease;
+}
+
+.push-card-inactive {
+  background: linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%);
+  border: 1.5px solid rgba(99, 102, 241, 0.4);
+  box-shadow: 0 12px 40px rgba(99, 102, 241, 0.2);
+}
+
+.push-card-active {
+  background: linear-gradient(135deg, #052e16 0%, #0f172a 100%);
+  border: 1.5px solid rgba(34, 197, 94, 0.5);
+  box-shadow: 0 12px 40px rgba(34, 197, 94, 0.2);
+}
+
+.push-card-denied,
+.push-card-unsupported {
+  background: #1e293b;
+  border: 1.5px solid rgba(239, 68, 68, 0.3);
+}
+
+.push-card-icon {
+  font-size: 44px;
+  flex-shrink: 0;
+  line-height: 1;
+  margin-top: 4px;
+}
+
+.push-bell-ring {
+  animation: pushBellRing 2s ease-in-out infinite;
+}
+
+.push-card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.push-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.push-card-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+}
+
+.push-card-badge {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: #ffffff;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  box-shadow: 0 2px 8px rgba(34, 197, 94, 0.4);
+  animation: pulseBadge 2s ease-in-out infinite;
+}
+
+.push-card-desc {
+  font-size: 14px;
+  color: #94a3b8;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.push-card-error {
+  font-size: 13px;
+  color: #fca5a5;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 10px;
+  padding: 8px 14px;
+  margin: 0;
+}
+
+.push-card-btn {
+  align-self: flex-start;
+  padding: 12px 28px;
+  border-radius: 9999px;
+  font-size: 14px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  letter-spacing: 0.3px;
+  margin-top: 4px;
+}
+
+.push-card-btn-on {
+  background: linear-gradient(135deg, #6366f1, #a855f7);
+  color: #ffffff;
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.45);
+}
+
+.push-card-btn-on:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(99, 102, 241, 0.6);
+}
+
+.push-card-btn-off {
+  background: rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.push-card-btn-off:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+.push-card-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@keyframes pushBellRing {
+  0%, 80%, 100% { transform: rotate(0deg); }
+  85%  { transform: rotate(18deg); }
+  90%  { transform: rotate(-16deg); }
+  95%  { transform: rotate(10deg); }
+  98%  { transform: rotate(-6deg); }
+}
+
+@keyframes pulseBadge {
+  0%, 100% { box-shadow: 0 2px 8px rgba(34, 197, 94, 0.4); }
+  50%       { box-shadow: 0 2px 18px rgba(34, 197, 94, 0.8); }
+}
+
+@media (max-width: 600px) {
+  .push-card {
+    flex-direction: column;
+    padding: 22px 20px;
+    gap: 14px;
+  }
+  .push-card-btn {
+    width: 100%;
+    text-align: center;
+  }
+}

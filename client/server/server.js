@@ -27,6 +27,9 @@ const authRoutes =
 const reportRoutes =
   require("./routes/reportRoutes");
 
+const pushRoutes =
+  require("./routes/pushRoutes");
+
 
 // =====================================
 // Express App
@@ -79,6 +82,11 @@ app.use(
 app.use(
   "/api/reports",
   reportRoutes
+);
+
+app.use(
+  "/api/push",
+  pushRoutes
 );
 
 

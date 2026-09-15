@@ -22,6 +22,12 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "student",
     },
+
+    // Web Push Notification subscription object from browser
+    pushSubscription: {
+      type: Object,
+      default: null,
+    },
   },
   {
     timestamps: true,
