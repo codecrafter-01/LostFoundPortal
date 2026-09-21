@@ -27,6 +27,8 @@ const createReport = async (req, res) => {
       description,
       reportType,
       verificationQuestion,
+      custodyType,
+      custodyLocation,
     } = req.body;
 
     const image = req.file
@@ -48,6 +50,8 @@ const createReport = async (req, res) => {
       status: "active",
       returnedAt: null,
       verificationQuestion: verificationQuestion || "",
+      custodyType: custodyType || "with_reporter",
+      custodyLocation: custodyLocation || "",
     });
 
     // ✅ Respond IMMEDIATELY — user gets success in milliseconds
@@ -251,6 +255,13 @@ const updateReport = async (req, res) => {
 
     report.description =
       req.body.description;
+
+    if (req.body.custodyType) {
+      report.custodyType = req.body.custodyType;
+    }
+    if (req.body.custodyLocation !== undefined) {
+      report.custodyLocation = req.body.custodyLocation;
+    }
 
     if (req.file) {
       report.image =

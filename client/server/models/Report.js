@@ -63,6 +63,18 @@ const reportSchema = new mongoose.Schema(
     default: "",
   },
 
+  // Autonomous College Campus Custody
+  custodyType: {
+    type: String,
+    enum: ["with_reporter", "college_desk"],
+    default: "with_reporter",
+  },
+
+  custodyLocation: {
+    type: String,
+    default: "",
+  },
+
   claims: [
     {
       claimant: {

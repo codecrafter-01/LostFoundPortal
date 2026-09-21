@@ -14,6 +14,8 @@ function ReportFound() {
     date: "",
     description: "",
     verificationQuestion: "",
+    custodyType: "with_reporter",
+    custodyLocation: "",
   });
 
   const [image, setImage] = useState(null);
@@ -74,6 +76,8 @@ function ReportFound() {
       data.append("description", formData.description);
       data.append("reportType", "found");
       data.append("verificationQuestion", formData.verificationQuestion);
+      data.append("custodyType", formData.custodyType);
+      data.append("custodyLocation", formData.custodyType === "college_desk" ? formData.custodyLocation : "");
 
       if (image) {
         data.append("image", image);
@@ -105,6 +109,8 @@ function ReportFound() {
         date: "",
         description: "",
         verificationQuestion: "",
+        custodyType: "with_reporter",
+        custodyLocation: "",
       });
 
       setImage(null);
@@ -283,6 +289,61 @@ function ReportFound() {
             <small style={{ display: "block", color: "#64748b", fontSize: "12px", lineHeight: "1.4" }}>
               💡 Recommended: Ask a question only the true owner can answer before you release the item.
             </small>
+          </div>
+
+          {/* Autonomous College Physical Custody Selector */}
+          <div style={{ margin: "18px 0", textAlign: "left", background: "#f8fafc", padding: "16px", borderRadius: "14px", border: "1px solid #e2e8f0" }}>
+            <label style={{ display: "block", fontSize: "14px", fontWeight: "700", color: "#1e293b", marginBottom: "8px" }}>
+              🏛️ Where is this item physically located right now?
+            </label>
+
+            <div style={{ display: "flex", gap: "16px", flexWrap: "wrap", marginBottom: formData.custodyType === "college_desk" ? "12px" : "0" }}>
+              <label style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "13.5px", fontWeight: "600", cursor: "pointer", color: "#334155" }}>
+                <input
+                  type="radio"
+                  name="custodyType"
+                  value="with_reporter"
+                  checked={formData.custodyType === "with_reporter"}
+                  onChange={handleChange}
+                />
+                🟢 With Me (Direct Handover)
+              </label>
+
+              <label style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "13.5px", fontWeight: "600", cursor: "pointer", color: "#334155" }}>
+                <input
+                  type="radio"
+                  name="custodyType"
+                  value="college_desk"
+                  checked={formData.custodyType === "college_desk"}
+                  onChange={handleChange}
+                />
+                🏛️ Deposited at College Support Desk
+              </label>
+            </div>
+
+            {formData.custodyType === "college_desk" && (
+              <div style={{ marginTop: "12px" }}>
+                <label style={{ display: "block", fontSize: "13px", fontWeight: "700", color: "#475569", marginBottom: "6px" }}>
+                  Select College Drop-off Counter:
+                </label>
+                <select
+                  name="custodyLocation"
+                  value={formData.custodyLocation}
+                  onChange={handleChange}
+                  required={formData.custodyType === "college_desk"}
+                  style={{ width: "100%", padding: "10px 12px", borderRadius: "10px", border: "1px solid #cbd5e1", fontSize: "13.5px", background: "#ffffff", color: "#0f172a", outline: "none" }}
+                >
+                  <option value="">-- Choose Campus Drop-off Counter --</option>
+                  <option value="Main Security Office (Gate 1)">🛡️ Main Security Office (Gate 1)</option>
+                  <option value="Central Library Circulation Desk">📚 Central Library Circulation Desk</option>
+                  <option value="Admin Office / Dean Student Affairs (Room 102)">🏛️ Admin Office / Dean Student Affairs (Room 102)</option>
+                  <option value="Department Staff Room / Lab In-Charge">🔬 Department Staff Room / Lab In-Charge</option>
+                </select>
+                <small style={{ display: "block", color: "#059669", fontSize: "12px", marginTop: "6px", fontWeight: "600" }}>
+                  ✅ The item will be marked as in safe campus custody. The owner can collect it directly from this counter!
+                </small>
+              </div>
+            )}
           </div>
 
           {/* ============================== */}

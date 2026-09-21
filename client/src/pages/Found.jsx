@@ -246,6 +246,20 @@ function Found() {
                     </div>
                   )}
 
+                  {report.custodyType === "college_desk" && report.custodyLocation && (
+                    <div style={{ margin: "10px 0", padding: "10px 12px", background: "#ecfdf5", borderRadius: "10px", border: "1.5px solid #10b981", textAlign: "left" }}>
+                      <span style={{ fontSize: "11.5px", fontWeight: "800", color: "#065f46", display: "flex", alignItems: "center", gap: "6px", letterSpacing: "0.5px" }}>
+                        🛡️ IN OFFICIAL CAMPUS CUSTODY
+                      </span>
+                      <p style={{ margin: "4px 0 2px", fontSize: "13px", color: "#047857", fontWeight: "700" }}>
+                        📍 {report.custodyLocation}
+                      </p>
+                      <small style={{ color: "#059669", fontSize: "11.5px", display: "block" }}>
+                        💡 Show your College ID Card at the counter to collect.
+                      </small>
+                    </div>
+                  )}
+
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "14px", flexWrap: "wrap", gap: "8px" }}>
                     <span className="status found-status">
                       📍 FOUND

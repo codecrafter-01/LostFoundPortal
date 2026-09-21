@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import NotificationBell from "./NotificationBell";
+import CampusHelpdeskModal from "./CampusHelpdeskModal";
 
 function Navbar() {
   const navigate = useNavigate();
@@ -16,6 +17,9 @@ function Navbar() {
 
   // Mobile menu toggle state
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Campus Helpdesk Modal state
+  const [helpdeskOpen, setHelpdeskOpen] = useState(false);
 
   // Sync photo & close mobile menu whenever location changes
   useEffect(() => {
@@ -96,6 +100,19 @@ function Navbar() {
               </li>
             </>
           )}
+          <li>
+            <button
+              type="button"
+              onClick={() => {
+                setHelpdeskOpen(true);
+                setMobileMenuOpen(false);
+              }}
+              className="nav-helpdesk-btn"
+              title="Autonomous College Support Desk & Directory"
+            >
+              🏛️ Desk
+            </button>
+          </li>
         </ul>
 
         {/* Authentication & User Info Badge */}
@@ -138,6 +155,12 @@ function Navbar() {
           )}
         </div>
       </div>
+
+      {/* Autonomous College Support Desk Directory Modal */}
+      <CampusHelpdeskModal
+        isOpen={helpdeskOpen}
+        onClose={() => setHelpdeskOpen(false)}
+      />
     </nav>
   );
 }
