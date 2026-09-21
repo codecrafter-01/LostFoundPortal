@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import NotificationBell from "./NotificationBell";
-import { NavbarInstallButton } from "./InstallPwaPrompt";
 
 function Navbar() {
   const navigate = useNavigate();
@@ -99,11 +98,8 @@ function Navbar() {
           )}
         </ul>
 
-        {/* Authentication, PWA Install & User Info Badge */}
+        {/* Authentication & User Info Badge */}
         <div className="navbar-right">
-          {/* 📲 PWA Install Button */}
-          <NavbarInstallButton />
-
           {!token ? (
             <>
               <Link to="/login">

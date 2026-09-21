@@ -12,8 +12,9 @@
   align-items: center;
 
   width: 100%;
-  min-height: 76px;
-  padding: 12px 5%;
+  box-sizing: border-box;
+  min-height: 70px;
+  padding: 10px 20px;
 
   background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 60%, #311042 100%);
   backdrop-filter: blur(16px);
@@ -27,11 +28,12 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-shrink: 0;
 }
 
 .logo {
   font-family: var(--font-heading, "Outfit", sans-serif);
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 800;
   letter-spacing: -0.5px;
   color: #ffffff !important;
@@ -47,8 +49,8 @@
 }
 
 .logo-img {
-  width: 36px;
-  height: 36px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid #ffffff;
@@ -121,9 +123,9 @@
 .menu a {
   display: inline-block;
   color: #f1f5f9 !important;
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 600;
-  padding: 7px 13px;
+  padding: 6px 12px;
   border-radius: 9999px;
   text-decoration: none;
   transition: all 0.25s ease;
@@ -145,7 +147,7 @@
 .navbar-right {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   flex-shrink: 0;
 }
 
@@ -157,13 +159,20 @@
   color: #ffffff !important;
   background: rgba(255, 255, 255, 0.2) !important;
   border: 1px solid rgba(255, 255, 255, 0.4) !important;
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 700;
-  padding: 6px 12px;
+  padding: 5px 12px;
   border-radius: 9999px;
   letter-spacing: 0.2px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(8px);
+  white-space: nowrap;
+  max-width: 140px;
+}
+
+.user-name span:last-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
