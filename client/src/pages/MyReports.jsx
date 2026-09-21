@@ -156,64 +156,81 @@ function MyReports() {
 
   return (
     <div className="reports-page">
-      <h1>📋 My Reports &amp; Claims</h1>
-      <p className="reports-subtitle">Manage the Lost &amp; Found items reported by you and track your submitted claims.</p>
+      <div style={{ textAlign: "center", marginBottom: "22px" }}>
+        <h1 style={{ fontSize: "28px", fontWeight: "800", color: "#0f172a", margin: "0 0 6px" }}>
+          📋 My Reports &amp; Claims
+        </h1>
+        <p style={{ color: "#64748b", fontSize: "14px", margin: 0 }}>
+          Manage your reported items and track proof of ownership claims in real time.
+        </p>
+      </div>
 
-      {/* Summary stats */}
-      <div className="dashboard-grid">
-        <div className="dashboard-card">
-          <div className="icon">📋</div>
-          <h2>{totalReports}</h2>
-          <p>Total Reports</p>
+      {/* Compact Modern Stats Strip */}
+      <div className="myreports-stats-strip">
+        <div className="myreports-stat-pill">
+          <span className="myreports-stat-icon">📋</span>
+          <div className="myreports-stat-data">
+            <div className="myreports-stat-num">{totalReports}</div>
+            <div className="myreports-stat-label">Total Reports</div>
+          </div>
         </div>
-        <div className="dashboard-card">
-          <div className="icon">🟢</div>
-          <h2>{activeReports}</h2>
-          <p>Active Reports</p>
+
+        <div className="myreports-stat-pill">
+          <span className="myreports-stat-icon">🟢</span>
+          <div className="myreports-stat-data">
+            <div className="myreports-stat-num" style={{ color: "#16a34a" }}>{activeReports}</div>
+            <div className="myreports-stat-label">Active Items</div>
+          </div>
         </div>
-        <div className="dashboard-card">
-          <div className="icon">✅</div>
-          <h2>{returnedReports}</h2>
-          <p>Returned Reports</p>
+
+        <div className="myreports-stat-pill">
+          <span className="myreports-stat-icon">✅</span>
+          <div className="myreports-stat-data">
+            <div className="myreports-stat-num" style={{ color: "#4f46e5" }}>{returnedReports}</div>
+            <div className="myreports-stat-label">Returned Items</div>
+          </div>
         </div>
-        <div className="dashboard-card">
-          <div className="icon">🔐</div>
-          <h2>{myClaims.length}</h2>
-          <p>My Claims</p>
+
+        <div className="myreports-stat-pill">
+          <span className="myreports-stat-icon">🔐</span>
+          <div className="myreports-stat-data">
+            <div className="myreports-stat-num" style={{ color: "#059669" }}>{myClaims.length}</div>
+            <div className="myreports-stat-label">Submitted Claims</div>
+          </div>
         </div>
       </div>
 
-      {/* Filters */}
-      <div style={{ textAlign: "center", margin: "30px 0", display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "8px" }}>
+      {/* Compact Segmented Tab Filter Bar */}
+      <div className="myreports-tabs-bar">
         <button
           onClick={() => setFilter("all")}
-          className="login-btn"
-          style={{ background: filter === "all" ? "linear-gradient(135deg, #6366f1 0%, #a855f7 100%)" : "#ffffff", color: filter === "all" ? "#ffffff" : "#475569", border: "1px solid #cbd5e1" }}
+          className={`myreports-tab-btn ${filter === "all" ? "active" : ""}`}
         >
-          📋 All Reports ({totalReports})
+          📋 All ({totalReports})
         </button>
         <button
           onClick={() => setFilter("active")}
-          className="login-btn"
-          style={{ background: filter === "active" ? "linear-gradient(135deg, #6366f1 0%, #a855f7 100%)" : "#ffffff", color: filter === "active" ? "#ffffff" : "#475569", border: "1px solid #cbd5e1" }}
+          className={`myreports-tab-btn ${filter === "active" ? "active" : ""}`}
         >
           🟢 Active ({activeReports})
         </button>
         <button
           onClick={() => setFilter("returned")}
-          className="login-btn"
-          style={{ background: filter === "returned" ? "linear-gradient(135deg, #6366f1 0%, #a855f7 100%)" : "#ffffff", color: filter === "returned" ? "#ffffff" : "#475569", border: "1px solid #cbd5e1" }}
+          className={`myreports-tab-btn ${filter === "returned" ? "active" : ""}`}
         >
           ✅ Returned ({returnedReports})
         </button>
         <button
           onClick={() => setFilter("claims")}
-          className="login-btn"
-          style={{ background: filter === "claims" ? "linear-gradient(135deg, #10b981 0%, #059669 100%)" : "#ffffff", color: filter === "claims" ? "#ffffff" : "#475569", border: "1px solid #cbd5e1" }}
+          className={`myreports-tab-btn ${filter === "claims" ? "active-claims" : ""}`}
         >
-          🔐 My Submitted Claims ({myClaims.length})
+          🔐 My Claims ({myClaims.length})
         </button>
-        <button onClick={() => { fetchReports(); fetchMyClaims(); }} className="login-btn" style={{ background: "#64748b" }}>
+        <button
+          onClick={() => { fetchReports(); fetchMyClaims(); }}
+          className="myreports-refresh-btn"
+          title="Refresh reports and claims"
+        >
           🔄 Refresh
         </button>
       </div>
@@ -240,42 +257,54 @@ function MyReports() {
                 const imgUrl = getImageUrl(claimItem.image);
 
                 return (
-                  <div className="report-card" key={claimItem.claimId}>
-                    <div style={{ textAlign: "center", marginBottom: "12px" }}>
+                  <div className="report-card myreports-card" key={claimItem.claimId}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
                       <span
                         className="status"
                         style={{
+                          fontSize: "11px",
+                          padding: "4px 10px",
+                          borderRadius: "9999px",
                           background: isApproved ? "#dcfce7" : isRejected ? "#fee2e2" : "#fef3c7",
                           color: isApproved ? "#166534" : isRejected ? "#991b1b" : "#92400e",
+                          fontWeight: "800",
                         }}
                       >
-                        {isApproved ? "🎉 CLAIM APPROVED" : isRejected ? "❌ NOT VERIFIED" : "⏳ PENDING FINDER REVIEW"}
+                        {isApproved ? "🎉 CLAIM APPROVED" : isRejected ? "❌ NOT VERIFIED" : "⏳ PENDING REVIEW"}
+                      </span>
+                      <span style={{ fontSize: "11.5px", color: "#64748b", fontWeight: "700" }}>
+                        📍 FOUND ITEM
                       </span>
                     </div>
 
                     {imgUrl ? (
-                      <img src={imgUrl} alt={claimItem.itemName} className="report-image" />
+                      <img src={imgUrl} alt={claimItem.itemName} className="myreports-card-img" />
                     ) : (
-                      <div className="image-placeholder">📍 Found Item</div>
+                      <div className="image-placeholder" style={{ height: "160px", marginBottom: "12px" }}>
+                        📍 No Photo
+                      </div>
                     )}
 
-                    <h2>{claimItem.itemName}</h2>
-                    <p><strong>📂 Category:</strong> {claimItem.category}</p>
-                    <p><strong>📍 Found At:</strong> {claimItem.location}</p>
-                    <p><strong>📅 Date Found:</strong> {claimItem.date}</p>
+                    <h2 className="myreports-card-title">{claimItem.itemName}</h2>
 
-                    <div style={{ margin: "12px 0", padding: "10px", background: "#f8fafc", borderRadius: "10px", border: "1px solid #e2e8f0" }}>
-                      <strong style={{ fontSize: "12px", color: "#64748b", display: "block" }}>Your Proof Answer:</strong>
-                      <p style={{ margin: "4px 0 0", fontSize: "13.5px", color: "#0f172a" }}>"{claimItem.proofAnswer}"</p>
+                    <div className="myreports-meta-list">
+                      <p><strong>📂 Category:</strong> {claimItem.category}</p>
+                      <p><strong>📍 Found Location:</strong> {claimItem.location}</p>
+                      <p><strong>📅 Date Found:</strong> {claimItem.date}</p>
+                    </div>
+
+                    <div style={{ margin: "10px 0", padding: "10px", background: "#f8fafc", borderRadius: "10px", border: "1px solid #e2e8f0", textAlign: "left" }}>
+                      <strong style={{ fontSize: "11.5px", color: "#64748b", display: "block" }}>Your Proof Answer:</strong>
+                      <p style={{ margin: "3px 0 0", fontSize: "13px", color: "#0f172a" }}>"{claimItem.proofAnswer}"</p>
                     </div>
 
                     {isApproved && claimItem.finder && (
-                      <div style={{ marginTop: "14px", padding: "12px", background: "#ecfdf5", border: "1.5px solid #10b981", borderRadius: "12px" }}>
-                        <strong style={{ color: "#065f46", fontSize: "14px" }}>🎉 Finder Contact Released:</strong>
-                        <p style={{ margin: "6px 0 2px", fontSize: "13px", color: "#047857" }}>
+                      <div style={{ marginTop: "10px", padding: "10px 12px", background: "#ecfdf5", border: "1.5px solid #10b981", borderRadius: "10px", textAlign: "left" }}>
+                        <strong style={{ color: "#065f46", fontSize: "12.5px" }}>🎉 Finder Contact Released:</strong>
+                        <p style={{ margin: "4px 0 2px", fontSize: "12.5px", color: "#047857" }}>
                           <strong>Name:</strong> {claimItem.finder.name}
                         </p>
-                        <p style={{ margin: "0", fontSize: "13px", color: "#047857" }}>
+                        <p style={{ margin: "0", fontSize: "12.5px", color: "#047857" }}>
                           <strong>Email:</strong>{" "}
                           <a href={`mailto:${claimItem.finder.email}`} style={{ color: "#059669", fontWeight: "bold" }}>
                             {claimItem.finder.email}
@@ -285,8 +314,8 @@ function MyReports() {
                     )}
 
                     {isPending && (
-                      <p style={{ fontSize: "12.5px", color: "#64748b", fontStyle: "italic", marginTop: "10px" }}>
-                        ⏳ The finder has been notified. Check back soon for contact release upon approval!
+                      <p style={{ fontSize: "12px", color: "#64748b", fontStyle: "italic", margin: "8px 0 0" }}>
+                        ⏳ Finder will review your proof. Contact details will appear here once approved.
                       </p>
                     )}
                   </div>
@@ -304,12 +333,12 @@ function MyReports() {
             {filter === "returned" ? "You don't have any returned reports." : filter === "active" ? "You don't have any active reports." : "You have not submitted any Lost or Found reports yet."}
           </p>
           {filter === "all" && (
-            <div style={{ display: "flex", gap: "12px", justifyContent: "center", marginTop: "16px" }}>
+            <div style={{ display: "flex", gap: "10px", justifyContent: "center", marginTop: "16px" }}>
               <Link to="/report-lost">
-                <button className="login-btn">📦 Report Lost Item</button>
+                <button className="myreports-action-btn myreports-edit-btn" style={{ padding: "10px 18px" }}>📦 Report Lost Item</button>
               </Link>
               <Link to="/report-found">
-                <button className="login-btn">📍 Report Found Item</button>
+                <button className="myreports-action-btn myreports-returned-btn" style={{ padding: "10px 18px" }}>📍 Report Found Item</button>
               </Link>
             </div>
           )}
@@ -324,61 +353,82 @@ function MyReports() {
             const isClaimsExpanded = expandedClaims[report._id];
 
             return (
-              <div className="report-card" key={report._id}>
-                <div style={{ textAlign: "center", marginBottom: "15px" }}>
-                  <span className={isReturned ? "status returned-status" : "status active-status"}>
+              <div className="report-card myreports-card" key={report._id}>
+                {/* Header Badge Row */}
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
+                  <span className={isReturned ? "status returned-status" : "status active-status"} style={{ fontSize: "11px", padding: "4px 10px" }}>
                     {isReturned ? "✅ RETURNED" : "🟢 ACTIVE"}
+                  </span>
+                  <span style={{ fontSize: "11.5px", fontWeight: "700", color: isFoundReport ? "#059669" : "#dc2626" }}>
+                    {isFoundReport ? "📍 FOUND REPORT" : "📦 LOST REPORT"}
                   </span>
                 </div>
 
+                {/* Compact Image */}
                 {imgUrl ? (
                   <img
                     src={imgUrl}
                     alt={report.itemName}
-                    className="report-image"
+                    className="myreports-card-img"
                     onError={(e) => {
                       e.target.onerror = null;
                       e.target.src = "https://images.unsplash.com/photo-1584438784894-089d6a62b8fa?w=400&auto=format&fit=crop&q=60";
                     }}
                   />
                 ) : (
-                  <div className="image-placeholder">
-                    📷 No Photo Provided
+                  <div className="image-placeholder" style={{ height: "160px", marginBottom: "12px" }}>
+                    📷 No Photo
                   </div>
                 )}
 
-                <h2>{report.itemName}</h2>
-                <p><strong>Type:</strong> <span style={{ textTransform: "uppercase" }}>{report.reportType}</span></p>
-                <p><strong>Category:</strong> {report.category}</p>
-                <p><strong>Location:</strong> {report.location}</p>
-                <p><strong>Date:</strong> {report.date}</p>
-                <p><strong>Description:</strong> {report.description}</p>
+                {/* Title */}
+                <h2 className="myreports-card-title">{report.itemName}</h2>
 
+                {/* Meta details */}
+                <div className="myreports-meta-list">
+                  <p><strong>📂 Category:</strong> {report.category}</p>
+                  <p><strong>📍 Location:</strong> {report.location}</p>
+                  <p><strong>📅 Date:</strong> {report.date}</p>
+                  <p><strong>📝 Description:</strong> {report.description}</p>
+                  {isReturned && report.returnedAt && (
+                    <p><strong>✅ Returned On:</strong> {new Date(report.returnedAt).toLocaleDateString()}</p>
+                  )}
+                </div>
+
+                {/* Autonomous College Campus Custody Badge */}
+                {report.custodyType === "college_desk" && report.custodyLocation && (
+                  <div style={{ margin: "8px 0", padding: "8px 10px", background: "#ecfdf5", borderRadius: "10px", border: "1px solid #10b981", textAlign: "left" }}>
+                    <span style={{ fontSize: "11px", fontWeight: "800", color: "#065f46", display: "block" }}>
+                      🛡️ IN CAMPUS CUSTODY:
+                    </span>
+                    <span style={{ fontSize: "12.5px", color: "#047857", fontWeight: "700" }}>
+                      📍 {report.custodyLocation}
+                    </span>
+                  </div>
+                )}
+
+                {/* Secret Verification Question */}
                 {report.verificationQuestion && (
-                  <div style={{ margin: "10px 0", padding: "8px 12px", background: "rgba(99, 102, 241, 0.08)", borderRadius: "8px", border: "1px dashed #6366f1" }}>
-                    <small style={{ fontWeight: "700", color: "#4f46e5", display: "block" }}>🔒 Secret Question:</small>
-                    <span style={{ fontSize: "13px", color: "#1e293b", fontStyle: "italic" }}>"{report.verificationQuestion}"</span>
+                  <div style={{ margin: "8px 0", padding: "8px 10px", background: "rgba(99, 102, 241, 0.08)", borderRadius: "8px", border: "1px dashed #6366f1", textAlign: "left" }}>
+                    <small style={{ fontWeight: "700", color: "#4f46e5", display: "block", fontSize: "11px" }}>🔒 Secret Question:</small>
+                    <span style={{ fontSize: "12.5px", color: "#1e293b", fontStyle: "italic" }}>"{report.verificationQuestion}"</span>
                   </div>
-                )}
-
-                {isReturned && report.returnedAt && (
-                  <p><strong>Returned On:</strong> {new Date(report.returnedAt).toLocaleDateString()}</p>
                 )}
 
                 {/* CLAIMS REVIEW SECTION FOR FOUND REPORTS */}
                 {isFoundReport && (
-                  <div style={{ marginTop: "15px", paddingTop: "15px", borderTop: "1px solid #e2e8f0" }}>
+                  <div style={{ margin: "10px 0 6px" }}>
                     <button
                       onClick={() => toggleClaims(report._id)}
                       style={{
                         width: "100%",
-                        padding: "8px 12px",
-                        borderRadius: "10px",
+                        padding: "7px 10px",
+                        borderRadius: "8px",
                         border: "1px solid rgba(99, 102, 241, 0.3)",
                         background: isClaimsExpanded ? "rgba(99, 102, 241, 0.15)" : "#f8fafc",
                         color: "#4f46e5",
                         fontWeight: "700",
-                        fontSize: "13px",
+                        fontSize: "12px",
                         cursor: "pointer",
                         display: "flex",
                         alignItems: "center",
@@ -390,9 +440,9 @@ function MyReports() {
                     </button>
 
                     {isClaimsExpanded && (
-                      <div style={{ marginTop: "12px", display: "flex", flexDirection: "column", gap: "10px" }}>
+                      <div style={{ marginTop: "8px", display: "flex", flexDirection: "column", gap: "8px" }}>
                         {claimsCount === 0 ? (
-                          <div style={{ padding: "12px", background: "#f8fafc", borderRadius: "10px", fontSize: "13px", color: "#64748b", textAlign: "center" }}>
+                          <div style={{ padding: "10px", background: "#f8fafc", borderRadius: "8px", fontSize: "12px", color: "#64748b", textAlign: "center" }}>
                             No ownership claims submitted yet.
                           </div>
                         ) : (
@@ -400,20 +450,20 @@ function MyReports() {
                             <div
                               key={claim._id}
                               style={{
-                                padding: "12px",
+                                padding: "10px",
                                 background: claim.status === "approved" ? "#f0fdf4" : claim.status === "rejected" ? "#fef2f2" : "#ffffff",
                                 border: `1px solid ${claim.status === "approved" ? "#bbf7d0" : claim.status === "rejected" ? "#fecaca" : "#e2e8f0"}`,
-                                borderRadius: "10px",
+                                borderRadius: "8px",
                                 textAlign: "left",
                               }}
                             >
-                              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
-                                <strong style={{ fontSize: "13.5px", color: "#0f172a" }}>{claim.claimantName}</strong>
+                              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "4px" }}>
+                                <strong style={{ fontSize: "13px", color: "#0f172a" }}>{claim.claimantName}</strong>
                                 <span
                                   style={{
-                                    fontSize: "11px",
+                                    fontSize: "10.5px",
                                     fontWeight: "800",
-                                    padding: "3px 8px",
+                                    padding: "2px 7px",
                                     borderRadius: "9999px",
                                     background: claim.status === "approved" ? "#dcfce7" : claim.status === "rejected" ? "#fee2e2" : "#fef3c7",
                                     color: claim.status === "approved" ? "#166534" : claim.status === "rejected" ? "#991b1b" : "#92400e",
@@ -423,27 +473,27 @@ function MyReports() {
                                 </span>
                               </div>
 
-                              <div style={{ fontSize: "12px", color: "#64748b", marginBottom: "6px" }}>
+                              <div style={{ fontSize: "11.5px", color: "#64748b", marginBottom: "4px" }}>
                                 ✉️ {claim.claimantEmail} {claim.contactPhone ? `| 📞 ${claim.contactPhone}` : ""}
                               </div>
 
-                              <div style={{ padding: "8px", background: "rgba(15, 23, 42, 0.04)", borderRadius: "8px", fontSize: "13px", color: "#334155" }}>
-                                <strong>Proof Answer:</strong> "{claim.proofAnswer}"
+                              <div style={{ padding: "6px 8px", background: "rgba(15, 23, 42, 0.04)", borderRadius: "6px", fontSize: "12px", color: "#334155" }}>
+                                <strong>Proof:</strong> "{claim.proofAnswer}"
                               </div>
 
                               {claim.status === "pending" && (
-                                <div style={{ display: "flex", gap: "8px", marginTop: "10px" }}>
+                                <div style={{ display: "flex", gap: "6px", marginTop: "8px" }}>
                                   <button
                                     onClick={() => handleReviewClaim(report._id, claim._id, "approved")}
                                     disabled={processingClaimId === claim._id}
                                     style={{
                                       flex: 1,
-                                      padding: "6px 10px",
-                                      borderRadius: "8px",
+                                      padding: "6px",
+                                      borderRadius: "6px",
                                       border: "none",
                                       background: "#16a34a",
                                       color: "#ffffff",
-                                      fontSize: "12px",
+                                      fontSize: "11.5px",
                                       fontWeight: "700",
                                       cursor: "pointer",
                                     }}
@@ -455,12 +505,12 @@ function MyReports() {
                                     disabled={processingClaimId === claim._id}
                                     style={{
                                       flex: 1,
-                                      padding: "6px 10px",
-                                      borderRadius: "8px",
+                                      padding: "6px",
+                                      borderRadius: "6px",
                                       border: "none",
                                       background: "#ef4444",
                                       color: "#ffffff",
-                                      fontSize: "12px",
+                                      fontSize: "11.5px",
                                       fontWeight: "700",
                                       cursor: "pointer",
                                     }}
@@ -477,27 +527,37 @@ function MyReports() {
                   </div>
                 )}
 
-                <div style={{ marginTop: "20px" }}>
+                {/* Clean Compact Actions Row */}
+                <div className="myreports-actions-row">
                   {!isReturned && (
                     <>
-                      <Link to={`/edit-report/${report._id}`}>
-                        <button className="login-btn" style={{ padding: "8px 16px" }}>✏️ Edit</button>
-                      </Link>{" "}
-                      <button onClick={() => handleReturned(report._id)} className="login-btn" style={{ padding: "8px 16px", background: "#16a34a" }}>
+                      <Link
+                        to={`/edit-report/${report._id}`}
+                        className="myreports-action-btn myreports-edit-btn"
+                      >
+                        ✏️ Edit
+                      </Link>
+                      <button
+                        onClick={() => handleReturned(report._id)}
+                        className="myreports-action-btn myreports-returned-btn"
+                      >
                         ✅ Mark Returned
-                      </button>{" "}
+                      </button>
                     </>
                   )}
-                  <button onClick={() => handleDelete(report._id)} className="logout-btn" style={{ padding: "8px 16px" }}>
+                  <button
+                    onClick={() => handleDelete(report._id)}
+                    className="myreports-action-btn myreports-delete-btn"
+                  >
                     🗑️ Delete
                   </button>
                 </div>
 
                 {isReturned && (
-                  <div style={{ marginTop: "15px", padding: "10px", borderRadius: "10px", background: "#f0fdf4", border: "1px solid #bbf7d0" }}>
-                    <strong style={{ color: "#166534" }}>🔒 Report Locked</strong>
-                    <p style={{ fontSize: "13px", color: "#15803d", margin: "4px 0 0" }}>
-                      This report has been marked as returned and can no longer be edited.
+                  <div style={{ marginTop: "10px", padding: "8px 10px", borderRadius: "8px", background: "#f0fdf4", border: "1px solid #bbf7d0", textAlign: "left" }}>
+                    <strong style={{ color: "#166534", fontSize: "12px" }}>🔒 Report Closed</strong>
+                    <p style={{ fontSize: "11.5px", color: "#15803d", margin: "2px 0 0" }}>
+                      Item returned successfully.
                     </p>
                   </div>
                 )}
