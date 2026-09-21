@@ -190,6 +190,10 @@ function ReportLost() {
             </option>
 
             <option>
+              ⚡ Electronics
+            </option>
+
+            <option>
               🔑 Keys
             </option>
 

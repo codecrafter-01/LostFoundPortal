@@ -199,6 +199,10 @@ function ReportFound() {
             </option>
 
             <option>
+              ⚡ Electronics
+            </option>
+
+            <option>
               🔑 Keys
             </option>
 

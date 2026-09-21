@@ -8,6 +8,7 @@ const CATEGORIES = [
   "🎒 Bag",
   "💻 Laptop",
   "📱 Mobile Phone",
+  "⚡ Electronics",
   "🔑 Keys",
   "💳 ID Card",
   "📚 Books",
