@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import api from "../api";
 import { getImageUrl } from "../utils/imageUtils";
 import { useNotification } from "../context/NotificationContext";
+import { formatTime } from "../utils/timeUtils";
 
 function Matches() {
   const [matches, setMatches] = useState([]);
@@ -258,7 +259,7 @@ function Matches() {
                       <h2>{match.myReport.itemName}</h2>
                       <p><strong>Category:</strong> {match.myReport.category}</p>
                       <p><strong>Location:</strong> {match.myReport.location}</p>
-                      <p><strong>Date:</strong> {match.myReport.date}</p>
+                      <p><strong>Date:</strong> {match.myReport.date}{match.myReport.time ? ` at ${formatTime(match.myReport.time)}` : ""}</p>
                       <p><strong>Description:</strong> {match.myReport.description}</p>
                     </div>
 
@@ -290,7 +291,7 @@ function Matches() {
                       <h2>{match.matchedReport.itemName}</h2>
                       <p><strong>Category:</strong> {match.matchedReport.category}</p>
                       <p><strong>Location:</strong> {match.matchedReport.location}</p>
-                      <p><strong>Date:</strong> {match.matchedReport.date}</p>
+                      <p><strong>Date:</strong> {match.matchedReport.date}{match.matchedReport.time ? ` at ${formatTime(match.matchedReport.time)}` : ""}</p>
                       <p><strong>Description:</strong> {match.matchedReport.description}</p>
 
                       {match.matchedReport.user && (

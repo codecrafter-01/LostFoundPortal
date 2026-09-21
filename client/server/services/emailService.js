@@ -248,7 +248,7 @@ const sendReportCreatedEmail = async (user, report) => {
           </tr>
           <tr>
             <td style="font-weight: 600; color: #475569;">Date:</td>
-            <td style="color: #1e293b;">${report.date}</td>
+            <td style="color: #1e293b;">${report.date}${report.time ? ` at ${report.time}` : ""}</td>
           </tr>
           <tr>
             <td style="font-weight: 600; color: #475569;">Status:</td>
@@ -271,7 +271,7 @@ const sendReportCreatedEmail = async (user, report) => {
       ...(adminCC && adminCC !== user.email ? { cc: adminCC } : {}),
       subject: subject,
       html: html,
-      text: `Hello ${user.name},\n\nYour ${report.reportType.toUpperCase()} report for "${report.itemName}" has been successfully submitted to Vignan Lost & Found Portal.\nCategory: ${report.category}\nLocation: ${report.location}\nDate: ${report.date}\nStatus: ${report.status}\n\nThank you,\nVignan Lost & Found Student Portal`,
+      text: `Hello ${user.name},\n\nYour ${report.reportType.toUpperCase()} report for "${report.itemName}" has been successfully submitted to Vignan Lost & Found Portal.\nCategory: ${report.category}\nLocation: ${report.location}\nDate: ${report.date}${report.time ? ` at ${report.time}` : ""}\nStatus: ${report.status}\n\nThank you,\nVignan Lost & Found Student Portal`,
     };
 
     const info = await transporter.sendMail(mailOptions);

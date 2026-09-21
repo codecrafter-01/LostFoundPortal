@@ -24,6 +24,7 @@ const createReport = async (req, res) => {
       category,
       location,
       date,
+      time,
       description,
       reportType,
       verificationQuestion,
@@ -43,6 +44,7 @@ const createReport = async (req, res) => {
       category,
       location,
       date,
+      time: time || "",
       description,
       image,
       reportType,
@@ -252,6 +254,10 @@ const updateReport = async (req, res) => {
 
     report.date =
       req.body.date;
+
+    if (req.body.time !== undefined) {
+      report.time = req.body.time;
+    }
 
     report.description =
       req.body.description;
@@ -582,6 +588,7 @@ const getMyClaims = async (req, res) => {
           category: report.category,
           location: report.location,
           date: report.date,
+          time: report.time || "",
           image: report.image,
           reportStatus: report.status,
           verificationQuestion: report.verificationQuestion,

@@ -12,6 +12,7 @@ function ReportFound() {
     category: "",
     location: "",
     date: "",
+    time: "",
     description: "",
     verificationQuestion: "",
     custodyType: "with_reporter",
@@ -73,6 +74,7 @@ function ReportFound() {
       data.append("category", formData.category);
       data.append("location", formData.location);
       data.append("date", formData.date);
+      data.append("time", formData.time || "");
       data.append("description", formData.description);
       data.append("reportType", "found");
       data.append("verificationQuestion", formData.verificationQuestion);
@@ -107,6 +109,7 @@ function ReportFound() {
         category: "",
         location: "",
         date: "",
+        time: "",
         description: "",
         verificationQuestion: "",
         custodyType: "with_reporter",
@@ -253,17 +256,31 @@ function ReportFound() {
             required
           />
 
-          <input
-            type="date"
-            name="date"
-            value={
-              formData.date
-            }
-            onChange={
-              handleChange
-            }
-            required
-          />
+          <div className="form-row-2col">
+            <div>
+              <label style={{ fontSize: "12.5px", fontWeight: "600", color: "#475569", marginBottom: "6px", display: "block", textAlign: "left" }}>
+                📅 Date Found *
+              </label>
+              <input
+                type="date"
+                name="date"
+                value={formData.date}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div>
+              <label style={{ fontSize: "12.5px", fontWeight: "600", color: "#475569", marginBottom: "6px", display: "block", textAlign: "left" }}>
+                ⏰ Time Found (Optional)
+              </label>
+              <input
+                type="time"
+                name="time"
+                value={formData.time}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
 
           <textarea
             name="description"

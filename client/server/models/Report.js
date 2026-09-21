@@ -22,6 +22,11 @@ const reportSchema = new mongoose.Schema(
     required: true,
   },
 
+  time: {
+    type: String,
+    default: "",
+  },
+
   description: {
     type: String,
     required: true,

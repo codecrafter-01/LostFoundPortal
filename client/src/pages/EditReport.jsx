@@ -23,6 +23,7 @@ function EditReport() {
       category: "",
       location: "",
       date: "",
+      time: "",
       description: "",
     });
 
@@ -70,10 +71,13 @@ function EditReport() {
           report.location,
 
         date:
-          report.date.substring(
+          report.date ? report.date.substring(
             0,
             10
-          ),
+          ) : "",
+
+        time:
+          report.time || "",
 
         description:
           report.description,
@@ -258,17 +262,31 @@ function EditReport() {
             required
           />
 
-          <input
-            type="date"
-            name="date"
-            value={
-              formData.date
-            }
-            onChange={
-              handleChange
-            }
-            required
-          />
+          <div className="form-row-2col">
+            <div>
+              <label style={{ fontSize: "12.5px", fontWeight: "600", color: "#475569", marginBottom: "6px", display: "block", textAlign: "left" }}>
+                📅 Date *
+              </label>
+              <input
+                type="date"
+                name="date"
+                value={formData.date}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div>
+              <label style={{ fontSize: "12.5px", fontWeight: "600", color: "#475569", marginBottom: "6px", display: "block", textAlign: "left" }}>
+                ⏰ Time (Approx.)
+              </label>
+              <input
+                type="time"
+                name="time"
+                value={formData.time}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
 
           <textarea
             name="description"

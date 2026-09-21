@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import api from "../api";
 import { getImageUrl } from "../utils/imageUtils";
 import { useNotification } from "../context/NotificationContext";
+import { formatTime } from "../utils/timeUtils";
 
 function MyReports() {
   const [reports, setReports] = useState([]);
@@ -290,7 +291,7 @@ function MyReports() {
                     <div className="myreports-meta-list">
                       <p><strong>📂 Category:</strong> {claimItem.category}</p>
                       <p><strong>📍 Found Location:</strong> {claimItem.location}</p>
-                      <p><strong>📅 Date Found:</strong> {claimItem.date}</p>
+                      <p><strong>📅 Date Found:</strong> {claimItem.date}{claimItem.time ? ` at ${formatTime(claimItem.time)}` : ""}</p>
                     </div>
 
                     <div style={{ margin: "10px 0", padding: "10px", background: "#f8fafc", borderRadius: "10px", border: "1px solid #e2e8f0", textAlign: "left" }}>
@@ -388,7 +389,7 @@ function MyReports() {
                 <div className="myreports-meta-list">
                   <p><strong>📂 Category:</strong> {report.category}</p>
                   <p><strong>📍 Location:</strong> {report.location}</p>
-                  <p><strong>📅 Date:</strong> {report.date}</p>
+                  <p><strong>📅 Date:</strong> {report.date}{report.time ? ` at ${formatTime(report.time)}` : ""}</p>
                   <p><strong>📝 Description:</strong> {report.description}</p>
                   {isReturned && report.returnedAt && (
                     <p><strong>✅ Returned On:</strong> {new Date(report.returnedAt).toLocaleDateString()}</p>

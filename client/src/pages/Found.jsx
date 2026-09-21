@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import api from "../api";
 import { getImageUrl } from "../utils/imageUtils";
 import { useNotification } from "../context/NotificationContext";
+import { formatTime } from "../utils/timeUtils";
 
 const CATEGORIES = [
   "ALL",
@@ -86,22 +87,23 @@ function Found() {
     e.preventDefault();
     if (!proofAnswer.trim()) {
       showNotification({
-        title: "Proof Required",
-        message: "Please answer the verification question to prove ownership.",
-        type: "warning",
+        title: "Missing Information",
+        message: "Please provide proof of ownership to submit your claim.",
+        type: "error",
       });
       return;
     }
 
     try {
       setSubmittingClaim(true);
-      const response = await api.post(`/reports/${claimModalReport._id}/claim`, {
-        proofAnswer,
-        contactPhone,
-      });
+      const response = await api.post(
+        `/reports/${claimModalReport._id}/claim`,
+        { proofAnswer, contactPhone },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
 
       showNotification({
-        title: "🔐 Claim Submitted!",
+        title: "Claim Submitted! 📨",
         message: response.data.message || "Your proof of ownership has been sent to the finder for review.",
         type: "success",
       });
@@ -127,6 +129,7 @@ function Found() {
       String(report.itemName || "").toLowerCase().includes(searchText) ||
       String(report.category || "").toLowerCase().includes(searchText) ||
       String(report.location || "").toLowerCase().includes(searchText) ||
+      String(report.time || "").toLowerCase().includes(searchText) ||
       String(report.description || "").toLowerCase().includes(searchText);
 
     const matchesCategory =
@@ -232,7 +235,7 @@ function Found() {
                   <h2>{report.itemName}</h2>
                   <p><strong>📂 Category:</strong> {report.category}</p>
                   <p><strong>📍 Location:</strong> {report.location}</p>
-                  <p><strong>📅 Date:</strong> {report.date}</p>
+                  <p><strong>📅 Date:</strong> {report.date}{report.time ? ` at ${formatTime(report.time)}` : ""}</p>
                   <p><strong>📝 Description:</strong> {report.description}</p>
                   <p><strong>👤 Reported By:</strong> {report.user?.name || "Vignan Student"}</p>
 
