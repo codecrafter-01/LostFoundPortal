@@ -8,6 +8,7 @@ import "./App.css";
 
 import { NotificationProvider } from "./context/NotificationContext";
 import NotificationToast from "./components/NotificationToast";
+import InstallPwaPrompt from "./components/InstallPwaPrompt";
 
 import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -31,6 +32,9 @@ function App() {
       <BrowserRouter>
         {/* Top-of-Screen Pop-up Notification Banner Component */}
         <NotificationToast />
+
+        {/* PWA Home Screen Installation Prompt */}
+        <InstallPwaPrompt />
 
         {/* Navigation Bar */}
         <Navbar />

@@ -4,17 +4,74 @@
    Receives push notifications from the server and shows them.
    ============================================================= */
 
-const CACHE_NAME = "vignan-lfp-v1";
+const CACHE_NAME = "vignan-lfp-v2";
 const APP_URL = self.location.origin;
 
-// ── Install: cache the app shell ──────────────────────────────
+const PRECACHE_ASSETS = [
+  "/",
+  "/manifest.json",
+  "/vignan_logo.jpg",
+  "/favicon.svg"
+];
+
+// ── Install: pre-cache core assets ────────────────────────────
 self.addEventListener("install", (event) => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.addAll(PRECACHE_ASSETS).catch((err) => {
+        console.warn("[SW] Pre-caching warning:", err);
+      });
+    })
+  );
   self.skipWaiting();
 });
 
-// ── Activate ──────────────────────────────────────────────────
+// ── Activate: clean old caches & claim clients ────────────────
 self.addEventListener("activate", (event) => {
-  event.waitUntil(clients.claim());
+  event.waitUntil(
+    caches.keys().then((keys) => {
+      return Promise.all(
+        keys.map((key) => {
+          if (key !== CACHE_NAME) {
+            return caches.delete(key);
+          }
+        })
+      );
+    }).then(() => clients.claim())
+  );
+});
+
+// ── Fetch: Network-first with cache fallback (PWA requirement) ─
+self.addEventListener("fetch", (event) => {
+  // Ignore non-GET and backend API requests
+  if (event.request.method !== "GET" || event.request.url.includes("/api/")) {
+    return;
+  }
+
+  event.respondWith(
+    fetch(event.request)
+      .then((networkResponse) => {
+        if (
+          networkResponse &&
+          networkResponse.status === 200 &&
+          networkResponse.type === "basic"
+        ) {
+          const responseToCache = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseToCache);
+          });
+        }
+        return networkResponse;
+      })
+      .catch(async () => {
+        const cached = await caches.match(event.request);
+        if (cached) return cached;
+        if (event.request.mode === "navigate") {
+          const fallback = await caches.match("/");
+          if (fallback) return fallback;
+        }
+      })
+  );
 });
 
 // ── Push Event: show notification ─────────────────────────────
