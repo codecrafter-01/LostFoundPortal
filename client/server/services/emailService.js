@@ -637,10 +637,192 @@ const sendStatusUpdateEmail = async (user, report) => {
   }
 };
 
+// =====================================
+// 6. Send New Claim Received Email (to Finder)
+// =====================================
+const sendNewClaimReceivedEmail = async (finder, report, claim) => {
+  try {
+    if (!isRealEmail(finder.email)) {
+      return false;
+    }
+
+    const transporter = getTransporter();
+    if (!transporter) return false;
+
+    const subject = `🔐 New Ownership Claim for Your Found "${report.itemName}" - Vignan Portal`;
+
+    const contentHtml = `
+      <div class="greeting">Hello ${finder.name || "Vignan Student"},</div>
+      <p class="intro">
+        A student has submitted a <strong>Proof of Ownership Claim</strong> for the <strong>"${report.itemName}"</strong> you reported found.
+      </p>
+
+      <div class="details-card">
+        <table width="100%" cellpadding="6" cellspacing="0" style="font-size: 14px;">
+          <tr>
+            <td width="140" style="font-weight: 600; color: #475569;">Claimant Name:</td>
+            <td style="color: #1e293b;"><strong>${claim.claimantName}</strong></td>
+          </tr>
+          <tr>
+            <td style="font-weight: 600; color: #475569;">Claimant Email:</td>
+            <td style="color: #1e293b;">${claim.claimantEmail}</td>
+          </tr>
+          ${claim.contactPhone ? `
+          <tr>
+            <td style="font-weight: 600; color: #475569;">Contact Phone:</td>
+            <td style="color: #1e293b;">${claim.contactPhone}</td>
+          </tr>` : ""}
+          ${report.verificationQuestion ? `
+          <tr>
+            <td style="font-weight: 600; color: #475569;">Your Question:</td>
+            <td style="color: #6366f1;"><em>"${report.verificationQuestion}"</em></td>
+          </tr>` : ""}
+          <tr>
+            <td style="font-weight: 600; color: #475569; vertical-align: top;">Their Proof Answer:</td>
+            <td style="color: #0f172a; background: #f1f5f9; padding: 10px; border-radius: 8px;">
+              <strong>"${claim.proofAnswer}"</strong>
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <p class="intro">
+        Please log in to your <strong>Vignan Lost &amp; Found Portal</strong>, go to <strong>My Reports</strong>, and either <strong>Approve</strong> or <strong>Reject</strong> this claim based on their proof answer.
+      </p>
+    `;
+
+    const html = wrapHtmlTemplate(subject, contentHtml);
+
+    const adminCC = getAdminCC();
+    const mailOptions = {
+      from: getFromAddress(),
+      to: finder.email,
+      ...(adminCC && adminCC !== finder.email ? { cc: adminCC } : {}),
+      subject: subject,
+      html: html,
+      text: `Hello ${finder.name},\n\nA student (${claim.claimantName}) claimed your found item "${report.itemName}".\nProof Answer: "${claim.proofAnswer}"\n\nPlease log in to review the claim.`,
+    };
+
+    const info = await transporter.sendMail(mailOptions);
+    console.log(`✅ [EmailService] Claim Received email sent to finder ${finder.email} (MessageId: ${info.messageId})`);
+    return true;
+
+  } catch (error) {
+    console.error("❌ [EmailService] Failed to send Claim Received email:", error.message);
+    return false;
+  }
+};
+
+// =====================================
+// 7. Send Claim Status Update Email (to Claimant)
+// =====================================
+const sendClaimStatusEmail = async (claimant, report, status, finder) => {
+  try {
+    if (!isRealEmail(claimant.email)) {
+      return false;
+    }
+
+    const transporter = getTransporter();
+    if (!transporter) return false;
+
+    const isApproved = status === "approved";
+    const subject = isApproved
+      ? `🎉 Claim Approved for "${report.itemName}" - Vignan Portal`
+      : `Update on Your Claim for "${report.itemName}" - Vignan Portal`;
+
+    const contentHtml = isApproved ? `
+      <div class="greeting">Congratulations ${claimant.name || "Student"},! 🎉</div>
+      <p class="intro">
+        The finder has <strong>APPROVED</strong> your Proof of Ownership claim for <strong>"${report.itemName}"</strong>!
+      </p>
+
+      <div style="background-color: #ecfdf5; border-left: 4px solid #10b981; padding: 14px; margin-bottom: 20px; border-radius: 6px;">
+        <strong style="color: #065f46; font-size: 15px;">Finder Contact Details (Released):</strong>
+        <p style="margin: 6px 0 0; color: #047857; font-size: 14px;">
+          <strong>Finder Name:</strong> ${finder?.name || "Fellow Vignan Student"}<br />
+          <strong>Finder Email:</strong> <a href="mailto:${finder?.email}" style="color: #059669; font-weight: bold;">${finder?.email}</a>
+        </p>
+      </div>
+
+      <div class="details-card">
+        <table width="100%" cellpadding="6" cellspacing="0" style="font-size: 14px;">
+          <tr>
+            <td width="130" style="font-weight: 600; color: #475569;">Item Name:</td>
+            <td style="color: #1e293b;"><strong>${report.itemName}</strong></td>
+          </tr>
+          <tr>
+            <td style="font-weight: 600; color: #475569;">Location Found:</td>
+            <td style="color: #1e293b;">${report.location}</td>
+          </tr>
+          <tr>
+            <td style="font-weight: 600; color: #475569;">Status:</td>
+            <td>
+              <span class="badge" style="background: #dcfce7; color: #166534;">CLAIM VERIFIED & APPROVED</span>
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <p class="intro">
+        Please contact the finder to coordinate a safe meeting place on campus to collect your item.
+      </p>
+    ` : `
+      <div class="greeting">Hello ${claimant.name || "Student"},</div>
+      <p class="intro">
+        Your ownership claim for the found item <strong>"${report.itemName}"</strong> was reviewed by the finder, but the provided proof details could not be verified.
+      </p>
+
+      <div class="details-card">
+        <table width="100%" cellpadding="6" cellspacing="0" style="font-size: 14px;">
+          <tr>
+            <td width="130" style="font-weight: 600; color: #475569;">Item Name:</td>
+            <td style="color: #1e293b;"><strong>${report.itemName}</strong></td>
+          </tr>
+          <tr>
+            <td style="font-weight: 600; color: #475569;">Status:</td>
+            <td>
+              <span class="badge" style="background: #fee2e2; color: #991b1b;">CLAIM NOT VERIFIED</span>
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <p class="intro">
+        If you believe this was an error, please verify your item description or submit a formal Lost report on the portal.
+      </p>
+    `;
+
+    const html = wrapHtmlTemplate(subject, contentHtml);
+
+    const adminCC = getAdminCC();
+    const mailOptions = {
+      from: getFromAddress(),
+      to: claimant.email,
+      ...(adminCC && adminCC !== claimant.email ? { cc: adminCC } : {}),
+      subject: subject,
+      html: html,
+      text: isApproved
+        ? `Your claim for "${report.itemName}" was approved! Contact finder at ${finder?.email}.`
+        : `Your claim for "${report.itemName}" could not be verified by the finder.`,
+    };
+
+    const info = await transporter.sendMail(mailOptions);
+    console.log(`✅ [EmailService] Claim Status email sent to claimant ${claimant.email} (MessageId: ${info.messageId})`);
+    return true;
+
+  } catch (error) {
+    console.error("❌ [EmailService] Failed to send Claim Status email:", error.message);
+    return false;
+  }
+};
+
 module.exports = {
   sendReportCreatedEmail,
   sendSmartMatchEmail,
   sendReturnedEmail,
   sendWelcomeEmail,
   sendStatusUpdateEmail,
+  sendNewClaimReceivedEmail,
+  sendClaimStatusEmail,
 };
+

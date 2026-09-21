@@ -5,6 +5,8 @@ const {
   sendSmartMatchEmail,
   sendReturnedEmail,
   sendStatusUpdateEmail,
+  sendNewClaimReceivedEmail,
+  sendClaimStatusEmail,
 } = require("../services/emailService");
 const {
   sendPushToAllUsers,
@@ -24,6 +26,7 @@ const createReport = async (req, res) => {
       date,
       description,
       reportType,
+      verificationQuestion,
     } = req.body;
 
     const image = req.file
@@ -44,6 +47,7 @@ const createReport = async (req, res) => {
       user: userId,
       status: "active",
       returnedAt: null,
+      verificationQuestion: verificationQuestion || "",
     });
 
     // ✅ Respond IMMEDIATELY — user gets success in milliseconds
@@ -394,6 +398,201 @@ const deleteReport = async (req, res) => {
   }
 };
 
+// ==============================
+// Submit Claim (Proof of Ownership)
+// ==============================
+const submitClaim = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { proofAnswer, contactPhone } = req.body;
+
+    if (!proofAnswer || !proofAnswer.trim()) {
+      return res.status(400).json({ message: "Proof of ownership answer is required." });
+    }
+
+    const report = await Report.findById(id).populate("user", "name email");
+    if (!report) {
+      return res.status(404).json({ message: "Report not found" });
+    }
+
+    if (report.status === "returned") {
+      return res.status(400).json({ message: "This item has already been returned to its owner." });
+    }
+
+    if (report.reportType !== "found") {
+      return res.status(400).json({ message: "Claims can only be submitted for found items." });
+    }
+
+    // A user cannot claim an item they themselves reported
+    if (report.user._id.toString() === req.user._id.toString()) {
+      return res.status(400).json({ message: "You cannot claim an item that you reported finding." });
+    }
+
+    // Check if the user already submitted a pending or approved claim for this report
+    const existingClaim = report.claims.find(
+      (c) => c.claimant.toString() === req.user._id.toString() && c.status !== "rejected"
+    );
+
+    if (existingClaim) {
+      return res.status(400).json({
+        message: existingClaim.status === "approved"
+          ? "Your claim has already been approved for this item!"
+          : "You already have a pending claim submitted for this item.",
+      });
+    }
+
+    const newClaim = {
+      claimant: req.user._id,
+      claimantName: req.user.name,
+      claimantEmail: req.user.email,
+      proofAnswer: proofAnswer.trim(),
+      contactPhone: (contactPhone || "").trim(),
+      status: "pending",
+      createdAt: new Date(),
+    };
+
+    report.claims.push(newClaim);
+    await report.save();
+
+    // Respond immediately
+    res.status(201).json({
+      message: "Proof of ownership submitted! The finder has been notified to review your claim.",
+      claim: newClaim,
+    });
+
+    // Notify finder in background
+    setImmediate(async () => {
+      try {
+        if (report.user && report.user.email) {
+          await sendNewClaimReceivedEmail(report.user, report, newClaim);
+          await sendPushToUsers([report.user._id], {
+            title: "🔐 New Claim Received!",
+            body: `${req.user.name} submitted proof for found "${report.itemName}". Tap to review.`,
+            icon: "/vignan_logo.jpg",
+            url: "/my-reports",
+          });
+        }
+      } catch (err) {
+        console.error("⚠️ Claim notification error:", err.message);
+      }
+    });
+  } catch (error) {
+    console.error("Submit Claim Error:", error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// ==============================
+// Review Claim (Approve or Reject by Finder)
+// ==============================
+const reviewClaim = async (req, res) => {
+  try {
+    const { id, claimId } = req.params;
+    const { status } = req.body;
+
+    if (!["approved", "rejected"].includes(status)) {
+      return res.status(400).json({ message: "Status must be either 'approved' or 'rejected'." });
+    }
+
+    const report = await Report.findById(id);
+    if (!report) {
+      return res.status(404).json({ message: "Report not found" });
+    }
+
+    // Only the reporter (finder) can review claims
+    if (report.user.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: "Only the finder can review claims for this item." });
+    }
+
+    const claim = report.claims.id(claimId);
+    if (!claim) {
+      return res.status(404).json({ message: "Claim not found" });
+    }
+
+    claim.status = status;
+    claim.reviewedAt = new Date();
+
+    await report.save();
+
+    res.json({
+      message: status === "approved"
+        ? "Claim approved! Your contact details have been shared with the claimant."
+        : "Claim has been rejected.",
+      report,
+    });
+
+    // Send notifications to claimant in background
+    setImmediate(async () => {
+      try {
+        const claimant = await User.findById(claim.claimant);
+        if (claimant && claimant.email) {
+          await sendClaimStatusEmail(claimant, report, status, req.user);
+          await sendPushToUsers([claimant._id], {
+            title: status === "approved" ? "🎉 Claim Approved!" : "Claim Update",
+            body: status === "approved"
+              ? `Your claim for "${report.itemName}" was approved! Finder contact: ${req.user.email}`
+              : `Your claim for "${report.itemName}" was not approved by the finder.`,
+            icon: "/vignan_logo.jpg",
+            url: "/my-reports",
+          });
+        }
+      } catch (err) {
+        console.error("⚠️ Claim review notification error:", err.message);
+      }
+    });
+  } catch (error) {
+    console.error("Review Claim Error:", error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// ==============================
+// Get All Claims Submitted By Current User
+// ==============================
+const getMyClaims = async (req, res) => {
+  try {
+    const reports = await Report.find({
+      "claims.claimant": req.user._id,
+    })
+      .populate("user", "name email")
+      .sort({ updatedAt: -1 });
+
+    const userClaims = [];
+
+    reports.forEach((report) => {
+      const myClaim = report.claims.find(
+        (c) => c.claimant.toString() === req.user._id.toString()
+      );
+
+      if (myClaim) {
+        userClaims.push({
+          reportId: report._id,
+          itemName: report.itemName,
+          category: report.category,
+          location: report.location,
+          date: report.date,
+          image: report.image,
+          reportStatus: report.status,
+          verificationQuestion: report.verificationQuestion,
+          claimId: myClaim._id,
+          proofAnswer: myClaim.proofAnswer,
+          contactPhone: myClaim.contactPhone,
+          status: myClaim.status,
+          createdAt: myClaim.createdAt,
+          reviewedAt: myClaim.reviewedAt,
+          finder: myClaim.status === "approved"
+            ? { name: report.user?.name || "Finder", email: report.user?.email || "" }
+            : null,
+        });
+      }
+    });
+
+    res.json(userClaims);
+  } catch (error) {
+    console.error("Get My Claims Error:", error);
+    res.status(500).json({ message: error.message });
+  }
+};
 
 // ==============================
 // Export Controllers
@@ -405,4 +604,7 @@ module.exports = {
   updateReport,
   markAsReturned,
   deleteReport,
+  submitClaim,
+  reviewClaim,
+  getMyClaims,
 };

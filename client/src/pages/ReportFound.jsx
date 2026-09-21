@@ -13,6 +13,7 @@ function ReportFound() {
     location: "",
     date: "",
     description: "",
+    verificationQuestion: "",
   });
 
   const [image, setImage] = useState(null);
@@ -72,6 +73,7 @@ function ReportFound() {
       data.append("date", formData.date);
       data.append("description", formData.description);
       data.append("reportType", "found");
+      data.append("verificationQuestion", formData.verificationQuestion);
 
       if (image) {
         data.append("image", image);
@@ -102,6 +104,7 @@ function ReportFound() {
         location: "",
         date: "",
         description: "",
+        verificationQuestion: "",
       });
 
       setImage(null);
@@ -264,6 +267,23 @@ function ReportFound() {
             }
             required
           />
+
+          <div style={{ margin: "14px 0", textAlign: "left" }}>
+            <label style={{ display: "block", fontSize: "14px", fontWeight: "700", color: "#334155", marginBottom: "6px" }}>
+              🔒 Secret Verification Question (Proof of Ownership)
+            </label>
+            <input
+              type="text"
+              name="verificationQuestion"
+              placeholder="e.g. What is the lock screen wallpaper / brand / sticker inside?"
+              value={formData.verificationQuestion}
+              onChange={handleChange}
+              style={{ marginBottom: "4px" }}
+            />
+            <small style={{ display: "block", color: "#64748b", fontSize: "12px", lineHeight: "1.4" }}>
+              💡 Recommended: Ask a question only the true owner can answer before you release the item.
+            </small>
+          </div>
 
           {/* ============================== */}
           {/* Image Upload */}

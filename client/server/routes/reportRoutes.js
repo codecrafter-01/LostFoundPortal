@@ -12,6 +12,9 @@ const {
   updateReport,
   markAsReturned,
   deleteReport,
+  submitClaim,
+  reviewClaim,
+  getMyClaims,
 } = require("../controllers/reportController");
 
 
@@ -38,15 +41,47 @@ router.get(
 
 
 // ==============================
+// Get My Claims
+// LOGIN REQUIRED
+// ==============================
+router.get(
+  "/claims/my",
+  protect,
+  getMyClaims
+);
+
+
+// ==============================
 // Create Report
 // LOGIN REQUIRED
 // ==============================
-
 router.post(
   "/",
   protect,
   upload.single("image"),
   createReport
+);
+
+
+// ==============================
+// Submit Claim (Proof of Ownership)
+// LOGIN REQUIRED
+// ==============================
+router.post(
+  "/:id/claim",
+  protect,
+  submitClaim
+);
+
+
+// ==============================
+// Review Claim (Approve/Reject by Finder)
+// LOGIN REQUIRED
+// ==============================
+router.put(
+  "/:id/claims/:claimId/review",
+  protect,
+  reviewClaim
 );
 
 

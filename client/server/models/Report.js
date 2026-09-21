@@ -56,6 +56,51 @@ const reportSchema = new mongoose.Schema(
     type: Date,
     default: null,
   },
+
+  // Proof of Ownership & Claim Verification
+  verificationQuestion: {
+    type: String,
+    default: "",
+  },
+
+  claims: [
+    {
+      claimant: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+      },
+      claimantName: {
+        type: String,
+        required: true,
+      },
+      claimantEmail: {
+        type: String,
+        required: true,
+      },
+      proofAnswer: {
+        type: String,
+        required: true,
+      },
+      contactPhone: {
+        type: String,
+        default: "",
+      },
+      status: {
+        type: String,
+        enum: ["pending", "approved", "rejected"],
+        default: "pending",
+      },
+      createdAt: {
+        type: Date,
+        default: Date.now,
+      },
+      reviewedAt: {
+        type: Date,
+        default: null,
+      },
+    },
+  ],
 },
 {
   timestamps: true,
